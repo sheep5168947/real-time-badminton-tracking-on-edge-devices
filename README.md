@@ -1,0 +1,1 @@
+# bottle-defect-detection-aoi
