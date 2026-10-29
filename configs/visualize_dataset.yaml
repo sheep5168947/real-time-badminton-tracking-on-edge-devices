@@ -1,0 +1,9 @@
+visualize_dataset:
+  output_dir: outputs/visualize_dataset
+  max_samples: 8
+  model:
+    version: v2
+  dataset:
+    processed_root: dataset/processed/tracknet_dataset_512x288
+    sequence_length: 3
+    split_file: dataset/processed/tracknet_dataset_512x288/splits/train.txt

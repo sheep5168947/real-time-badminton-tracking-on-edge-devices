@@ -1,0 +1,38 @@
+model:
+  version: v4
+  sequence_length: 3
+  base_channels: 64
+  fusion_variant: eq4   # eq4 or mean, matching the two V4 variants
+  dropout: 0.0
+
+dataset:
+  processed_root: dataset/processed/tracknet_dataset_512x288
+  sequence_length: 3
+  frame_stride: 1
+  train_split_file: dataset/processed/tracknet_dataset_512x288/splits/train.txt
+  val_split_file: dataset/processed/tracknet_dataset_512x288/splits/val.txt
+
+train:
+  experiment_name: tracknet_v4
+  output_root: outputs/train
+  epochs: 30
+  batch_size: 1
+  workers: 8
+  persistent_workers: true
+  prefetch_factor: 2
+  optimizer: Adadelta
+  lr: 1.0
+  loss: wbce
+  device: auto
+  amp: false
+  tensorboard: true
+  launch_tensorboard: true
+  tensorboard_port: 6006
+  tensorboard_images: true
+  tensorboard_hparams: true
+  tensorboard_histograms: false
+  tensorboard_profiler: false
+  log_every_steps: 20
+  tensorboard_flush_secs: 30
+  tensorboard_max_queue: 100
+  seed: 26

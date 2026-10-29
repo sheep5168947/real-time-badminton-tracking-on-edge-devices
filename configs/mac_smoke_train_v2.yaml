@@ -1,0 +1,37 @@
+model:
+  version: v2
+  sequence_length: 3
+  base_channels: 4
+  dropout: 0.0
+
+dataset:
+  processed_root: test_results/dataset/processed/mac_smoke
+  sequence_length: 3
+  frame_stride: 1
+  train_split_file: test_results/dataset/processed/mac_smoke/splits/train.txt
+  val_split_file: test_results/dataset/processed/mac_smoke/splits/val.txt
+
+train:
+  experiment_name: mac_smoke_v2
+  output_root: test_results/train
+  epochs: 1
+  batch_size: 2
+  workers: 0
+  optimizer: Adam
+  lr: 0.001
+  loss: wbce
+  device: auto
+  amp: false
+  tensorboard: true
+  launch_tensorboard: true
+  tensorboard_port: 6006
+  tensorboard_images: true
+  tensorboard_hparams: true
+  tensorboard_histograms: false
+  tensorboard_profiler: false
+  log_every_steps: 5
+  tensorboard_flush_secs: 30
+  tensorboard_max_queue: 100
+  seed: 7
+  num_threads: 1
+  interop_threads: 1
