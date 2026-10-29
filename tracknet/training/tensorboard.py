@@ -5,7 +5,7 @@ to TensorBoard so visual diagnostics, experiment metadata, and optional heavy
 logging can evolve without turning the training loop into a dashboard script.
 """
 
-from __future__ import annotations
+# # from __future__ import annotations
 
 import json
 import time
@@ -28,7 +28,7 @@ class TensorBoardRunLogger:
     def __init__(
         self,
         *,
-        writer: Any | None,
+        writer: Any,
         cfg: dict[str, Any],
         output_dir: Path,
         is_main: bool,
@@ -53,7 +53,7 @@ class TensorBoardRunLogger:
         self.image_interval = max(1, int(self.train_cfg.get("tensorboard_image_interval", 1)))
         self.max_images = max(1, int(self.train_cfg.get("tensorboard_max_images", 2)))
         self.log_every_steps = max(1, int(self.train_cfg.get("log_every_steps", 20)))
-        self._loss_ema: float | None = None
+        self._loss_ema: float = None
         self._run_start = time.perf_counter()
 
     def log_run_metadata(self) -> None:
@@ -87,7 +87,7 @@ class TensorBoardRunLogger:
         epoch_seconds: float,
         train_samples: int,
         model: torch.nn.Module,
-        val_sample: dict[str, Any] | None,
+        val_sample: dict[str, Any],
     ) -> None:
         if not self.enabled:
             return
@@ -149,7 +149,7 @@ class TensorBoardRunLogger:
             return
         self.writer.add_hparams(hparams, numeric_metrics, run_name="hparams")
 
-    def make_profiler(self) -> Any | None:
+    def make_profiler(self) -> Any:
         if not self.enabled or not bool(self.train_cfg.get("tensorboard_profiler", False)):
             return None
         wait = int(self.train_cfg.get("tensorboard_profiler_wait", 1))

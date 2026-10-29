@@ -7,7 +7,7 @@ frame; otherwise validation counts the same frame multiple times and drifts from
 video inference semantics.
 """
 
-from __future__ import annotations
+# # from __future__ import annotations
 
 from collections import defaultdict
 from dataclasses import dataclass

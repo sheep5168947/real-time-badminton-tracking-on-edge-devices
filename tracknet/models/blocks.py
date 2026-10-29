@@ -1,6 +1,6 @@
 """Reusable neural network blocks for TrackNet models."""
 
-from __future__ import annotations
+# # from __future__ import annotations
 
 import math
 
@@ -32,7 +32,7 @@ class V2EncoderDecoder(nn.Module):
     fusion, or residual refinement according to the target paper version.
     """
 
-    def __init__(self, input_channels: int, output_channels: int | None, dropout: float = 0.0, base_channels: int = 64):
+    def __init__(self, input_channels: int, output_channels: int, dropout: float = 0.0, base_channels: int = 64):
         super().__init__()
         c1, c2, c3, c4 = base_channels, base_channels * 2, base_channels * 4, base_channels * 8
         self.enc1 = conv_block(input_channels, c1, 2)

@@ -14,7 +14,7 @@ CSV files are expected to contain TrackNet columns `Frame`, `Visibility`, `X`,
 stable internal names.
 """
 
-from __future__ import annotations
+# # from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path

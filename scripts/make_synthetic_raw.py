@@ -7,7 +7,7 @@ This script is optional and does not download data. It writes:
   <output>/match2/csv/rally2_ball.csv
 """
 
-from __future__ import annotations
+# # from __future__ import annotations
 
 import argparse
 from pathlib import Path

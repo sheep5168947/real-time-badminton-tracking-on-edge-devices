@@ -1,6 +1,6 @@
 """Create a small visualization gallery from processed samples."""
 
-from __future__ import annotations
+# # from __future__ import annotations
 
 import argparse
 from pathlib import Path

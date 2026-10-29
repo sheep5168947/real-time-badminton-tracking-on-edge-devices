@@ -5,7 +5,7 @@ policy describes how a caller wants those annotations converted into tensors
 without forcing the dataset to know about TrackNet paper versions.
 """
 
-from __future__ import annotations
+# # from __future__ import annotations
 
 from dataclasses import dataclass
 

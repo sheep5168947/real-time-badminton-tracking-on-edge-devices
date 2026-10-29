@@ -4,7 +4,7 @@ The project keeps data, training, evaluation and inference aligned by reusing
 these names everywhere instead of hard-coding strings in scripts.
 """
 
-from __future__ import annotations
+# # from __future__ import annotations
 
 RAW_FRAME_COL = "Frame"
 RAW_VISIBILITY_COL = "Visibility"

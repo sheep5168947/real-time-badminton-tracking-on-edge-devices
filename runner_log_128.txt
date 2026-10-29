@@ -1,0 +1,245 @@
+nohup: ignoring input
+[INFO] 準備進行自動化參數搜索 (128x128 批次盲測)，總計 81 組測試...
+
+[1/81] 測試參數 -> Motion: 10, Local: 0.45, Global: 0.55, Miss: 1
+       成功擷取 -> 省電: 89.2%, Precision: 44.6%, Recall: 46.5%, FPS: 22.5
+
+[2/81] 測試參數 -> Motion: 10, Local: 0.45, Global: 0.55, Miss: 2
+       成功擷取 -> 省電: 91.8%, Precision: 43.1%, Recall: 45.8%, FPS: 33.9
+
+[3/81] 測試參數 -> Motion: 10, Local: 0.45, Global: 0.55, Miss: 3
+       成功擷取 -> 省電: 91.9%, Precision: 42.8%, Recall: 45.6%, FPS: 34.6
+
+[4/81] 測試參數 -> Motion: 10, Local: 0.45, Global: 0.62, Miss: 1
+       成功擷取 -> 省電: 83.9%, Precision: 47.9%, Recall: 46.9%, FPS: 25.1
+
+[5/81] 測試參數 -> Motion: 10, Local: 0.45, Global: 0.62, Miss: 2
+       成功擷取 -> 省電: 87.5%, Precision: 46.3%, Recall: 46.9%, FPS: 28.8
+
+[6/81] 測試參數 -> Motion: 10, Local: 0.45, Global: 0.62, Miss: 3
+       成功擷取 -> 省電: 87.7%, Precision: 46.2%, Recall: 46.9%, FPS: 29.0
+
+[7/81] 測試參數 -> Motion: 10, Local: 0.45, Global: 0.7, Miss: 1
+       成功擷取 -> 省電: 65.1%, Precision: 48.0%, Recall: 36.2%, FPS: 16.2
+
+[8/81] 測試參數 -> Motion: 10, Local: 0.45, Global: 0.7, Miss: 2
+       成功擷取 -> 省電: 69.0%, Precision: 46.5%, Recall: 37.1%, FPS: 17.7
+
+[9/81] 測試參數 -> Motion: 10, Local: 0.45, Global: 0.7, Miss: 3
+       成功擷取 -> 省電: 69.4%, Precision: 46.4%, Recall: 37.2%, FPS: 18.0
+
+[10/81] 測試參數 -> Motion: 10, Local: 0.55, Global: 0.55, Miss: 1
+       成功擷取 -> 省電: 62.3%, Precision: 59.0%, Recall: 46.8%, FPS: 16.0
+
+[11/81] 測試參數 -> Motion: 10, Local: 0.55, Global: 0.55, Miss: 2
+       成功擷取 -> 省電: 63.8%, Precision: 59.2%, Recall: 46.4%, FPS: 18.6
+
+[12/81] 測試參數 -> Motion: 10, Local: 0.55, Global: 0.55, Miss: 3
+       成功擷取 -> 省電: 64.2%, Precision: 59.4%, Recall: 46.3%, FPS: 20.4
+
+[13/81] 測試參數 -> Motion: 10, Local: 0.55, Global: 0.62, Miss: 1
+       成功擷取 -> 省電: 55.7%, Precision: 60.7%, Recall: 41.5%, FPS: 14.3
+
+[14/81] 測試參數 -> Motion: 10, Local: 0.55, Global: 0.62, Miss: 2
+       成功擷取 -> 省電: 58.3%, Precision: 60.5%, Recall: 42.5%, FPS: 16.1
+
+[15/81] 測試參數 -> Motion: 10, Local: 0.55, Global: 0.62, Miss: 3
+       成功擷取 -> 省電: 59.6%, Precision: 60.5%, Recall: 43.1%, FPS: 17.2
+
+[16/81] 測試參數 -> Motion: 10, Local: 0.55, Global: 0.7, Miss: 1
+       成功擷取 -> 省電: 30.4%, Precision: 57.5%, Recall: 21.0%, FPS: 10.0
+
+[17/81] 測試參數 -> Motion: 10, Local: 0.55, Global: 0.7, Miss: 2
+       成功擷取 -> 省電: 34.9%, Precision: 57.5%, Recall: 23.9%, FPS: 10.8
+
+[18/81] 測試參數 -> Motion: 10, Local: 0.55, Global: 0.7, Miss: 3
+       成功擷取 -> 省電: 37.5%, Precision: 58.0%, Recall: 25.7%, FPS: 11.4
+
+[19/81] 測試參數 -> Motion: 10, Local: 0.65, Global: 0.55, Miss: 1
+       成功擷取 -> 省電: 36.6%, Precision: 58.5%, Recall: 45.4%, FPS: 10.2
+
+[20/81] 測試參數 -> Motion: 10, Local: 0.65, Global: 0.55, Miss: 2
+       成功擷取 -> 省電: 36.6%, Precision: 59.4%, Recall: 35.7%, FPS: 13.7
+
+[21/81] 測試參數 -> Motion: 10, Local: 0.65, Global: 0.55, Miss: 3
+       成功擷取 -> 省電: 36.8%, Precision: 59.7%, Recall: 32.5%, FPS: 16.0
+
+[22/81] 測試參數 -> Motion: 10, Local: 0.65, Global: 0.62, Miss: 1
+       成功擷取 -> 省電: 34.4%, Precision: 60.1%, Recall: 33.6%, FPS: 10.3
+
+[23/81] 測試參數 -> Motion: 10, Local: 0.65, Global: 0.62, Miss: 2
+       成功擷取 -> 省電: 35.0%, Precision: 60.8%, Recall: 30.1%, FPS: 11.9
+
+[24/81] 測試參數 -> Motion: 10, Local: 0.65, Global: 0.62, Miss: 3
+       成功擷取 -> 省電: 35.7%, Precision: 61.1%, Recall: 29.2%, FPS: 13.1
+
+[25/81] 測試參數 -> Motion: 10, Local: 0.65, Global: 0.7, Miss: 1
+       成功擷取 -> 省電: 15.4%, Precision: 61.4%, Recall: 12.2%, FPS: 8.4
+
+[26/81] 測試參數 -> Motion: 10, Local: 0.65, Global: 0.7, Miss: 2
+       成功擷取 -> 省電: 17.2%, Precision: 59.9%, Recall: 13.0%, FPS: 8.8
+
+[27/81] 測試參數 -> Motion: 10, Local: 0.65, Global: 0.7, Miss: 3
+       成功擷取 -> 省電: 18.9%, Precision: 59.0%, Recall: 13.9%, FPS: 9.2
+
+[28/81] 測試參數 -> Motion: 15, Local: 0.45, Global: 0.55, Miss: 1
+       成功擷取 -> 省電: 87.7%, Precision: 45.4%, Recall: 46.7%, FPS: 28.7
+
+[29/81] 測試參數 -> Motion: 15, Local: 0.45, Global: 0.55, Miss: 2
+       成功擷取 -> 省電: 90.5%, Precision: 43.3%, Recall: 45.4%, FPS: 32.8
+
+[30/81] 測試參數 -> Motion: 15, Local: 0.45, Global: 0.55, Miss: 3
+       成功擷取 -> 省電: 90.7%, Precision: 42.8%, Recall: 45.0%, FPS: 34.3
+
+[31/81] 測試參數 -> Motion: 15, Local: 0.45, Global: 0.62, Miss: 1
+       成功擷取 -> 省電: 82.8%, Precision: 47.9%, Recall: 46.3%, FPS: 24.4
+
+[32/81] 測試參數 -> Motion: 15, Local: 0.45, Global: 0.62, Miss: 2
+       成功擷取 -> 省電: 86.2%, Precision: 45.9%, Recall: 45.8%, FPS: 28.2
+
+[33/81] 測試參數 -> Motion: 15, Local: 0.45, Global: 0.62, Miss: 3
+       成功擷取 -> 省電: 86.7%, Precision: 45.4%, Recall: 45.6%, FPS: 28.9
+
+[34/81] 測試參數 -> Motion: 15, Local: 0.45, Global: 0.7, Miss: 1
+       成功擷取 -> 省電: 63.8%, Precision: 48.0%, Recall: 35.5%, FPS: 15.9
+
+[35/81] 測試參數 -> Motion: 15, Local: 0.45, Global: 0.7, Miss: 2
+       成功擷取 -> 省電: 67.9%, Precision: 46.7%, Recall: 36.7%, FPS: 17.2
+
+[36/81] 測試參數 -> Motion: 15, Local: 0.45, Global: 0.7, Miss: 3
+       成功擷取 -> 省電: 68.5%, Precision: 46.5%, Recall: 36.8%, FPS: 16.8
+
+[37/81] 測試參數 -> Motion: 15, Local: 0.55, Global: 0.55, Miss: 1
+       成功擷取 -> 省電: 62.2%, Precision: 59.0%, Recall: 46.7%, FPS: 14.4
+
+[38/81] 測試參數 -> Motion: 15, Local: 0.55, Global: 0.55, Miss: 2
+       成功擷取 -> 省電: 63.7%, Precision: 59.2%, Recall: 46.4%, FPS: 16.9
+
+[39/81] 測試參數 -> Motion: 15, Local: 0.55, Global: 0.55, Miss: 3
+       成功擷取 -> 省電: 64.1%, Precision: 59.4%, Recall: 46.2%, FPS: 18.6
+
+[40/81] 測試參數 -> Motion: 15, Local: 0.55, Global: 0.62, Miss: 1
+       成功擷取 -> 省電: 55.7%, Precision: 60.6%, Recall: 41.4%, FPS: 13.1
+
+[41/81] 測試參數 -> Motion: 15, Local: 0.55, Global: 0.62, Miss: 2
+       成功擷取 -> 省電: 58.3%, Precision: 60.5%, Recall: 42.4%, FPS: 14.6
+
+[42/81] 測試參數 -> Motion: 15, Local: 0.55, Global: 0.62, Miss: 3
+       成功擷取 -> 省電: 59.5%, Precision: 60.5%, Recall: 43.0%, FPS: 15.8
+
+[43/81] 測試參數 -> Motion: 15, Local: 0.55, Global: 0.7, Miss: 1
+       成功擷取 -> 省電: 30.3%, Precision: 57.4%, Recall: 20.9%, FPS: 9.3
+
+[44/81] 測試參數 -> Motion: 15, Local: 0.55, Global: 0.7, Miss: 2
+       成功擷取 -> 省電: 34.7%, Precision: 57.5%, Recall: 23.7%, FPS: 10.1
+
+[45/81] 測試參數 -> Motion: 15, Local: 0.55, Global: 0.7, Miss: 3
+       成功擷取 -> 省電: 37.3%, Precision: 57.9%, Recall: 25.6%, FPS: 10.6
+
+[46/81] 測試參數 -> Motion: 15, Local: 0.65, Global: 0.55, Miss: 1
+       成功擷取 -> 省電: 36.5%, Precision: 58.5%, Recall: 45.3%, FPS: 9.5
+
+[47/81] 測試參數 -> Motion: 15, Local: 0.65, Global: 0.55, Miss: 2
+       成功擷取 -> 省電: 36.6%, Precision: 59.3%, Recall: 35.6%, FPS: 12.6
+
+[48/81] 測試參數 -> Motion: 15, Local: 0.65, Global: 0.55, Miss: 3
+       成功擷取 -> 省電: 36.8%, Precision: 59.7%, Recall: 32.5%, FPS: 14.6
+
+[49/81] 測試參數 -> Motion: 15, Local: 0.65, Global: 0.62, Miss: 1
+       成功擷取 -> 省電: 34.4%, Precision: 60.0%, Recall: 33.6%, FPS: 9.6
+
+[50/81] 測試參數 -> Motion: 15, Local: 0.65, Global: 0.62, Miss: 2
+       成功擷取 -> 省電: 35.0%, Precision: 60.8%, Recall: 30.1%, FPS: 11.1
+
+[51/81] 測試參數 -> Motion: 15, Local: 0.65, Global: 0.62, Miss: 3
+       成功擷取 -> 省電: 35.7%, Precision: 61.1%, Recall: 29.2%, FPS: 12.2
+
+[52/81] 測試參數 -> Motion: 15, Local: 0.65, Global: 0.7, Miss: 1
+       成功擷取 -> 省電: 15.4%, Precision: 61.4%, Recall: 12.2%, FPS: 8.1
+
+[53/81] 測試參數 -> Motion: 15, Local: 0.65, Global: 0.7, Miss: 2
+       成功擷取 -> 省電: 17.2%, Precision: 59.9%, Recall: 13.0%, FPS: 8.3
+
+[54/81] 測試參數 -> Motion: 15, Local: 0.65, Global: 0.7, Miss: 3
+       成功擷取 -> 省電: 18.9%, Precision: 59.0%, Recall: 13.9%, FPS: 8.8
+
+[55/81] 測試參數 -> Motion: 20, Local: 0.45, Global: 0.55, Miss: 1
+       成功擷取 -> 省電: 87.4%, Precision: 46.3%, Recall: 47.4%, FPS: 26.1
+
+[56/81] 測試參數 -> Motion: 20, Local: 0.45, Global: 0.55, Miss: 2
+       成功擷取 -> 省電: 90.2%, Precision: 44.9%, Recall: 47.0%, FPS: 30.6
+
+[57/81] 測試參數 -> Motion: 20, Local: 0.45, Global: 0.55, Miss: 3
+       成功擷取 -> 省電: 90.4%, Precision: 44.7%, Recall: 46.8%, FPS: 31.1
+
+[58/81] 測試參數 -> Motion: 20, Local: 0.45, Global: 0.62, Miss: 1
+       成功擷取 -> 省電: 82.5%, Precision: 48.5%, Recall: 46.8%, FPS: 22.4
+
+[59/81] 測試參數 -> Motion: 20, Local: 0.45, Global: 0.62, Miss: 2
+       成功擷取 -> 省電: 85.9%, Precision: 47.2%, Recall: 47.0%, FPS: 26.0
+
+[60/81] 測試參數 -> Motion: 20, Local: 0.45, Global: 0.62, Miss: 3
+       成功擷取 -> 省電: 86.4%, Precision: 46.9%, Recall: 46.9%, FPS: 26.0
+
+[61/81] 測試參數 -> Motion: 20, Local: 0.45, Global: 0.7, Miss: 1
+       成功擷取 -> 省電: 63.6%, Precision: 48.3%, Recall: 35.6%, FPS: 14.9
+
+[62/81] 測試參數 -> Motion: 20, Local: 0.45, Global: 0.7, Miss: 2
+       成功擷取 -> 省電: 67.7%, Precision: 47.2%, Recall: 36.9%, FPS: 16.4
+
+[63/81] 測試參數 -> Motion: 20, Local: 0.45, Global: 0.7, Miss: 3
+       成功擷取 -> 省電: 68.4%, Precision: 46.8%, Recall: 37.0%, FPS: 16.8
+
+[64/81] 測試參數 -> Motion: 20, Local: 0.55, Global: 0.55, Miss: 1
+       成功擷取 -> 省電: 62.1%, Precision: 58.9%, Recall: 46.6%, FPS: 14.7
+
+[65/81] 測試參數 -> Motion: 20, Local: 0.55, Global: 0.55, Miss: 2
+       成功擷取 -> 省電: 63.6%, Precision: 59.1%, Recall: 46.2%, FPS: 16.7
+
+[66/81] 測試參數 -> Motion: 20, Local: 0.55, Global: 0.55, Miss: 3
+       成功擷取 -> 省電: 64.0%, Precision: 59.3%, Recall: 46.1%, FPS: 18.7
+
+[67/81] 測試參數 -> Motion: 20, Local: 0.55, Global: 0.62, Miss: 1
+       成功擷取 -> 省電: 55.5%, Precision: 60.5%, Recall: 41.3%, FPS: 13.0
+
+[68/81] 測試參數 -> Motion: 20, Local: 0.55, Global: 0.62, Miss: 2
+       成功擷取 -> 省電: 58.2%, Precision: 60.4%, Recall: 42.3%, FPS: 14.7
+
+[69/81] 測試參數 -> Motion: 20, Local: 0.55, Global: 0.62, Miss: 3
+       成功擷取 -> 省電: 59.4%, Precision: 60.4%, Recall: 42.8%, FPS: 15.6
+
+[70/81] 測試參數 -> Motion: 20, Local: 0.55, Global: 0.7, Miss: 1
+       成功擷取 -> 省電: 30.0%, Precision: 57.2%, Recall: 20.6%, FPS: 9.4
+
+[71/81] 測試參數 -> Motion: 20, Local: 0.55, Global: 0.7, Miss: 2
+       成功擷取 -> 省電: 34.6%, Precision: 57.4%, Recall: 23.6%, FPS: 10.0
+
+[72/81] 測試參數 -> Motion: 20, Local: 0.55, Global: 0.7, Miss: 3
+       成功擷取 -> 省電: 37.1%, Precision: 57.8%, Recall: 25.4%, FPS: 10.6
+
+[73/81] 測試參數 -> Motion: 20, Local: 0.65, Global: 0.55, Miss: 1
+       成功擷取 -> 省電: 36.5%, Precision: 58.4%, Recall: 45.2%, FPS: 9.3
+
+[74/81] 測試參數 -> Motion: 20, Local: 0.65, Global: 0.55, Miss: 2
+       成功擷取 -> 省電: 36.5%, Precision: 59.3%, Recall: 35.6%, FPS: 12.5
+
+[75/81] 測試參數 -> Motion: 20, Local: 0.65, Global: 0.55, Miss: 3
+       成功擷取 -> 省電: 36.8%, Precision: 59.7%, Recall: 32.4%, FPS: 14.4
+
+[76/81] 測試參數 -> Motion: 20, Local: 0.65, Global: 0.62, Miss: 1
+       成功擷取 -> 省電: 34.4%, Precision: 60.0%, Recall: 33.5%, FPS: 9.6
+
+[77/81] 測試參數 -> Motion: 20, Local: 0.65, Global: 0.62, Miss: 2
+       成功擷取 -> 省電: 35.0%, Precision: 60.8%, Recall: 30.1%, FPS: 11.0
+
+[78/81] 測試參數 -> Motion: 20, Local: 0.65, Global: 0.62, Miss: 3
+       成功擷取 -> 省電: 35.7%, Precision: 61.1%, Recall: 29.1%, FPS: 12.2
+
+[79/81] 測試參數 -> Motion: 20, Local: 0.65, Global: 0.7, Miss: 1
+       成功擷取 -> 省電: 15.4%, Precision: 61.4%, Recall: 12.2%, FPS: 8.1
+
+[80/81] 測試參數 -> Motion: 20, Local: 0.65, Global: 0.7, Miss: 2
+       成功擷取 -> 省電: 17.2%, Precision: 59.9%, Recall: 13.0%, FPS: 8.4
+
+[81/81] 測試參數 -> Motion: 20, Local: 0.65, Global: 0.7, Miss: 3
+       成功擷取 -> 省電: 18.9%, Precision: 58.9%, Recall: 13.9%, FPS: 8.7

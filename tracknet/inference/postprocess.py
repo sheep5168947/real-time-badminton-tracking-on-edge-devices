@@ -5,7 +5,7 @@ one file prevents training/evaluation/inference drift: the same heatmap threshol
 blob extraction, V1 Hough rule, and coordinate convention are used everywhere.
 """
 
-from __future__ import annotations
+# # from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import Literal
@@ -28,7 +28,7 @@ class Prediction:
     score: float
 
     @property
-    def coordinate(self) -> tuple[float, float] | None:
+    def coordinate(self) -> tuple[float, float]:
         if self.visibility != 1 or self.x < 0 or self.y < 0:
             return None
         return float(self.x), float(self.y)

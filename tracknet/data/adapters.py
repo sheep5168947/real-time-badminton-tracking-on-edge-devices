@@ -5,7 +5,7 @@ emit neutral `RawSequence` records so preprocessing, training, and paper specs
 can stay independent from raw directory conventions.
 """
 
-from __future__ import annotations
+# # from __future__ import annotations
 
 from pathlib import Path
 from typing import Iterable, Literal
@@ -20,7 +20,7 @@ def _visible_dir(path: Path) -> bool:
     return path.is_dir() and not path.name.startswith(".") and path.name != "__pycache__"
 
 
-def _iter_match_sequences(match_dir: Path, *, domain: str | None = None) -> Iterable[RawSequence]:
+def _iter_match_sequences(match_dir: Path, *, domain: str = None) -> Iterable[RawSequence]:
     video_dir = match_dir / "video"
     csv_dir = match_dir / "csv"
     if not video_dir.exists() or not csv_dir.exists():

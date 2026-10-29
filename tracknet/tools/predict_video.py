@@ -1,6 +1,6 @@
 """Run frame-accurate video inference and write CSV/video outputs."""
 
-from __future__ import annotations
+# # from __future__ import annotations
 
 import argparse
 from pathlib import Path

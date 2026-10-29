@@ -1,6 +1,6 @@
 """TrackNetV3 tracker and rectifier contracts."""
 
-from __future__ import annotations
+# # from __future__ import annotations
 
 from tracknet.data.targets import HeatmapTargetPolicy
 from tracknet.models.tracknet_v3 import TrackNetV3Tracker, TrajectoryRectifier

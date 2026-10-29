@@ -1,6 +1,6 @@
 """Paper-level contracts for the TrackNet family."""
 
-from __future__ import annotations
+# # from __future__ import annotations
 
 from typing import Any
 
@@ -30,7 +30,7 @@ def _build_specs() -> dict[str, PaperSpec]:
     }
 
 
-_SPECS: dict[str, PaperSpec] | None = None
+_SPECS: dict[str, PaperSpec] = None
 
 
 def _specs() -> dict[str, PaperSpec]:
@@ -64,7 +64,7 @@ def get_paper_spec(name: str) -> PaperSpec:
     return specs[key]
 
 
-def dataset_config_with_paper_defaults(dataset_cfg: dict[str, Any], model_cfg: dict[str, Any] | None = None) -> dict[str, Any]:
+def dataset_config_with_paper_defaults(dataset_cfg: dict[str, Any], model_cfg: dict[str, Any] = None) -> dict[str, Any]:
     """Return sampling defaults for compatibility with older callers.
 
     Paper-specific target generation now lives in `PaperSpec.target_policy`.

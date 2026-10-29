@@ -1,6 +1,6 @@
 """TrackNetV4 motion-aware feature fusion."""
 
-# from __future__ import annotations
+# # # from __future__ import annotations
 
 import torch
 import torch.nn as nn
@@ -25,7 +25,7 @@ class MotionPromptV4(nn.Module):
 
 
 class TrackNetV4(nn.Module):
-    def __init__(self, sequence_length: int = 3, input_channels: int | None = None, output_channels: int | None = None, dropout: float = 0.0, base_channels: int = 64, fusion_variant: str = "eq4"):
+    def __init__(self, sequence_length: int = 3, input_channels: int = None, output_channels: int = None, dropout: float = 0.0, base_channels: int = 64, fusion_variant: str = "eq4"):
         super().__init__()
         self.sequence_length = sequence_length
         in_ch = input_channels if input_channels is not None else sequence_length * 3

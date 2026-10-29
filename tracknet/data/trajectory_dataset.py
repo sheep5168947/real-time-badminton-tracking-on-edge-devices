@@ -1,6 +1,6 @@
 """Trajectory windows for the TrackNetV3 rectification module."""
 
-from __future__ import annotations
+# # from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
@@ -23,7 +23,7 @@ class TrajectoryRectifierDatasetConfig:
     mask_ratio: float = 0.3
     delta_y_pixels: float = 30.0
     seed: int = 26
-    split_file: Path | None = None
+    split_file: Path = None
 
     @classmethod
     def from_mapping(cls, cfg: dict[str, Any]) -> "TrajectoryRectifierDatasetConfig":
@@ -62,7 +62,7 @@ class TrajectoryRectifierDataset(Dataset[dict[str, Any]]):
         self.width = int(self.manifest["target_width"])
         self.height = int(self.manifest["target_height"])
         self.sequences: list[tuple[str, pd.DataFrame]] = []
-        allowed: set[str] | None = None
+        allowed: set[str] = None
         if cfg.split_file is not None:
             allowed = {line.strip() for line in cfg.split_file.read_text().splitlines() if line.strip()}
         for meta in self.manifest["sequences"]:

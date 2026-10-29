@@ -1,6 +1,6 @@
 """TrackNetV3 tracking and trajectory rectification modules."""
 
-from __future__ import annotations
+# # from __future__ import annotations
 
 import torch
 import torch.nn as nn
@@ -17,7 +17,7 @@ class TrackNetV3Tracker(nn.Module):
     the paper value in configs.
     """
 
-    def __init__(self, sequence_length: int = 8, input_channels: int | None = None, output_channels: int | None = None, dropout: float = 0.0, base_channels: int = 64):
+    def __init__(self, sequence_length: int = 8, input_channels: int = None, output_channels: int = None, dropout: float = 0.0, base_channels: int = 64):
         super().__init__()
         self.sequence_length = sequence_length
         in_ch = input_channels if input_channels is not None else sequence_length * 3 + 3

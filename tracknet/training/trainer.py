@@ -1,6 +1,6 @@
 """Training loop for TrackNet tracking models."""
 
-from __future__ import annotations
+# # from __future__ import annotations
 
 import os
 import random
@@ -72,7 +72,7 @@ class TrainResult:
     output_dir: Path
     best_loss: float
     last_epoch: int
-    tensorboard_url: str | None = None
+    tensorboard_url: str = None
 
 
 @dataclass
@@ -117,8 +117,8 @@ class TrackNetTrainer:
         self.split_metadata: dict[str, Any] = {}
         self.paper_spec = self._resolve_paper_spec()
         self.tensorboard_enabled = bool(self.train_cfg.get("tensorboard", False))
-        self.tensorboard_writer: Any | None = None
-        self.tensorboard_server: TensorBoardServer | None = None
+        self.tensorboard_writer: Any = None
+        self.tensorboard_server: TensorBoardServer = None
 
     def _resolve_paper_spec(self) -> PaperSpec:
         model_cfg = self.cfg.get("model", {})
@@ -237,7 +237,7 @@ class TrackNetTrainer:
             return torch.optim.SGD(model.parameters(), lr=float(1e-2 if lr is None else lr), momentum=0.9, weight_decay=wd)
         raise ValueError(f"Unknown optimizer: {opt_name}")
 
-    def _make_scheduler(self, optimizer: torch.optim.Optimizer) -> Any | None:
+    def _make_scheduler(self, optimizer: torch.optim.Optimizer) -> Any:
         name = self.train_cfg.get("scheduler")
         if not name or str(name).lower() == "none":
             return None
@@ -257,7 +257,7 @@ class TrackNetTrainer:
             )
         raise ValueError(f"Unknown scheduler: {name}")
 
-    def _make_tensorboard_writer(self) -> Any | None:
+    def _make_tensorboard_writer(self) -> Any:
         if not self.tensorboard_enabled or not self.is_main:
             return None
         try:
@@ -281,7 +281,7 @@ class TrackNetTrainer:
                 return port
         raise RuntimeError(f"Could not find an open TensorBoard port starting at {preferred_port}")
 
-    def _launch_tensorboard_if_needed(self) -> TensorBoardServer | None:
+    def _launch_tensorboard_if_needed(self) -> TensorBoardServer:
         if not self.tensorboard_enabled or not self.is_main:
             return None
         if not bool(self.train_cfg.get("launch_tensorboard", True)):
@@ -307,7 +307,7 @@ class TrackNetTrainer:
         print(f"TensorBoard logdir: {logdir}")
         return TensorBoardServer(process=process, url=url, logdir=logdir, port=port)
 
-    def _restore_if_needed(self, model: torch.nn.Module, optimizer: torch.optim.Optimizer, scheduler: Any | None) -> None:
+    def _restore_if_needed(self, model: torch.nn.Module, optimizer: torch.optim.Optimizer, scheduler: Any) -> None:
         resume = self.train_cfg.get("resume_checkpoint") or (self.output_dir / "checkpoints" / "last.pt" if self.train_cfg.get("resume") else None)
         if not resume:
             return
@@ -335,10 +335,10 @@ class TrackNetTrainer:
         model: torch.nn.Module,
         criterion: torch.nn.Module,
         loader: DataLoader,
-        optimizer: torch.optim.Optimizer | None,
+        optimizer: torch.optim.Optimizer,
         epoch: int,
-        profiler: Any | None = None,
-        tensorboard: TensorBoardRunLogger | None = None,
+        profiler: Any = None,
+        tensorboard: TensorBoardRunLogger = None,
     ) -> tuple[float, int]:
         train = optimizer is not None
         model.train(train)
@@ -381,7 +381,7 @@ class TrackNetTrainer:
             count = int(t[1].item())
         return avg, count
 
-    def _sample_batch(self, loader: DataLoader) -> dict[str, Any] | None:
+    def _sample_batch(self, loader: DataLoader) -> dict[str, Any]:
         try:
             return next(iter(loader))
         except StopIteration:

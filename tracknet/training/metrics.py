@@ -1,6 +1,6 @@
 """TrackNet evaluation classification and metrics."""
 
-from __future__ import annotations
+# # from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import Literal
@@ -52,7 +52,7 @@ class ConfusionCounts:
         }
 
 
-def classify_prediction(pred: tuple[float, float] | None, gt: tuple[float, float] | None, tolerance: float) -> PredictionClass:
+def classify_prediction(pred: tuple[float, float], gt: tuple[float, float], tolerance: float) -> PredictionClass:
     has_pred = pred is not None
     has_gt = gt is not None
     if not has_pred and not has_gt:

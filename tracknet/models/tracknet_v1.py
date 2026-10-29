@@ -5,7 +5,7 @@ DeconvNet-style decoder. The network predicts a 256-bin grayscale class at each
 pixel; `CrossEntropyLoss` applies the pixel-wise softmax during training.
 """
 
-from __future__ import annotations
+# # from __future__ import annotations
 
 import torch
 import torch.nn as nn
@@ -24,7 +24,7 @@ def _conv_stack(in_channels: int, depths: tuple[int, ...]) -> nn.Sequential:
 
 
 class TrackNetV1(nn.Module):
-    def __init__(self, sequence_length: int = 3, input_channels: int | None = None, num_bins: int = 256, dropout: float = 0.0, base_channels: int = 64):
+    def __init__(self, sequence_length: int = 3, input_channels: int = None, num_bins: int = 256, dropout: float = 0.0, base_channels: int = 64):
         super().__init__()
         in_ch = input_channels if input_channels is not None else sequence_length * 3
         self.sequence_length = sequence_length

@@ -1,6 +1,6 @@
 """TrackNetV5: MDD + residual spatio-temporal refinement."""
 
-from __future__ import annotations
+# # from __future__ import annotations
 
 import math
 
