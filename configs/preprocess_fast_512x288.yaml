@@ -9,4 +9,4 @@ preprocess:
   missing_annotation_policy: invisible
   background_sample_stride: 1
   val_fraction: 0.2
-  workers: 16
+  workers: 64

@@ -1,6 +1,6 @@
 """Preprocess legacy raw TrackNet data into the stable project format."""
 
-from __future__ import annotations
+# # from __future__ import annotations
 
 import argparse
 from pathlib import Path

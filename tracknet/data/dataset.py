@@ -1,6 +1,6 @@
 """Processed TrackNet datasets and sliding-window sampling."""
 
-from __future__ import annotations
+# # from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
@@ -32,10 +32,10 @@ class SequenceRecord:
     match_name: str
     sequence_name: str
     sequence_root: Path
-    background_path: Path | None
+    background_path: Path
     width: int
     height: int
-    transform: dict[str, Any] | None
+    transform: dict[str, Any]
     annotations: pd.DataFrame
 
 
@@ -51,7 +51,7 @@ class TrackNetDatasetConfig:
     processed_root: Path
     sequence_length: int
     frame_stride: int = 1
-    split_file: Path | None = None
+    split_file: Path = None
 
     @classmethod
     def from_mapping(cls, cfg: dict[str, Any]) -> "TrackNetDatasetConfig":
@@ -74,7 +74,7 @@ class ProcessedTrackNetDataset(Dataset[dict[str, Any]]):
     - target_classes: [H,W] for V1 softmax targets when heatmap_mode=v1_uint8
     """
 
-    def __init__(self, cfg: TrackNetDatasetConfig, target_policy: HeatmapTargetPolicy | None = None):
+    def __init__(self, cfg: TrackNetDatasetConfig, target_policy: HeatmapTargetPolicy = None):
         if cfg.sequence_length <= 0:
             raise ValueError("sequence_length must be positive")
         self.cfg = cfg
@@ -99,7 +99,7 @@ class ProcessedTrackNetDataset(Dataset[dict[str, Any]]):
 
     def _load_sequences(self) -> list[SequenceRecord]:
         records: list[SequenceRecord] = []
-        allowed_sequence_ids: set[str] | None = None
+        allowed_sequence_ids: set[str] = None
         if self.cfg.split_file is not None:
             if not self.cfg.split_file.exists():
                 raise FileNotFoundError(f"Split file not found: {self.cfg.split_file}")

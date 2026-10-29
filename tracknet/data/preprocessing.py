@@ -6,7 +6,7 @@ on demand by model-specific datasets so TrackNetV1/V2/V3/V4/V5 can keep their
 paper-specific target semantics without rebuilding raw data for every loss.
 """
 
-from __future__ import annotations
+# # from __future__ import annotations
 
 from collections import defaultdict
 from concurrent.futures import ProcessPoolExecutor
@@ -83,13 +83,13 @@ def _annotation_lookup(df: pd.DataFrame) -> dict[int, pd.Series]:
     return {int(row[RAW_FRAME_COL]): row for _, row in df.iterrows()}
 
 
-def _safe_visibility(row: pd.Series | None) -> int:
+def _safe_visibility(row: pd.Series) -> int:
     if row is None:
         return 0
     return 1 if int(row[RAW_VISIBILITY_COL]) == 1 else 0
 
 
-def _safe_xy(row: pd.Series | None) -> tuple[float, float]:
+def _safe_xy(row: pd.Series) -> tuple[float, float]:
     if row is None:
         return -1.0, -1.0
     x = row[RAW_X_COL]

@@ -7,7 +7,7 @@ The functions below keep the channel shape and coordinate convention explicit:
 coordinates are always (x, y), arrays are always [H, W].
 """
 
-from __future__ import annotations
+# # from __future__ import annotations
 
 import math
 from dataclasses import dataclass
@@ -56,14 +56,14 @@ def make_heatmap(width: int, height: int, visibility: int, x: float, y: float, m
     raise ValueError(f"Unsupported heatmap mode: {mode}")
 
 
-def heatmap_argmax(heatmap: np.ndarray, threshold: float) -> tuple[int, int] | None:
+def heatmap_argmax(heatmap: np.ndarray, threshold: float) -> tuple[int, int]:
     if heatmap.size == 0 or float(np.max(heatmap)) < threshold:
         return None
     y, x = np.unravel_index(int(np.argmax(heatmap)), heatmap.shape)
     return int(x), int(y)
 
 
-def heatmap_largest_blob_centroid(heatmap: np.ndarray, threshold: float) -> tuple[int, int] | None:
+def heatmap_largest_blob_centroid(heatmap: np.ndarray, threshold: float) -> tuple[int, int]:
     """TrackNetV2/V3 post-processing: threshold then centroid of largest blob."""
     if heatmap.size == 0 or float(np.max(heatmap)) < threshold:
         return None
@@ -78,7 +78,7 @@ def heatmap_largest_blob_centroid(heatmap: np.ndarray, threshold: float) -> tupl
     return int(round(m["m10"] / m["m00"])), int(round(m["m01"] / m["m00"]))
 
 
-def v1_hough_coordinate(heatmap_uint8: np.ndarray, threshold: int = 128, min_radius: int = 2, max_radius: int = 12) -> tuple[int, int] | None:
+def v1_hough_coordinate(heatmap_uint8: np.ndarray, threshold: int = 128, min_radius: int = 2, max_radius: int = 12) -> tuple[int, int]:
     """TrackNetV1 post-processing from the paper.
 
     V1 first binarizes the grayscale heatmap at t=128 and then applies the
@@ -106,7 +106,7 @@ def v1_hough_coordinate(heatmap_uint8: np.ndarray, threshold: int = 128, min_rad
     return int(x), int(y)
 
 
-def coordinate_distance(a: tuple[float, float] | None, b: tuple[float, float] | None) -> float:
+def coordinate_distance(a: tuple[float, float], b: tuple[float, float]) -> float:
     if a is None or b is None:
         return math.inf
     return float(math.hypot(a[0] - b[0], a[1] - b[1]))

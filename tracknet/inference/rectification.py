@@ -1,6 +1,6 @@
 """TrackNetV3 trajectory rectification for predicted coordinate sequences."""
 
-from __future__ import annotations
+# # from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
@@ -18,14 +18,14 @@ from tracknet.utils.device import select_device
 @dataclass(frozen=True)
 class RectificationConfig:
     checkpoint_path: Path
-    model: dict[str, Any] | None = None
+    model: dict[str, Any] = None
     trajectory_length: int = 16
     delta_y_pixels: float = 30.0
     batch_size: int = 16
     device: str = "auto"
 
 
-def _model_config_from_checkpoint(checkpoint_path: Path, explicit_model: dict[str, Any] | None) -> tuple[dict[str, Any], dict[str, Any]]:
+def _model_config_from_checkpoint(checkpoint_path: Path, explicit_model: dict[str, Any]) -> tuple[dict[str, Any], dict[str, Any]]:
     ckpt = load_checkpoint(checkpoint_path, map_location="cpu")
     if explicit_model is not None:
         return explicit_model, ckpt

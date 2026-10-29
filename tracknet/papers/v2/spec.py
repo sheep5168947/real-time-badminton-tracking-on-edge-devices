@@ -1,6 +1,6 @@
 """TrackNetV2 paper contract."""
 
-from __future__ import annotations
+# # from __future__ import annotations
 
 from tracknet.data.targets import HeatmapTargetPolicy
 from tracknet.models.tracknet_v2 import TrackNetV2

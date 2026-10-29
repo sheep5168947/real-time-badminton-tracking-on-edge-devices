@@ -1,6 +1,6 @@
 """Shared protocol objects for TrackNet paper integrations."""
 
-from __future__ import annotations
+# # from __future__ import annotations
 
 from dataclasses import asdict, dataclass, field, replace
 from typing import Any, Callable, Literal
@@ -34,11 +34,11 @@ class EvaluationProtocol:
     def with_overrides(
         self,
         *,
-        threshold: float | None = None,
-        hough_threshold: int | None = None,
-        tolerance_pixels: float | None = None,
-        coordinate_space: CoordinateSpace | None = None,
-        supports_rectifier: bool | None = None,
+        threshold: float = None,
+        hough_threshold: int = None,
+        tolerance_pixels: float = None,
+        coordinate_space: CoordinateSpace = None,
+        supports_rectifier: bool = None,
     ) -> "EvaluationProtocol":
         return replace(
             self,
@@ -65,9 +65,9 @@ class PaperSpec:
     paper_id: str
     model_version: str
     loss_name: str
-    model_factory: Callable[..., nn.Module] | None = None
+    model_factory: Callable[..., nn.Module] = None
     dataset_defaults: dict[str, Any] = field(default_factory=dict)
-    target_policy: HeatmapTargetPolicy | None = None
+    target_policy: HeatmapTargetPolicy = None
     postprocess_kind: PostprocessKind = "largest_blob"
     tolerance_pixels: float = 4.0
     evaluation_protocol: EvaluationProtocol = field(default_factory=EvaluationProtocol)

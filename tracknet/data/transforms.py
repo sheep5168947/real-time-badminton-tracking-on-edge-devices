@@ -5,7 +5,7 @@ heatmap coordinate is only meaningful when the inverse transform maps it back to
 exactly the same raw video coordinate system used by the labels.
 """
 
-from __future__ import annotations
+# # from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import Tuple

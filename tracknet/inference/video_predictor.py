@@ -1,6 +1,6 @@
 """Video inference with frame-accurate CSV and optional visualization output."""
 
-from __future__ import annotations
+# # from __future__ import annotations
 
 from collections import defaultdict, deque
 from dataclasses import dataclass
@@ -30,8 +30,8 @@ class VideoPredictionConfig:
     video_path: Path
     checkpoint_path: Path
     output_csv: Path
-    output_video: Path | None = None
-    model: dict[str, Any] | None = None
+    output_video: Path = None
+    model: dict[str, Any] = None
     target_width: int = 512
     target_height: int = 288
     sequence_length: int = 3
@@ -41,14 +41,14 @@ class VideoPredictionConfig:
     device: str = "auto"
     frame_index_base: int = 0
     trail_length: int = 12
-    rectifier_checkpoint_path: Path | None = None
-    rectifier_model: dict[str, Any] | None = None
+    rectifier_checkpoint_path: Path = None
+    rectifier_model: dict[str, Any] = None
     rectifier_sequence_length: int = 16
     rectifier_delta_y_pixels: float = 30.0
     background_sample_stride: int = 8
     max_background_samples: int = 512
-    num_threads: int | None = None
-    interop_threads: int | None = None
+    num_threads: int = None
+    interop_threads: int = None
     progress: bool = True
     verbose: bool = True
 
@@ -104,7 +104,7 @@ def _estimate_background(model_frames_rgb: list[np.ndarray]) -> np.ndarray:
 
 def _sample_background(video_path: Path, cfg: VideoPredictionConfig) -> tuple[np.ndarray, LetterboxTransform]:
     samples: list[np.ndarray] = []
-    transform: LetterboxTransform | None = None
+    transform: LetterboxTransform = None
     stride = max(1, int(cfg.background_sample_stride))
     max_samples = max(1, int(cfg.max_background_samples))
     progress_bar = tqdm(
@@ -131,7 +131,7 @@ def _sample_background(video_path: Path, cfg: VideoPredictionConfig) -> tuple[np
     return _estimate_background(samples), transform
 
 
-def _model_config_from_checkpoint(checkpoint_path: Path, explicit_model: dict[str, Any] | None) -> tuple[dict[str, Any], dict[str, Any]]:
+def _model_config_from_checkpoint(checkpoint_path: Path, explicit_model: dict[str, Any]) -> tuple[dict[str, Any], dict[str, Any]]:
     ckpt = load_checkpoint(checkpoint_path, map_location="cpu")
     if explicit_model is not None:
         return explicit_model, ckpt
@@ -196,7 +196,7 @@ def _build_input_tensor(
     frames_rgb_model: list[np.ndarray],
     indices: list[int],
     *,
-    background_rgb_model: np.ndarray | None,
+    background_rgb_model: np.ndarray,
 ) -> torch.Tensor:
     tensors = [torch.from_numpy(image_to_tensor_chw_uint8_rgb(frames_rgb_model[i])) for i in indices]
     frames_t = torch.stack(tensors, dim=0)
@@ -289,7 +289,7 @@ def _predict_streaming(
     *,
     video_path: Path,
     frame_count: int,
-    background_rgb_model: np.ndarray | None,
+    background_rgb_model: np.ndarray,
     cfg: VideoPredictionConfig,
     paper_spec: Any,
     device: torch.device,

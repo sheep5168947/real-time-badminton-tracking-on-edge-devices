@@ -1,6 +1,6 @@
 """Visualization helpers for prediction outputs."""
 
-from __future__ import annotations
+# # from __future__ import annotations
 
 from collections import deque
 from typing import Iterable
@@ -15,8 +15,8 @@ def draw_prediction(
     frame_bgr: np.ndarray,
     prediction: Prediction,
     *,
-    frame_index: int | None = None,
-    trail: Iterable[tuple[int, int]] | None = None,
+    frame_index: int = None,
+    trail: Iterable[tuple[int, int]] = None,
     radius: int = 6,
 ) -> np.ndarray:
     """Draw one prediction on a raw BGR frame without changing its dimensions."""

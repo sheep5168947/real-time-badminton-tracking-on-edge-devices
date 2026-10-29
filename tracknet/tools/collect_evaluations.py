@@ -1,6 +1,6 @@
 """Collect independent evaluation outputs into release summaries."""
 
-from __future__ import annotations
+# # from __future__ import annotations
 
 import argparse
 from pathlib import Path

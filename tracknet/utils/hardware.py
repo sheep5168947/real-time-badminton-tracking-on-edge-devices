@@ -1,6 +1,6 @@
 """Hardware capability reporting for reproducible experiment logs."""
 
-from __future__ import annotations
+# # from __future__ import annotations
 
 import platform
 from typing import Any

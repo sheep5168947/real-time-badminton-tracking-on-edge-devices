@@ -1,6 +1,6 @@
 """Window scheduling primitives for video and dataset inference."""
 
-from __future__ import annotations
+# # from __future__ import annotations
 
 
 def window_indices_for_frame(frame_index: int, frame_count: int, sequence_length: int) -> list[int]:

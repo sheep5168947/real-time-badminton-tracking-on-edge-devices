@@ -6,7 +6,7 @@ state with the best validation metric/loss; `model_best.pt` contains only the
 model weights for lightweight inference export.
 """
 
-from __future__ import annotations
+# # from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
@@ -24,7 +24,7 @@ class CheckpointState:
     global_step: int
     best_score: float
     metrics: dict[str, float]
-    training: dict[str, Any] | None = None
+    training: dict[str, Any] = None
 
 
 def _model_state_dict(model: nn.Module) -> dict[str, torch.Tensor]:
@@ -36,11 +36,11 @@ def _model_state_dict(model: nn.Module) -> dict[str, torch.Tensor]:
 def save_checkpoint(
     path: str | Path,
     model: nn.Module,
-    optimizer: torch.optim.Optimizer | None,
-    scheduler: Any | None,
+    optimizer: torch.optim.Optimizer,
+    scheduler: Any,
     state: CheckpointState,
     config: dict[str, Any],
-    scaler: Any | None = None,
+    scaler: Any = None,
 ) -> None:
     path = Path(path)
     ensure_dir(path.parent)
@@ -63,7 +63,7 @@ def save_checkpoint(
     torch.save(payload, path)
 
 
-def save_model_only(path: str | Path, model: nn.Module, config: dict[str, Any], metrics: dict[str, float] | None = None) -> None:
+def save_model_only(path: str | Path, model: nn.Module, config: dict[str, Any], metrics: dict[str, float] = None) -> None:
     path = Path(path)
     ensure_dir(path.parent)
     torch.save({"format_version": 1, "config": config, "metrics": metrics or {}, "model_state_dict": _model_state_dict(model)}, path)

@@ -93,3 +93,6 @@ lightning_logs/
 /weights/
 /report_materials/
 /model_results/**/predictions.csv
+
+# Raw TensorBoard telemetry stays on the working machine
+/model_results/training_logs/**/events.out.tfevents.*

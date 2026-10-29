@@ -1,6 +1,6 @@
 """Evaluation loop using the same model, heatmap and post-processing semantics as inference."""
 
-from __future__ import annotations
+# # from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
@@ -28,20 +28,20 @@ class EvaluationConfig:
     checkpoint_path: Path
     output_dir: Path
     dataset: dict[str, Any]
-    model: dict[str, Any] | None = None
+    model: dict[str, Any] = None
     batch_size: int = 4
     workers: int = 2
     device: str = "auto"
-    threshold: float | None = None
-    hough_threshold: int | None = None
-    tolerance_pixels: float | None = None
-    coordinate_space: CoordinateSpace | None = None
-    rectifier_checkpoint_path: Path | None = None
-    rectifier_model: dict[str, Any] | None = None
+    threshold: float = None
+    hough_threshold: int = None
+    tolerance_pixels: float = None
+    coordinate_space: CoordinateSpace = None
+    rectifier_checkpoint_path: Path = None
+    rectifier_model: dict[str, Any] = None
     rectifier_sequence_length: int = 16
     rectifier_delta_y_pixels: float = 30.0
-    num_threads: int | None = None
-    interop_threads: int | None = None
+    num_threads: int = None
+    interop_threads: int = None
     progress: bool = True
 
 
@@ -64,7 +64,7 @@ def _collate_eval(samples: list[dict[str, Any]]) -> dict[str, Any]:
     }
 
 
-def _model_config_from_checkpoint(checkpoint_path: Path, explicit_model: dict[str, Any] | None) -> tuple[dict[str, Any], dict[str, Any]]:
+def _model_config_from_checkpoint(checkpoint_path: Path, explicit_model: dict[str, Any]) -> tuple[dict[str, Any], dict[str, Any]]:
     ckpt = load_checkpoint(checkpoint_path, map_location="cpu")
     if explicit_model is not None:
         return explicit_model, ckpt
@@ -159,7 +159,7 @@ def _counts_metrics(counts: ConfusionCounts) -> dict[str, float]:
     return counts.metrics()
 
 
-def resolve_evaluation_protocol(cfg: EvaluationConfig, model_cfg: dict[str, Any] | None = None) -> EvaluationProtocol:
+def resolve_evaluation_protocol(cfg: EvaluationConfig, model_cfg: dict[str, Any] = None) -> EvaluationProtocol:
     resolved_model = model_cfg or cfg.model
     if resolved_model is None:
         raise ValueError("model_cfg is required when EvaluationConfig.model is not provided")
@@ -218,7 +218,7 @@ def _record_frame_predictions(
     sequence_id: str,
     sample_metas: list[dict[str, Any]],
     frame_predictions: list[FramePrediction],
-    rectifier_cfg: RectificationConfig | None,
+    rectifier_cfg: RectificationConfig,
 ) -> None:
     if not frame_predictions:
         return
@@ -273,7 +273,7 @@ def _record_frame_predictions(
         )
 
 
-def _rectifier_config(cfg: EvaluationConfig) -> RectificationConfig | None:
+def _rectifier_config(cfg: EvaluationConfig) -> RectificationConfig:
     if cfg.rectifier_checkpoint_path is None:
         return None
     return RectificationConfig(

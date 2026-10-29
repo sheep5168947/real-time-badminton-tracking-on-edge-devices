@@ -1,4 +1,4 @@
-from __future__ import annotations
+# # from __future__ import annotations
 
 from pathlib import Path
 import inspect
@@ -144,7 +144,7 @@ class _RaisingOutput(nn.Module):
 class _RecordingFusionOutput(nn.Conv2d):
     def __init__(self, in_channels: int, out_channels: int):
         super().__init__(in_channels, out_channels, kernel_size=1)
-        self.last_input: torch.Tensor | None = None
+        self.last_input: torch.Tensor = None
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         self.last_input = x.detach().clone()
