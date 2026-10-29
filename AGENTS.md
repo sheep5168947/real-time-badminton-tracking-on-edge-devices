@@ -200,3 +200,18 @@ Keep changes scoped and consistent with existing project patterns.
 Do not modify real datasets, generated processed data, local training outputs, unrelated tmux sessions, or unrelated GPU processes unless explicitly requested.
 
 Communicate concisely in Chinese unless the user requests another language. Repository artifacts requested by the user may be written in professional English.
+
+
+## Thesis Version Control Rules
+
+This is an actively developed thesis repository, not a backup-only repository.
+Read CONTRIBUTING.md before committing or pushing.
+- Use a task branch based on main (PC/common) or deploy/jetson-nano (device compatibility).
+- Use Conventional Commits for every new commit. Do not use backup branches for regular work.
+- Complete relevant checks, review the staged diff, then commit and push authorized task changes.
+- Do not push directly to main or deploy/jetson-nano. Integrate through a pull request.
+- Do not force-push, overwrite unrelated user changes, or store secrets/datasets/engines in Git.
+- Keep algorithms and existing training settings unchanged unless the user requests changes.
+- PC is Python 3.11; Nano currently uses Python 3.6.9 with existing TensorRT/PyCUDA.
+- Do not apply PC dependency installation or whole-repository Python compilation to Nano.
+- If authentication or tests block publishing, report the exact limitation and retain local work.

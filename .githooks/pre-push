@@ -1,0 +1,10 @@
+#!/bin/sh
+THESIS_PYTHON=$(git config --get thesis.python)
+if [ -n "$THESIS_PYTHON" ]; then
+    exec "$THESIS_PYTHON" scripts/check_push.py "$@"
+fi
+if command -v python3 >/dev/null 2>&1; then
+    exec python3 scripts/check_push.py "$@"
+else
+    exec python scripts/check_push.py "$@"
+fi

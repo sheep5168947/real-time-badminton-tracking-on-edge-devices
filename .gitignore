@@ -87,3 +87,9 @@ lightning_logs/
 # Versioned training logs and evaluation artifacts
 !model_results/
 !model_results/**
+
+# Device-local assets and reproducible event media
+/raw/
+/weights/
+/report_materials/
+/model_results/**/predictions.csv

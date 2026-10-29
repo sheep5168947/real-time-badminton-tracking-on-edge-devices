@@ -63,8 +63,10 @@ Nano 原始程式與既有上游修改先完成來源快照。PC 保留 Nano 原
 改名清單見 `docs/platforms/jetson_nano/file_migration.csv`。
 舊檔名 `realtime_student_nano_64*64.py` 已換成 `runtime/student_64.py`，可在 Windows 正常保存。
 
-## Git 範圍
+## Git 與部署分支
 
-提交程式、文件、設定與小型實驗摘要。原始影片、raw/、weights/、ONNX／TensorRT engines、密碼與暫存輸出不進一般 Git。
-Git 原碼備份不等同資料集與 engines 的完整備份；部署用 engines 保留在裝置上，日後應另有檔案備份。
-推送只應使用使用者自己的 repo，保留上游來源記錄；未取得個人 repo 和 commit 身分前，不推送到現有 upstream origin。
+專案已改為正式開發 repo，工作目錄即為 repo 根目錄。
+PC 使用 main，Nano 使用 deploy/jetson-nano 保存既有 Python 3.6 相容性差異。
+每次從對應基底開 task branch，檢查後 commit、push，透過 PR 合併。詳見 CONTRIBUTING.md。
+commit 作者為 Nero；憑證不寫入 repo。原始影片、raw/、weights/、ONNX／TensorRT engines、密碼及暫存輸出不進一般 Git。
+Git 原碼版控不等同資料集與 engines 的完整備份。
