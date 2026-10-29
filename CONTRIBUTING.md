@@ -31,9 +31,9 @@ test: verify mask threshold behavior
 
 ```bash
 git status
-git switch main
+git checkout main
 git pull --ff-only
-git switch -c fix/example-topic
+git checkout -b fix/example-topic
 # 修改並執行相關檢查
 git add <明確的檔案>
 git diff --cached
@@ -41,7 +41,7 @@ git commit -m "fix(scope): describe the change"
 git push -u origin HEAD
 ```
 
-Nano 將第一行基底切換成 deploy/jetson-nano。未提交修改存在時，先處理它們，不要直接切分支或覆蓋。
+Nano 將基底改成 deploy/jetson-nano。範例使用 git checkout，兼容裝置上較舊的 Git。未提交修改存在時，先處理它們，不要直接切分支或覆蓋。
 推送後開 PR，列出目的、驗證與限制。檢查通過後再合併並更新裝置；不自動要求自己批准自己的 PR。
 經使用者授權的工作，助理完成相關修改與驗證後應 commit 並 push 到工作分支，回報分支與 commit；不得只留本機修改。
 例外是使用者明確要求暫不提交，或認證／檢查失敗時。此時說明狀態，不得宣稱已推送。
