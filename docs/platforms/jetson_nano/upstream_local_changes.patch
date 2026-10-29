@@ -1,0 +1,1128 @@
+--- a/tracknet/config.py
++++ b/tracknet/config.py
+@@ -1,6 +1,6 @@
+ """Configuration loading with explicit error messages."""
+ 
+-from __future__ import annotations
++# # from __future__ import annotations
+ 
+ from pathlib import Path
+ from typing import Any, Mapping
+--- a/tracknet/constants.py
++++ b/tracknet/constants.py
+@@ -4,7 +4,7 @@
+ these names everywhere instead of hard-coding strings in scripts.
+ """
+ 
+-from __future__ import annotations
++# # from __future__ import annotations
+ 
+ RAW_FRAME_COL = "Frame"
+ RAW_VISIBILITY_COL = "Visibility"
+--- a/tracknet/data/adapters.py
++++ b/tracknet/data/adapters.py
+@@ -5,7 +5,7 @@
+ can stay independent from raw directory conventions.
+ """
+ 
+-from __future__ import annotations
++# # from __future__ import annotations
+ 
+ from pathlib import Path
+ from typing import Iterable, Literal
+@@ -20,7 +20,7 @@
+     return path.is_dir() and not path.name.startswith(".") and path.name != "__pycache__"
+ 
+ 
+-def _iter_match_sequences(match_dir: Path, *, domain: str | None = None) -> Iterable[RawSequence]:
++def _iter_match_sequences(match_dir: Path, *, domain: str = None) -> Iterable[RawSequence]:
+     video_dir = match_dir / "video"
+     csv_dir = match_dir / "csv"
+     if not video_dir.exists() or not csv_dir.exists():
+--- a/tracknet/data/dataset.py
++++ b/tracknet/data/dataset.py
+@@ -1,6 +1,6 @@
+ """Processed TrackNet datasets and sliding-window sampling."""
+ 
+-from __future__ import annotations
++# # from __future__ import annotations
+ 
+ from dataclasses import dataclass
+ from pathlib import Path
+@@ -32,10 +32,10 @@
+     match_name: str
+     sequence_name: str
+     sequence_root: Path
+-    background_path: Path | None
++    background_path: Path
+     width: int
+     height: int
+-    transform: dict[str, Any] | None
++    transform: dict[str, Any]
+     annotations: pd.DataFrame
+ 
+ 
+@@ -51,7 +51,7 @@
+     processed_root: Path
+     sequence_length: int
+     frame_stride: int = 1
+-    split_file: Path | None = None
++    split_file: Path = None
+ 
+     @classmethod
+     def from_mapping(cls, cfg: dict[str, Any]) -> "TrackNetDatasetConfig":
+@@ -74,7 +74,7 @@
+     - target_classes: [H,W] for V1 softmax targets when heatmap_mode=v1_uint8
+     """
+ 
+-    def __init__(self, cfg: TrackNetDatasetConfig, target_policy: HeatmapTargetPolicy | None = None):
++    def __init__(self, cfg: TrackNetDatasetConfig, target_policy: HeatmapTargetPolicy = None):
+         if cfg.sequence_length <= 0:
+             raise ValueError("sequence_length must be positive")
+         self.cfg = cfg
+@@ -99,7 +99,7 @@
+ 
+     def _load_sequences(self) -> list[SequenceRecord]:
+         records: list[SequenceRecord] = []
+-        allowed_sequence_ids: set[str] | None = None
++        allowed_sequence_ids: set[str] = None
+         if self.cfg.split_file is not None:
+             if not self.cfg.split_file.exists():
+                 raise FileNotFoundError(f"Split file not found: {self.cfg.split_file}")
+--- a/tracknet/data/heatmaps.py
++++ b/tracknet/data/heatmaps.py
+@@ -7,7 +7,7 @@
+ coordinates are always (x, y), arrays are always [H, W].
+ """
+ 
+-from __future__ import annotations
++# # from __future__ import annotations
+ 
+ import math
+ from dataclasses import dataclass
+@@ -56,14 +56,14 @@
+     raise ValueError(f"Unsupported heatmap mode: {mode}")
+ 
+ 
+-def heatmap_argmax(heatmap: np.ndarray, threshold: float) -> tuple[int, int] | None:
++def heatmap_argmax(heatmap: np.ndarray, threshold: float) -> tuple[int, int]:
+     if heatmap.size == 0 or float(np.max(heatmap)) < threshold:
+         return None
+     y, x = np.unravel_index(int(np.argmax(heatmap)), heatmap.shape)
+     return int(x), int(y)
+ 
+ 
+-def heatmap_largest_blob_centroid(heatmap: np.ndarray, threshold: float) -> tuple[int, int] | None:
++def heatmap_largest_blob_centroid(heatmap: np.ndarray, threshold: float) -> tuple[int, int]:
+     """TrackNetV2/V3 post-processing: threshold then centroid of largest blob."""
+     if heatmap.size == 0 or float(np.max(heatmap)) < threshold:
+         return None
+@@ -78,7 +78,7 @@
+     return int(round(m["m10"] / m["m00"])), int(round(m["m01"] / m["m00"]))
+ 
+ 
+-def v1_hough_coordinate(heatmap_uint8: np.ndarray, threshold: int = 128, min_radius: int = 2, max_radius: int = 12) -> tuple[int, int] | None:
++def v1_hough_coordinate(heatmap_uint8: np.ndarray, threshold: int = 128, min_radius: int = 2, max_radius: int = 12) -> tuple[int, int]:
+     """TrackNetV1 post-processing from the paper.
+ 
+     V1 first binarizes the grayscale heatmap at t=128 and then applies the
+@@ -106,7 +106,7 @@
+     return int(x), int(y)
+ 
+ 
+-def coordinate_distance(a: tuple[float, float] | None, b: tuple[float, float] | None) -> float:
++def coordinate_distance(a: tuple[float, float], b: tuple[float, float]) -> float:
+     if a is None or b is None:
+         return math.inf
+     return float(math.hypot(a[0] - b[0], a[1] - b[1]))
+--- a/tracknet/data/preprocessing.py
++++ b/tracknet/data/preprocessing.py
+@@ -6,7 +6,7 @@
+ paper-specific target semantics without rebuilding raw data for every loss.
+ """
+ 
+-from __future__ import annotations
++# # from __future__ import annotations
+ 
+ from collections import defaultdict
+ from concurrent.futures import ProcessPoolExecutor
+@@ -83,13 +83,13 @@
+     return {int(row[RAW_FRAME_COL]): row for _, row in df.iterrows()}
+ 
+ 
+-def _safe_visibility(row: pd.Series | None) -> int:
++def _safe_visibility(row: pd.Series) -> int:
+     if row is None:
+         return 0
+     return 1 if int(row[RAW_VISIBILITY_COL]) == 1 else 0
+ 
+ 
+-def _safe_xy(row: pd.Series | None) -> tuple[float, float]:
++def _safe_xy(row: pd.Series) -> tuple[float, float]:
+     if row is None:
+         return -1.0, -1.0
+     x = row[RAW_X_COL]
+--- a/tracknet/data/raw_reader.py
++++ b/tracknet/data/raw_reader.py
+@@ -14,7 +14,7 @@
+ stable internal names.
+ """
+ 
+-from __future__ import annotations
++# # from __future__ import annotations
+ 
+ from dataclasses import dataclass
+ from pathlib import Path
+--- a/tracknet/data/targets.py
++++ b/tracknet/data/targets.py
+@@ -5,7 +5,7 @@
+ without forcing the dataset to know about TrackNet paper versions.
+ """
+ 
+-from __future__ import annotations
++# # from __future__ import annotations
+ 
+ from dataclasses import dataclass
+ 
+--- a/tracknet/data/trajectory_dataset.py
++++ b/tracknet/data/trajectory_dataset.py
+@@ -1,6 +1,6 @@
+ """Trajectory windows for the TrackNetV3 rectification module."""
+ 
+-from __future__ import annotations
++# # from __future__ import annotations
+ 
+ from dataclasses import dataclass
+ from pathlib import Path
+@@ -23,7 +23,7 @@
+     mask_ratio: float = 0.3
+     delta_y_pixels: float = 30.0
+     seed: int = 26
+-    split_file: Path | None = None
++    split_file: Path = None
+ 
+     @classmethod
+     def from_mapping(cls, cfg: dict[str, Any]) -> "TrajectoryRectifierDatasetConfig":
+@@ -62,7 +62,7 @@
+         self.width = int(self.manifest["target_width"])
+         self.height = int(self.manifest["target_height"])
+         self.sequences: list[tuple[str, pd.DataFrame]] = []
+-        allowed: set[str] | None = None
++        allowed: set[str] = None
+         if cfg.split_file is not None:
+             allowed = {line.strip() for line in cfg.split_file.read_text().splitlines() if line.strip()}
+         for meta in self.manifest["sequences"]:
+--- a/tracknet/data/transforms.py
++++ b/tracknet/data/transforms.py
+@@ -5,7 +5,7 @@
+ exactly the same raw video coordinate system used by the labels.
+ """
+ 
+-from __future__ import annotations
++# # from __future__ import annotations
+ 
+ from dataclasses import dataclass
+ from typing import Tuple
+--- a/tracknet/evaluation/evaluator.py
++++ b/tracknet/evaluation/evaluator.py
+@@ -1,6 +1,6 @@
+ """Evaluation loop using the same model, heatmap and post-processing semantics as inference."""
+ 
+-from __future__ import annotations
++# # from __future__ import annotations
+ 
+ from dataclasses import dataclass
+ from pathlib import Path
+@@ -28,20 +28,20 @@
+     checkpoint_path: Path
+     output_dir: Path
+     dataset: dict[str, Any]
+-    model: dict[str, Any] | None = None
++    model: dict[str, Any] = None
+     batch_size: int = 4
+     workers: int = 2
+     device: str = "auto"
+-    threshold: float | None = None
+-    hough_threshold: int | None = None
+-    tolerance_pixels: float | None = None
+-    coordinate_space: CoordinateSpace | None = None
+-    rectifier_checkpoint_path: Path | None = None
+-    rectifier_model: dict[str, Any] | None = None
++    threshold: float = None
++    hough_threshold: int = None
++    tolerance_pixels: float = None
++    coordinate_space: CoordinateSpace = None
++    rectifier_checkpoint_path: Path = None
++    rectifier_model: dict[str, Any] = None
+     rectifier_sequence_length: int = 16
+     rectifier_delta_y_pixels: float = 30.0
+-    num_threads: int | None = None
+-    interop_threads: int | None = None
++    num_threads: int = None
++    interop_threads: int = None
+     progress: bool = True
+ 
+ 
+@@ -64,7 +64,7 @@
+     }
+ 
+ 
+-def _model_config_from_checkpoint(checkpoint_path: Path, explicit_model: dict[str, Any] | None) -> tuple[dict[str, Any], dict[str, Any]]:
++def _model_config_from_checkpoint(checkpoint_path: Path, explicit_model: dict[str, Any]) -> tuple[dict[str, Any], dict[str, Any]]:
+     ckpt = load_checkpoint(checkpoint_path, map_location="cpu")
+     if explicit_model is not None:
+         return explicit_model, ckpt
+@@ -159,7 +159,7 @@
+     return counts.metrics()
+ 
+ 
+-def resolve_evaluation_protocol(cfg: EvaluationConfig, model_cfg: dict[str, Any] | None = None) -> EvaluationProtocol:
++def resolve_evaluation_protocol(cfg: EvaluationConfig, model_cfg: dict[str, Any] = None) -> EvaluationProtocol:
+     resolved_model = model_cfg or cfg.model
+     if resolved_model is None:
+         raise ValueError("model_cfg is required when EvaluationConfig.model is not provided")
+@@ -218,7 +218,7 @@
+     sequence_id: str,
+     sample_metas: list[dict[str, Any]],
+     frame_predictions: list[FramePrediction],
+-    rectifier_cfg: RectificationConfig | None,
++    rectifier_cfg: RectificationConfig,
+ ) -> None:
+     if not frame_predictions:
+         return
+@@ -273,7 +273,7 @@
+         )
+ 
+ 
+-def _rectifier_config(cfg: EvaluationConfig) -> RectificationConfig | None:
++def _rectifier_config(cfg: EvaluationConfig) -> RectificationConfig:
+     if cfg.rectifier_checkpoint_path is None:
+         return None
+     return RectificationConfig(
+--- a/tracknet/inference/aggregation.py
++++ b/tracknet/inference/aggregation.py
+@@ -7,7 +7,7 @@
+ video inference semantics.
+ """
+ 
+-from __future__ import annotations
++# # from __future__ import annotations
+ 
+ from collections import defaultdict
+ from dataclasses import dataclass
+--- a/tracknet/inference/postprocess.py
++++ b/tracknet/inference/postprocess.py
+@@ -5,7 +5,7 @@
+ blob extraction, V1 Hough rule, and coordinate convention are used everywhere.
+ """
+ 
+-from __future__ import annotations
++# # from __future__ import annotations
+ 
+ from dataclasses import dataclass
+ from typing import Literal
+@@ -28,7 +28,7 @@
+     score: float
+ 
+     @property
+-    def coordinate(self) -> tuple[float, float] | None:
++    def coordinate(self) -> tuple[float, float]:
+         if self.visibility != 1 or self.x < 0 or self.y < 0:
+             return None
+         return float(self.x), float(self.y)
+--- a/tracknet/inference/rectification.py
++++ b/tracknet/inference/rectification.py
+@@ -1,6 +1,6 @@
+ """TrackNetV3 trajectory rectification for predicted coordinate sequences."""
+ 
+-from __future__ import annotations
++# # from __future__ import annotations
+ 
+ from dataclasses import dataclass
+ from pathlib import Path
+@@ -18,14 +18,14 @@
+ @dataclass(frozen=True)
+ class RectificationConfig:
+     checkpoint_path: Path
+-    model: dict[str, Any] | None = None
++    model: dict[str, Any] = None
+     trajectory_length: int = 16
+     delta_y_pixels: float = 30.0
+     batch_size: int = 16
+     device: str = "auto"
+ 
+ 
+-def _model_config_from_checkpoint(checkpoint_path: Path, explicit_model: dict[str, Any] | None) -> tuple[dict[str, Any], dict[str, Any]]:
++def _model_config_from_checkpoint(checkpoint_path: Path, explicit_model: dict[str, Any]) -> tuple[dict[str, Any], dict[str, Any]]:
+     ckpt = load_checkpoint(checkpoint_path, map_location="cpu")
+     if explicit_model is not None:
+         return explicit_model, ckpt
+--- a/tracknet/inference/video_predictor.py
++++ b/tracknet/inference/video_predictor.py
+@@ -1,6 +1,6 @@
+ """Video inference with frame-accurate CSV and optional visualization output."""
+ 
+-from __future__ import annotations
++# # from __future__ import annotations
+ 
+ from collections import defaultdict, deque
+ from dataclasses import dataclass
+@@ -30,8 +30,8 @@
+     video_path: Path
+     checkpoint_path: Path
+     output_csv: Path
+-    output_video: Path | None = None
+-    model: dict[str, Any] | None = None
++    output_video: Path = None
++    model: dict[str, Any] = None
+     target_width: int = 512
+     target_height: int = 288
+     sequence_length: int = 3
+@@ -41,14 +41,14 @@
+     device: str = "auto"
+     frame_index_base: int = 0
+     trail_length: int = 12
+-    rectifier_checkpoint_path: Path | None = None
+-    rectifier_model: dict[str, Any] | None = None
++    rectifier_checkpoint_path: Path = None
++    rectifier_model: dict[str, Any] = None
+     rectifier_sequence_length: int = 16
+     rectifier_delta_y_pixels: float = 30.0
+     background_sample_stride: int = 8
+     max_background_samples: int = 512
+-    num_threads: int | None = None
+-    interop_threads: int | None = None
++    num_threads: int = None
++    interop_threads: int = None
+     progress: bool = True
+     verbose: bool = True
+ 
+@@ -104,7 +104,7 @@
+ 
+ def _sample_background(video_path: Path, cfg: VideoPredictionConfig) -> tuple[np.ndarray, LetterboxTransform]:
+     samples: list[np.ndarray] = []
+-    transform: LetterboxTransform | None = None
++    transform: LetterboxTransform = None
+     stride = max(1, int(cfg.background_sample_stride))
+     max_samples = max(1, int(cfg.max_background_samples))
+     progress_bar = tqdm(
+@@ -131,7 +131,7 @@
+     return _estimate_background(samples), transform
+ 
+ 
+-def _model_config_from_checkpoint(checkpoint_path: Path, explicit_model: dict[str, Any] | None) -> tuple[dict[str, Any], dict[str, Any]]:
++def _model_config_from_checkpoint(checkpoint_path: Path, explicit_model: dict[str, Any]) -> tuple[dict[str, Any], dict[str, Any]]:
+     ckpt = load_checkpoint(checkpoint_path, map_location="cpu")
+     if explicit_model is not None:
+         return explicit_model, ckpt
+@@ -196,7 +196,7 @@
+     frames_rgb_model: list[np.ndarray],
+     indices: list[int],
+     *,
+-    background_rgb_model: np.ndarray | None,
++    background_rgb_model: np.ndarray,
+ ) -> torch.Tensor:
+     tensors = [torch.from_numpy(image_to_tensor_chw_uint8_rgb(frames_rgb_model[i])) for i in indices]
+     frames_t = torch.stack(tensors, dim=0)
+@@ -289,7 +289,7 @@
+     *,
+     video_path: Path,
+     frame_count: int,
+-    background_rgb_model: np.ndarray | None,
++    background_rgb_model: np.ndarray,
+     cfg: VideoPredictionConfig,
+     paper_spec: Any,
+     device: torch.device,
+--- a/tracknet/inference/visualization.py
++++ b/tracknet/inference/visualization.py
+@@ -1,6 +1,6 @@
+ """Visualization helpers for prediction outputs."""
+ 
+-from __future__ import annotations
++# # from __future__ import annotations
+ 
+ from collections import deque
+ from typing import Iterable
+@@ -15,8 +15,8 @@
+     frame_bgr: np.ndarray,
+     prediction: Prediction,
+     *,
+-    frame_index: int | None = None,
+-    trail: Iterable[tuple[int, int]] | None = None,
++    frame_index: int = None,
++    trail: Iterable[tuple[int, int]] = None,
+     radius: int = 6,
+ ) -> np.ndarray:
+     """Draw one prediction on a raw BGR frame without changing its dimensions."""
+--- a/tracknet/inference/windowing.py
++++ b/tracknet/inference/windowing.py
+@@ -1,6 +1,6 @@
+ """Window scheduling primitives for video and dataset inference."""
+ 
+-from __future__ import annotations
++# # from __future__ import annotations
+ 
+ 
+ def window_indices_for_frame(frame_index: int, frame_count: int, sequence_length: int) -> list[int]:
+--- a/tracknet/models/blocks.py
++++ b/tracknet/models/blocks.py
+@@ -1,6 +1,6 @@
+ """Reusable neural network blocks for TrackNet models."""
+ 
+-from __future__ import annotations
++# # from __future__ import annotations
+ 
+ import math
+ 
+@@ -32,7 +32,7 @@
+     fusion, or residual refinement according to the target paper version.
+     """
+ 
+-    def __init__(self, input_channels: int, output_channels: int | None, dropout: float = 0.0, base_channels: int = 64):
++    def __init__(self, input_channels: int, output_channels: int, dropout: float = 0.0, base_channels: int = 64):
+         super().__init__()
+         c1, c2, c3, c4 = base_channels, base_channels * 2, base_channels * 4, base_channels * 8
+         self.enc1 = conv_block(input_channels, c1, 2)
+--- a/tracknet/models/registry.py
++++ b/tracknet/models/registry.py
+@@ -1,4 +1,4 @@
+-from __future__ import annotations
++# # from __future__ import annotations
+ 
+ from typing import Any
+ 
+--- a/tracknet/models/tracknet_v1.py
++++ b/tracknet/models/tracknet_v1.py
+@@ -5,7 +5,7 @@
+ pixel; `CrossEntropyLoss` applies the pixel-wise softmax during training.
+ """
+ 
+-from __future__ import annotations
++# # from __future__ import annotations
+ 
+ import torch
+ import torch.nn as nn
+@@ -24,7 +24,7 @@
+ 
+ 
+ class TrackNetV1(nn.Module):
+-    def __init__(self, sequence_length: int = 3, input_channels: int | None = None, num_bins: int = 256, dropout: float = 0.0, base_channels: int = 64):
++    def __init__(self, sequence_length: int = 3, input_channels: int = None, num_bins: int = 256, dropout: float = 0.0, base_channels: int = 64):
+         super().__init__()
+         in_ch = input_channels if input_channels is not None else sequence_length * 3
+         self.sequence_length = sequence_length
+--- a/tracknet/models/tracknet_v2.py
++++ b/tracknet/models/tracknet_v2.py
+@@ -1,6 +1,6 @@
+ """TrackNetV2: 3-in/3-out U-Net with weighted BCE supervision."""
+ 
+-from __future__ import annotations
++# # from __future__ import annotations
+ 
+ import torch
+ import torch.nn as nn
+@@ -9,7 +9,7 @@
+ 
+ 
+ class TrackNetV2(nn.Module):
+-    def __init__(self, sequence_length: int = 3, input_channels: int | None = None, output_channels: int | None = None, dropout: float = 0.0, base_channels: int = 64):
++    def __init__(self, sequence_length: int = 3, input_channels: int = None, output_channels: int = None, dropout: float = 0.0, base_channels: int = 64):
+         super().__init__()
+         self.sequence_length = sequence_length
+         in_ch = input_channels if input_channels is not None else sequence_length * 3
+--- a/tracknet/models/tracknet_v3.py
++++ b/tracknet/models/tracknet_v3.py
+@@ -1,6 +1,6 @@
+ """TrackNetV3 tracking and trajectory rectification modules."""
+ 
+-from __future__ import annotations
++# # from __future__ import annotations
+ 
+ import torch
+ import torch.nn as nn
+@@ -17,7 +17,7 @@
+     the paper value in configs.
+     """
+ 
+-    def __init__(self, sequence_length: int = 8, input_channels: int | None = None, output_channels: int | None = None, dropout: float = 0.0, base_channels: int = 64):
++    def __init__(self, sequence_length: int = 8, input_channels: int = None, output_channels: int = None, dropout: float = 0.0, base_channels: int = 64):
+         super().__init__()
+         self.sequence_length = sequence_length
+         in_ch = input_channels if input_channels is not None else sequence_length * 3 + 3
+--- a/tracknet/models/tracknet_v4.py
++++ b/tracknet/models/tracknet_v4.py
+@@ -1,6 +1,6 @@
+ """TrackNetV4 motion-aware feature fusion."""
+ 
+-# from __future__ import annotations
++# # # from __future__ import annotations
+ 
+ import torch
+ import torch.nn as nn
+@@ -25,7 +25,7 @@
+ 
+ 
+ class TrackNetV4(nn.Module):
+-    def __init__(self, sequence_length: int = 3, input_channels: int | None = None, output_channels: int | None = None, dropout: float = 0.0, base_channels: int = 64, fusion_variant: str = "eq4"):
++    def __init__(self, sequence_length: int = 3, input_channels: int = None, output_channels: int = None, dropout: float = 0.0, base_channels: int = 64, fusion_variant: str = "eq4"):
+         super().__init__()
+         self.sequence_length = sequence_length
+         in_ch = input_channels if input_channels is not None else sequence_length * 3
+--- a/tracknet/models/tracknet_v5.py
++++ b/tracknet/models/tracknet_v5.py
+@@ -1,6 +1,6 @@
+ """TrackNetV5: MDD + residual spatio-temporal refinement."""
+ 
+-from __future__ import annotations
++# # from __future__ import annotations
+ 
+ import math
+ 
+--- a/tracknet/papers/__init__.py
++++ b/tracknet/papers/__init__.py
+@@ -1,6 +1,6 @@
+ """Paper-level contracts for the TrackNet family."""
+ 
+-from __future__ import annotations
++# # from __future__ import annotations
+ 
+ from typing import Any
+ 
+@@ -30,7 +30,7 @@
+     }
+ 
+ 
+-_SPECS: dict[str, PaperSpec] | None = None
++_SPECS: dict[str, PaperSpec] = None
+ 
+ 
+ def _specs() -> dict[str, PaperSpec]:
+@@ -64,7 +64,7 @@
+     return specs[key]
+ 
+ 
+-def dataset_config_with_paper_defaults(dataset_cfg: dict[str, Any], model_cfg: dict[str, Any] | None = None) -> dict[str, Any]:
++def dataset_config_with_paper_defaults(dataset_cfg: dict[str, Any], model_cfg: dict[str, Any] = None) -> dict[str, Any]:
+     """Return sampling defaults for compatibility with older callers.
+ 
+     Paper-specific target generation now lives in `PaperSpec.target_policy`.
+--- a/tracknet/papers/base.py
++++ b/tracknet/papers/base.py
+@@ -1,6 +1,6 @@
+ """Shared protocol objects for TrackNet paper integrations."""
+ 
+-from __future__ import annotations
++# # from __future__ import annotations
+ 
+ from dataclasses import asdict, dataclass, field, replace
+ from typing import Any, Callable, Literal
+@@ -34,11 +34,11 @@
+     def with_overrides(
+         self,
+         *,
+-        threshold: float | None = None,
+-        hough_threshold: int | None = None,
+-        tolerance_pixels: float | None = None,
+-        coordinate_space: CoordinateSpace | None = None,
+-        supports_rectifier: bool | None = None,
++        threshold: float = None,
++        hough_threshold: int = None,
++        tolerance_pixels: float = None,
++        coordinate_space: CoordinateSpace = None,
++        supports_rectifier: bool = None,
+     ) -> "EvaluationProtocol":
+         return replace(
+             self,
+@@ -65,9 +65,9 @@
+     paper_id: str
+     model_version: str
+     loss_name: str
+-    model_factory: Callable[..., nn.Module] | None = None
++    model_factory: Callable[..., nn.Module] = None
+     dataset_defaults: dict[str, Any] = field(default_factory=dict)
+-    target_policy: HeatmapTargetPolicy | None = None
++    target_policy: HeatmapTargetPolicy = None
+     postprocess_kind: PostprocessKind = "largest_blob"
+     tolerance_pixels: float = 4.0
+     evaluation_protocol: EvaluationProtocol = field(default_factory=EvaluationProtocol)
+--- a/tracknet/papers/v1/spec.py
++++ b/tracknet/papers/v1/spec.py
+@@ -1,6 +1,6 @@
+ """TrackNetV1 paper contract."""
+ 
+-from __future__ import annotations
++# # from __future__ import annotations
+ 
+ from tracknet.data.targets import HeatmapTargetPolicy
+ from tracknet.models.tracknet_v1 import TrackNetV1
+--- a/tracknet/papers/v2/spec.py
++++ b/tracknet/papers/v2/spec.py
+@@ -1,6 +1,6 @@
+ """TrackNetV2 paper contract."""
+ 
+-from __future__ import annotations
++# # from __future__ import annotations
+ 
+ from tracknet.data.targets import HeatmapTargetPolicy
+ from tracknet.models.tracknet_v2 import TrackNetV2
+--- a/tracknet/papers/v3/spec.py
++++ b/tracknet/papers/v3/spec.py
+@@ -1,6 +1,6 @@
+ """TrackNetV3 tracker and rectifier contracts."""
+ 
+-from __future__ import annotations
++# # from __future__ import annotations
+ 
+ from tracknet.data.targets import HeatmapTargetPolicy
+ from tracknet.models.tracknet_v3 import TrackNetV3Tracker, TrajectoryRectifier
+--- a/tracknet/papers/v4/spec.py
++++ b/tracknet/papers/v4/spec.py
+@@ -1,6 +1,6 @@
+ """TrackNetV4 paper contract."""
+ 
+-from __future__ import annotations
++# # from __future__ import annotations
+ 
+ from tracknet.data.targets import HeatmapTargetPolicy
+ from tracknet.models.tracknet_v4 import TrackNetV4
+--- a/tracknet/papers/v5/spec.py
++++ b/tracknet/papers/v5/spec.py
+@@ -1,6 +1,6 @@
+ """TrackNetV5 paper contract."""
+ 
+-from __future__ import annotations
++# # from __future__ import annotations
+ 
+ from tracknet.data.targets import HeatmapTargetPolicy
+ from tracknet.models.tracknet_v5 import TrackNetV5
+--- a/tracknet/tools/collect_evaluations.py
++++ b/tracknet/tools/collect_evaluations.py
+@@ -1,6 +1,6 @@
+ """Collect independent evaluation outputs into release summaries."""
+ 
+-from __future__ import annotations
++# # from __future__ import annotations
+ 
+ import argparse
+ from pathlib import Path
+--- a/tracknet/tools/evaluate.py
++++ b/tracknet/tools/evaluate.py
+@@ -1,6 +1,6 @@
+ """Evaluate a checkpoint on a processed split."""
+ 
+-from __future__ import annotations
++# # from __future__ import annotations
+ 
+ import argparse
+ from pathlib import Path
+--- a/tracknet/tools/hardware.py
++++ b/tracknet/tools/hardware.py
+@@ -1,6 +1,6 @@
+ """Print local hardware capabilities for TrackNet pipeline runs."""
+ 
+-from __future__ import annotations
++# # from __future__ import annotations
+ 
+ import json
+ 
+--- a/tracknet/tools/predict_video.py
++++ b/tracknet/tools/predict_video.py
+@@ -1,6 +1,6 @@
+ """Run frame-accurate video inference and write CSV/video outputs."""
+ 
+-from __future__ import annotations
++# # from __future__ import annotations
+ 
+ import argparse
+ from pathlib import Path
+--- a/tracknet/tools/preprocess.py
++++ b/tracknet/tools/preprocess.py
+@@ -1,6 +1,6 @@
+ """Preprocess legacy raw TrackNet data into the stable project format."""
+ 
+-from __future__ import annotations
++# # from __future__ import annotations
+ 
+ import argparse
+ from pathlib import Path
+--- a/tracknet/tools/train.py
++++ b/tracknet/tools/train.py
+@@ -1,6 +1,6 @@
+ """Train or resume a TrackNet model."""
+ 
+-from __future__ import annotations
++# # from __future__ import annotations
+ 
+ import argparse
+ from pathlib import Path
+--- a/tracknet/tools/visualize_dataset.py
++++ b/tracknet/tools/visualize_dataset.py
+@@ -1,6 +1,6 @@
+ """Create a small visualization gallery from processed samples."""
+ 
+-from __future__ import annotations
++# # from __future__ import annotations
+ 
+ import argparse
+ from pathlib import Path
+--- a/tracknet/training/checkpoint.py
++++ b/tracknet/training/checkpoint.py
+@@ -6,7 +6,7 @@
+ model weights for lightweight inference export.
+ """
+ 
+-from __future__ import annotations
++# # from __future__ import annotations
+ 
+ from dataclasses import dataclass
+ from pathlib import Path
+@@ -24,7 +24,7 @@
+     global_step: int
+     best_score: float
+     metrics: dict[str, float]
+-    training: dict[str, Any] | None = None
++    training: dict[str, Any] = None
+ 
+ 
+ def _model_state_dict(model: nn.Module) -> dict[str, torch.Tensor]:
+@@ -36,11 +36,11 @@
+ def save_checkpoint(
+     path: str | Path,
+     model: nn.Module,
+-    optimizer: torch.optim.Optimizer | None,
+-    scheduler: Any | None,
++    optimizer: torch.optim.Optimizer,
++    scheduler: Any,
+     state: CheckpointState,
+     config: dict[str, Any],
+-    scaler: Any | None = None,
++    scaler: Any = None,
+ ) -> None:
+     path = Path(path)
+     ensure_dir(path.parent)
+@@ -63,7 +63,7 @@
+     torch.save(payload, path)
+ 
+ 
+-def save_model_only(path: str | Path, model: nn.Module, config: dict[str, Any], metrics: dict[str, float] | None = None) -> None:
++def save_model_only(path: str | Path, model: nn.Module, config: dict[str, Any], metrics: dict[str, float] = None) -> None:
+     path = Path(path)
+     ensure_dir(path.parent)
+     torch.save({"format_version": 1, "config": config, "metrics": metrics or {}, "model_state_dict": _model_state_dict(model)}, path)
+--- a/tracknet/training/losses.py
++++ b/tracknet/training/losses.py
+@@ -1,6 +1,6 @@
+ """Loss functions matching TrackNet paper semantics."""
+ 
+-from __future__ import annotations
++# # from __future__ import annotations
+ 
+ import torch
+ import torch.nn as nn
+--- a/tracknet/training/metrics.py
++++ b/tracknet/training/metrics.py
+@@ -1,6 +1,6 @@
+ """TrackNet evaluation classification and metrics."""
+ 
+-from __future__ import annotations
++# # from __future__ import annotations
+ 
+ from dataclasses import dataclass
+ from typing import Literal
+@@ -52,7 +52,7 @@
+         }
+ 
+ 
+-def classify_prediction(pred: tuple[float, float] | None, gt: tuple[float, float] | None, tolerance: float) -> PredictionClass:
++def classify_prediction(pred: tuple[float, float], gt: tuple[float, float], tolerance: float) -> PredictionClass:
+     has_pred = pred is not None
+     has_gt = gt is not None
+     if not has_pred and not has_gt:
+--- a/tracknet/training/tensorboard.py
++++ b/tracknet/training/tensorboard.py
+@@ -5,7 +5,7 @@
+ logging can evolve without turning the training loop into a dashboard script.
+ """
+ 
+-from __future__ import annotations
++# # from __future__ import annotations
+ 
+ import json
+ import time
+@@ -28,7 +28,7 @@
+     def __init__(
+         self,
+         *,
+-        writer: Any | None,
++        writer: Any,
+         cfg: dict[str, Any],
+         output_dir: Path,
+         is_main: bool,
+@@ -53,7 +53,7 @@
+         self.image_interval = max(1, int(self.train_cfg.get("tensorboard_image_interval", 1)))
+         self.max_images = max(1, int(self.train_cfg.get("tensorboard_max_images", 2)))
+         self.log_every_steps = max(1, int(self.train_cfg.get("log_every_steps", 20)))
+-        self._loss_ema: float | None = None
++        self._loss_ema: float = None
+         self._run_start = time.perf_counter()
+ 
+     def log_run_metadata(self) -> None:
+@@ -87,7 +87,7 @@
+         epoch_seconds: float,
+         train_samples: int,
+         model: torch.nn.Module,
+-        val_sample: dict[str, Any] | None,
++        val_sample: dict[str, Any],
+     ) -> None:
+         if not self.enabled:
+             return
+@@ -149,7 +149,7 @@
+             return
+         self.writer.add_hparams(hparams, numeric_metrics, run_name="hparams")
+ 
+-    def make_profiler(self) -> Any | None:
++    def make_profiler(self) -> Any:
+         if not self.enabled or not bool(self.train_cfg.get("tensorboard_profiler", False)):
+             return None
+         wait = int(self.train_cfg.get("tensorboard_profiler_wait", 1))
+--- a/tracknet/training/trainer.py
++++ b/tracknet/training/trainer.py
+@@ -1,6 +1,6 @@
+ """Training loop for TrackNet tracking models."""
+ 
+-from __future__ import annotations
++# # from __future__ import annotations
+ 
+ import os
+ import random
+@@ -72,7 +72,7 @@
+     output_dir: Path
+     best_loss: float
+     last_epoch: int
+-    tensorboard_url: str | None = None
++    tensorboard_url: str = None
+ 
+ 
+ @dataclass
+@@ -117,8 +117,8 @@
+         self.split_metadata: dict[str, Any] = {}
+         self.paper_spec = self._resolve_paper_spec()
+         self.tensorboard_enabled = bool(self.train_cfg.get("tensorboard", False))
+-        self.tensorboard_writer: Any | None = None
+-        self.tensorboard_server: TensorBoardServer | None = None
++        self.tensorboard_writer: Any = None
++        self.tensorboard_server: TensorBoardServer = None
+ 
+     def _resolve_paper_spec(self) -> PaperSpec:
+         model_cfg = self.cfg.get("model", {})
+@@ -237,7 +237,7 @@
+             return torch.optim.SGD(model.parameters(), lr=float(1e-2 if lr is None else lr), momentum=0.9, weight_decay=wd)
+         raise ValueError(f"Unknown optimizer: {opt_name}")
+ 
+-    def _make_scheduler(self, optimizer: torch.optim.Optimizer) -> Any | None:
++    def _make_scheduler(self, optimizer: torch.optim.Optimizer) -> Any:
+         name = self.train_cfg.get("scheduler")
+         if not name or str(name).lower() == "none":
+             return None
+@@ -257,7 +257,7 @@
+             )
+         raise ValueError(f"Unknown scheduler: {name}")
+ 
+-    def _make_tensorboard_writer(self) -> Any | None:
++    def _make_tensorboard_writer(self) -> Any:
+         if not self.tensorboard_enabled or not self.is_main:
+             return None
+         try:
+@@ -281,7 +281,7 @@
+                 return port
+         raise RuntimeError(f"Could not find an open TensorBoard port starting at {preferred_port}")
+ 
+-    def _launch_tensorboard_if_needed(self) -> TensorBoardServer | None:
++    def _launch_tensorboard_if_needed(self) -> TensorBoardServer:
+         if not self.tensorboard_enabled or not self.is_main:
+             return None
+         if not bool(self.train_cfg.get("launch_tensorboard", True)):
+@@ -307,7 +307,7 @@
+         print(f"TensorBoard logdir: {logdir}")
+         return TensorBoardServer(process=process, url=url, logdir=logdir, port=port)
+ 
+-    def _restore_if_needed(self, model: torch.nn.Module, optimizer: torch.optim.Optimizer, scheduler: Any | None) -> None:
++    def _restore_if_needed(self, model: torch.nn.Module, optimizer: torch.optim.Optimizer, scheduler: Any) -> None:
+         resume = self.train_cfg.get("resume_checkpoint") or (self.output_dir / "checkpoints" / "last.pt" if self.train_cfg.get("resume") else None)
+         if not resume:
+             return
+@@ -335,10 +335,10 @@
+         model: torch.nn.Module,
+         criterion: torch.nn.Module,
+         loader: DataLoader,
+-        optimizer: torch.optim.Optimizer | None,
++        optimizer: torch.optim.Optimizer,
+         epoch: int,
+-        profiler: Any | None = None,
+-        tensorboard: TensorBoardRunLogger | None = None,
++        profiler: Any = None,
++        tensorboard: TensorBoardRunLogger = None,
+     ) -> tuple[float, int]:
+         train = optimizer is not None
+         model.train(train)
+@@ -381,7 +381,7 @@
+             count = int(t[1].item())
+         return avg, count
+ 
+-    def _sample_batch(self, loader: DataLoader) -> dict[str, Any] | None:
++    def _sample_batch(self, loader: DataLoader) -> dict[str, Any]:
+         try:
+             return next(iter(loader))
+         except StopIteration:
+--- a/tracknet/utils/device.py
++++ b/tracknet/utils/device.py
+@@ -1,4 +1,4 @@
+-from __future__ import annotations
++# # from __future__ import annotations
+ 
+ import torch
+ 
+--- a/tracknet/utils/hardware.py
++++ b/tracknet/utils/hardware.py
+@@ -1,6 +1,6 @@
+ """Hardware capability reporting for reproducible experiment logs."""
+ 
+-from __future__ import annotations
++# # from __future__ import annotations
+ 
+ import platform
+ from typing import Any
+--- a/tracknet/utils/io.py
++++ b/tracknet/utils/io.py
+@@ -1,4 +1,4 @@
+-from __future__ import annotations
++# # from __future__ import annotations
+ 
+ import json
+ from pathlib import Path
+--- a/tracknet/utils/seeding.py
++++ b/tracknet/utils/seeding.py
+@@ -1,4 +1,4 @@
+-from __future__ import annotations
++# # from __future__ import annotations
+ 
+ import os
+ import random
+--- a/tests/conftest.py
++++ b/tests/conftest.py
+@@ -1,4 +1,4 @@
+-from __future__ import annotations
++# # from __future__ import annotations
+ 
+ from pathlib import Path
+ 
+--- a/tests/test_hardware_pipeline.py
++++ b/tests/test_hardware_pipeline.py
+@@ -1,4 +1,4 @@
+-from __future__ import annotations
++# # from __future__ import annotations
+ 
+ import copy
+ import os
+--- a/tests/test_inference_evaluation_training.py
++++ b/tests/test_inference_evaluation_training.py
+@@ -1,4 +1,4 @@
+-from __future__ import annotations
++# # from __future__ import annotations
+ 
+ from pathlib import Path
+ 
+--- a/tests/test_loss_checkpoint_metrics.py
++++ b/tests/test_loss_checkpoint_metrics.py
+@@ -1,4 +1,4 @@
+-from __future__ import annotations
++# # from __future__ import annotations
+ 
+ from pathlib import Path
+ 
+--- a/tests/test_models_forward.py
++++ b/tests/test_models_forward.py
+@@ -1,4 +1,4 @@
+-from __future__ import annotations
++# # from __future__ import annotations
+ 
+ import torch
+ import torch.nn as nn
+--- a/tests/test_paper_contracts.py
++++ b/tests/test_paper_contracts.py
+@@ -1,4 +1,4 @@
+-from __future__ import annotations
++# # from __future__ import annotations
+ 
+ from pathlib import Path
+ import inspect
+@@ -144,7 +144,7 @@
+ class _RecordingFusionOutput(nn.Conv2d):
+     def __init__(self, in_channels: int, out_channels: int):
+         super().__init__(in_channels, out_channels, kernel_size=1)
+-        self.last_input: torch.Tensor | None = None
++        self.last_input: torch.Tensor = None
+ 
+     def forward(self, x: torch.Tensor) -> torch.Tensor:
+         self.last_input = x.detach().clone()
+--- a/tests/test_preprocess_dataset.py
++++ b/tests/test_preprocess_dataset.py
+@@ -1,4 +1,4 @@
+-from __future__ import annotations
++# # from __future__ import annotations
+ 
+ from pathlib import Path
+ 
+--- a/tests/test_project_layout.py
++++ b/tests/test_project_layout.py
+@@ -1,4 +1,4 @@
+-from __future__ import annotations
++# # from __future__ import annotations
+ 
+ from pathlib import Path
+ 
+--- a/tests/test_transforms_heatmaps.py
++++ b/tests/test_transforms_heatmaps.py
+@@ -1,4 +1,4 @@
+-from __future__ import annotations
++# # from __future__ import annotations
+ 
+ import numpy as np
+ 
+--- a/scripts/make_synthetic_raw.py
++++ b/scripts/make_synthetic_raw.py
+@@ -7,7 +7,7 @@
+   <output>/match2/csv/rally2_ball.csv
+ """
+ 
+-from __future__ import annotations
++# # from __future__ import annotations
+ 
+ import argparse
+ from pathlib import Path
+--- a/configs/evaluate_v4.yaml
++++ b/configs/evaluate_v4.yaml
+@@ -1,10 +1,10 @@
+ evaluation:
+-  checkpoint_path: outputs\train\tracknet_v4_20260715_075947\checkpoints\best.pt
+-  output_dir: model_results/evaluation/tracknet_v4_full
+-  batch_size: 2
+-  workers: 1
++  checkpoint_path: outputs/train/tracknet_v4_20260511_002432/checkpoints/last.pt
++  output_dir: model_results/evaluation/tracknet_v4
++  batch_size: 4
++  workers: 4
+   device: auto
+   dataset:
+     processed_root: dataset/processed/tracknet_dataset_512x288
+     sequence_length: 3
+-    split_file: dataset/processed/tracknet_dataset_512x288/splits/val_mini.txt
++    split_file: dataset/processed/tracknet_dataset_512x288/splits/test.txt
+--- a/configs/preprocess_fast_512x288.yaml
++++ b/configs/preprocess_fast_512x288.yaml
+@@ -9,4 +9,4 @@
+   missing_annotation_policy: invisible
+   background_sample_stride: 1
+   val_fraction: 0.2
+-  workers: 16
++  workers: 64
