@@ -1,0 +1,37 @@
+model:
+  version: v1
+  sequence_length: 3
+  base_channels: 64
+  dropout: 0.0
+
+dataset:
+  processed_root: dataset/processed/tracknet_dataset_640x360
+  sequence_length: 3
+  frame_stride: 1
+  train_split_file: dataset/processed/tracknet_dataset_640x360/splits/train.txt
+  val_split_file: dataset/processed/tracknet_dataset_640x360/splits/val.txt
+
+train:
+  experiment_name: tracknet_v1
+  output_root: outputs/train
+  epochs: 30
+  batch_size: 1
+  workers: 4
+  persistent_workers: true
+  prefetch_factor: 2
+  optimizer: Adadelta
+  lr: 1.0
+  loss: cross_entropy
+  device: auto
+  amp: false
+  tensorboard: true
+  launch_tensorboard: true
+  tensorboard_port: 6006
+  tensorboard_images: true
+  tensorboard_hparams: true
+  tensorboard_histograms: false
+  tensorboard_profiler: false
+  log_every_steps: 20
+  tensorboard_flush_secs: 30
+  tensorboard_max_queue: 100
+  seed: 26

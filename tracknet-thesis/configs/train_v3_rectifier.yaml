@@ -1,0 +1,39 @@
+model:
+  version: v3_rectifier
+  hidden_channels: 64
+
+dataset:
+  type: trajectory
+  processed_root: dataset/processed/tracknet_dataset_512x288
+  trajectory_length: 16
+  frame_stride: 1
+  mask_ratio: 0.3
+  delta_y_pixels: 30.0
+  train_split_file: dataset/processed/tracknet_dataset_512x288/splits/train.txt
+  val_split_file: dataset/processed/tracknet_dataset_512x288/splits/val.txt
+  seed: 26
+
+train:
+  experiment_name: tracknet_v3_rectifier
+  output_root: outputs/train
+  epochs: 30
+  batch_size: 16
+  workers: 4
+  persistent_workers: true
+  prefetch_factor: 2
+  optimizer: Adam
+  lr: 0.001
+  loss: trajectory_mse
+  device: auto
+  amp: false
+  tensorboard: true
+  launch_tensorboard: true
+  tensorboard_port: 6006
+  tensorboard_images: true
+  tensorboard_hparams: true
+  tensorboard_histograms: false
+  tensorboard_profiler: false
+  log_every_steps: 20
+  tensorboard_flush_secs: 30
+  tensorboard_max_queue: 100
+  seed: 26

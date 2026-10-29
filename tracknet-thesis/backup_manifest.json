@@ -1,0 +1,1107 @@
+{
+  "files": [
+    {
+      "path": "thesis/__init__.py",
+      "bytes": 88,
+      "sha256": "9f9468addf5c10fdbed57975dfae396444b75e3f748d5c486294098b68368e17"
+    },
+    {
+      "path": "thesis/analysis/__init__.py",
+      "bytes": 88,
+      "sha256": "9f9468addf5c10fdbed57975dfae396444b75e3f748d5c486294098b68368e17"
+    },
+    {
+      "path": "thesis/analysis/find_mask_cases.py",
+      "bytes": 9522,
+      "sha256": "a4c88585aa98bb7e6d26849352d15b1472af3ad394ef9b76542a6b42d5f30d68"
+    },
+    {
+      "path": "thesis/analysis/plot_roi_comparison.py",
+      "bytes": 7016,
+      "sha256": "41ecfcb2ebba96397711f7c2b38ba80a3bb1b1cedd091ec44b2e153cbae471de"
+    },
+    {
+      "path": "thesis/data/__init__.py",
+      "bytes": 67,
+      "sha256": "15469b4aba0fde621c1873514dc028ca426120ba2440ec125edea359101b3b7c"
+    },
+    {
+      "path": "thesis/data/cache_teacher_heatmaps.py",
+      "bytes": 7313,
+      "sha256": "927b5e97aee536ed70f36ff198f2befd52f438e48b741d2c22143c12246d4085"
+    },
+    {
+      "path": "thesis/data/organize_raw_dataset.py",
+      "bytes": 1328,
+      "sha256": "56f12ae982da4fd194a10e3e602831af65f2316f8dfe9157efbf836309087748"
+    },
+    {
+      "path": "thesis/evaluation/__init__.py",
+      "bytes": 88,
+      "sha256": "9f9468addf5c10fdbed57975dfae396444b75e3f748d5c486294098b68368e17"
+    },
+    {
+      "path": "thesis/evaluation/compare_motion_mask.py",
+      "bytes": 13814,
+      "sha256": "b2bcaf4b1d11c272d99e2e4e45cee4ed4e049c27b3568823d2bc5bb2087997e4"
+    },
+    {
+      "path": "thesis/evaluation/historical/__init__.py",
+      "bytes": 67,
+      "sha256": "15469b4aba0fde621c1873514dc028ca426120ba2440ec125edea359101b3b7c"
+    },
+    {
+      "path": "thesis/evaluation/historical/evaluate_global_512.py",
+      "bytes": 5646,
+      "sha256": "5b294d3e0f36477872a4e8f6f31aaa5c8fbae84f6816933034462564b059ba84"
+    },
+    {
+      "path": "thesis/evaluation/historical/evaluate_local_128.py",
+      "bytes": 9090,
+      "sha256": "d378002b3b48c19496f7033d8f2a3fab731d28043325fc0c222ce41f55d1aad1"
+    },
+    {
+      "path": "thesis/evaluation/historical/evaluate_without_kf.py",
+      "bytes": 9000,
+      "sha256": "e14d3ddfe5c16f1bb073689f552c20325c2571dc4f1ce56756512d54667ab8ab"
+    },
+    {
+      "path": "thesis/evaluation/historical/evaluate_without_mask.py",
+      "bytes": 10397,
+      "sha256": "9ff045931d9aeee365987081f341ed74874d4b6aeb88f0b49429a0488af0fc78"
+    },
+    {
+      "path": "thesis/export/__init__.py",
+      "bytes": 67,
+      "sha256": "15469b4aba0fde621c1873514dc028ca426120ba2440ec125edea359101b3b7c"
+    },
+    {
+      "path": "thesis/export/export_student_128.py",
+      "bytes": 1721,
+      "sha256": "bc087c960eebcb76da3f1065e66d8232cb093f734b11b0d2025cc3c74c09cf57"
+    },
+    {
+      "path": "thesis/export/export_student_32.py",
+      "bytes": 1252,
+      "sha256": "fa2a989d058ea061cf80cf8d4d7ee924bb01ab5e7201c56fe6b7c5f83664dee8"
+    },
+    {
+      "path": "thesis/export/export_student_64.py",
+      "bytes": 1402,
+      "sha256": "46bbd7761cfa81c0809954a8a11d51411ff0e3e4fe1e00d324fcbc71fc1d66b7"
+    },
+    {
+      "path": "thesis/export/export_student_global.py",
+      "bytes": 1951,
+      "sha256": "94dcb08410b074199f3aecc04a01a0a82055f6c588928ea9cd8d59f646ef5f8e"
+    },
+    {
+      "path": "thesis/export/export_teacher_v4.py",
+      "bytes": 2566,
+      "sha256": "b314b8e7b71da81281ae0f44c34438b1625ef67ee5403fdac39e85f31e38ba38"
+    },
+    {
+      "path": "thesis/models/__init__.py",
+      "bytes": 67,
+      "sha256": "15469b4aba0fde621c1873514dc028ca426120ba2440ec125edea359101b3b7c"
+    },
+    {
+      "path": "thesis/models/miniroi_unet.py",
+      "bytes": 3461,
+      "sha256": "850f490b9c064980e906b60f348a6e1d956385be97bfe29843b11dc9c5b32916"
+    },
+    {
+      "path": "thesis/platforms/__init__.py",
+      "bytes": 88,
+      "sha256": "9f9468addf5c10fdbed57975dfae396444b75e3f748d5c486294098b68368e17"
+    },
+    {
+      "path": "thesis/platforms/jetson_nano/__init__.py",
+      "bytes": 88,
+      "sha256": "9f9468addf5c10fdbed57975dfae396444b75e3f748d5c486294098b68368e17"
+    },
+    {
+      "path": "thesis/platforms/jetson_nano/diagnostics/__init__.py",
+      "bytes": 88,
+      "sha256": "9f9468addf5c10fdbed57975dfae396444b75e3f748d5c486294098b68368e17"
+    },
+    {
+      "path": "thesis/platforms/jetson_nano/diagnostics/benchmark_gstreamer.py",
+      "bytes": 1863,
+      "sha256": "81b6fa95123e33ecf09bde4da018e9d2503f94f04dd3a3dfad3d95ae765bf250"
+    },
+    {
+      "path": "thesis/platforms/jetson_nano/diagnostics/benchmark_teacher_onnx.py",
+      "bytes": 3302,
+      "sha256": "243c126987830f7b303d859ce66ee05a8780199211bb2db11530c5bfdb58e642"
+    },
+    {
+      "path": "thesis/platforms/jetson_nano/diagnostics/benchmark_teacher_torch_legacy.py",
+      "bytes": 1694,
+      "sha256": "892cf4f7c9867d8073e19d5967e84d46bcc7ac702835ea8db32f448099738117"
+    },
+    {
+      "path": "thesis/platforms/jetson_nano/evaluation/__init__.py",
+      "bytes": 88,
+      "sha256": "9f9468addf5c10fdbed57975dfae396444b75e3f748d5c486294098b68368e17"
+    },
+    {
+      "path": "thesis/platforms/jetson_nano/evaluation/batch_evaluate_128.py",
+      "bytes": 11998,
+      "sha256": "df66579f37acb57a812d5471068e411b1d6f9273c31a6f2711871e98fdd44aa3"
+    },
+    {
+      "path": "thesis/platforms/jetson_nano/evaluation/batch_evaluate_64.py",
+      "bytes": 13018,
+      "sha256": "9809b5ad08c2cc3ec5a4ee3cd064abc5a328474ce91e7d6d94f656f2dfdbad00"
+    },
+    {
+      "path": "thesis/platforms/jetson_nano/evaluation/evaluate_tolerances_128.py",
+      "bytes": 14059,
+      "sha256": "3587f1435fec5dea1101de1c32c613b253b7583e600338396d085c3459b76967"
+    },
+    {
+      "path": "thesis/platforms/jetson_nano/evaluation/evaluate_tolerances_32.py",
+      "bytes": 14241,
+      "sha256": "9e293fff8577923ed04980609f45211a8dee3a5ae71e56fd1f142568328ea389"
+    },
+    {
+      "path": "thesis/platforms/jetson_nano/evaluation/evaluate_tolerances_64.py",
+      "bytes": 14103,
+      "sha256": "24a78fb64ce3dfd4841012555f985b5b0fdd068e5045108d07bcb8db2de03d6c"
+    },
+    {
+      "path": "thesis/platforms/jetson_nano/evaluation/sweep_128.py",
+      "bytes": 4090,
+      "sha256": "8f9a3233380c9035209018f028c9c8112ef78eaab564f892e2f5c06d7a5adb9b"
+    },
+    {
+      "path": "thesis/platforms/jetson_nano/evaluation/sweep_64.py",
+      "bytes": 4212,
+      "sha256": "6e9842e5239457478563d93fe32ad4f72f468d295c372d1ce66dc332ffb3002a"
+    },
+    {
+      "path": "thesis/platforms/jetson_nano/experiments/__init__.py",
+      "bytes": 88,
+      "sha256": "9f9468addf5c10fdbed57975dfae396444b75e3f748d5c486294098b68368e17"
+    },
+    {
+      "path": "thesis/platforms/jetson_nano/experiments/local_only_demo.py",
+      "bytes": 9565,
+      "sha256": "b860e089744790d197e9610cc481dad7853a6b3c1927ec6cb57d4290a8c4282c"
+    },
+    {
+      "path": "thesis/platforms/jetson_nano/README.md",
+      "bytes": 275,
+      "sha256": "da945625cd2c34419a3abc000d16766c3a5f9589354d4afa13dbc97a807b6cf7"
+    },
+    {
+      "path": "thesis/platforms/jetson_nano/runtime/__init__.py",
+      "bytes": 88,
+      "sha256": "9f9468addf5c10fdbed57975dfae396444b75e3f748d5c486294098b68368e17"
+    },
+    {
+      "path": "thesis/platforms/jetson_nano/runtime/demo_with_gt.py",
+      "bytes": 17063,
+      "sha256": "29992d3af48f8e46a4bda869e96d80013782461ec918b2151f814c172557a1b4"
+    },
+    {
+      "path": "thesis/platforms/jetson_nano/runtime/student_128.py",
+      "bytes": 14468,
+      "sha256": "9a288d8892f65ee841ac3ac3709d63392760e44408e692ecd5601c502d9febad"
+    },
+    {
+      "path": "thesis/platforms/jetson_nano/runtime/student_128_with_gt.py",
+      "bytes": 16812,
+      "sha256": "a5c3bcbbcf9051f275a0bad18c864e9bf1dada4f948bf22eac83bf439cc8dd7c"
+    },
+    {
+      "path": "thesis/platforms/jetson_nano/runtime/student_64.py",
+      "bytes": 14003,
+      "sha256": "100beb47230df587a7fcadbd2774cf6038c4bccba0e5d11ea28ad649eecbdf36"
+    },
+    {
+      "path": "thesis/platforms/jetson_nano/runtime/student_64_with_gt.py",
+      "bytes": 16535,
+      "sha256": "da4643d511f67ace202864f4b525a3eda425e29b3eedd9702c377b6dbc275ac7"
+    },
+    {
+      "path": "thesis/platforms/jetson_nano/runtime/teacher_v4.py",
+      "bytes": 6968,
+      "sha256": "05dc265350963e4cdc87edd1cc67057ba8e0a3f1865a8de52575db72cf4fcf79"
+    },
+    {
+      "path": "thesis/platforms/pc/__init__.py",
+      "bytes": 88,
+      "sha256": "9f9468addf5c10fdbed57975dfae396444b75e3f748d5c486294098b68368e17"
+    },
+    {
+      "path": "thesis/platforms/pc/student_realtime_events.py",
+      "bytes": 46134,
+      "sha256": "d7389bfb7677e367ed428d0251137fc1049eaf2d345b630f4b5fae421aa42997"
+    },
+    {
+      "path": "thesis/platforms/pc/student_realtime_legacy.py",
+      "bytes": 11477,
+      "sha256": "ac416c7be50f72c32c5b9ce602a77604fce0bcd44cac0a3a2d39a0282a6f4697"
+    },
+    {
+      "path": "thesis/platforms/pc/teacher_realtime.py",
+      "bytes": 7935,
+      "sha256": "022b3203142aea8bed9c9f1c179be3368f8e8a3778a7a75bc4cb3ab6e94e5878"
+    },
+    {
+      "path": "thesis/training/__init__.py",
+      "bytes": 67,
+      "sha256": "15469b4aba0fde621c1873514dc028ca426120ba2440ec125edea359101b3b7c"
+    },
+    {
+      "path": "thesis/training/train_student_128.py",
+      "bytes": 5226,
+      "sha256": "100e6a4ba11080d43ba5f564ae3a83825e35875f56952debff2e3228aede7b2f"
+    },
+    {
+      "path": "thesis/training/train_student_32.py",
+      "bytes": 4944,
+      "sha256": "6f32da6bad2655c03f509154d3b329d46127ae8a3e8e85f576c639beb9870349"
+    },
+    {
+      "path": "thesis/training/train_student_64.py",
+      "bytes": 5215,
+      "sha256": "f6a9faa3a8b4073d86ba130f08a4336d83b946e05bec6b8602d5d8c47dd09f35"
+    },
+    {
+      "path": "tracknet/__init__.py",
+      "bytes": 96,
+      "sha256": "dcdddf9116e310b6e216f5bc1cdfa3f61853ba64685e74b9954cd77be33101e1"
+    },
+    {
+      "path": "tracknet/config.py",
+      "bytes": 1309,
+      "sha256": "5386b5a1628b2dfdddc747f874486fc87472ad5862d39abea68384b778d0a44c"
+    },
+    {
+      "path": "tracknet/constants.py",
+      "bytes": 685,
+      "sha256": "cc52214137c2e72a1d0ad1768cc6bc33a349b087e6701c57cd405b48399070ab"
+    },
+    {
+      "path": "tracknet/data/__init__.py",
+      "bytes": 909,
+      "sha256": "68467809395e1754ad7a379caf7d413c2c834f926c0585d2608fa7aca46e88ee"
+    },
+    {
+      "path": "tracknet/data/adapters.py",
+      "bytes": 2842,
+      "sha256": "46b2114a16d4365244875a9fb51cb7922cbfcd584ff29356f59e7697e22bc7ca"
+    },
+    {
+      "path": "tracknet/data/dataset.py",
+      "bytes": 11425,
+      "sha256": "14af6f87250902c53d8db7cf9581d9ffd671053c9186fcff1470a6806988f34d"
+    },
+    {
+      "path": "tracknet/data/heatmaps.py",
+      "bytes": 4523,
+      "sha256": "a4f3915a1d52b2b030f31df49ef7974b51e066da72453265ad13b3f5385f3b1a"
+    },
+    {
+      "path": "tracknet/data/preprocessing.py",
+      "bytes": 12662,
+      "sha256": "7f34dff36f4e72f25526e0137bb5700194e39dcd3d38df3ed2df436136445a46"
+    },
+    {
+      "path": "tracknet/data/raw_reader.py",
+      "bytes": 4291,
+      "sha256": "3fedf43aa3b35844d4631c8c33bd9936c24052c715dda8f7873f421192375a53"
+    },
+    {
+      "path": "tracknet/data/targets.py",
+      "bytes": 947,
+      "sha256": "916a235b0698691ec68dcb461a931ef7c17a9ecc9fde8eb046f59133331ef454"
+    },
+    {
+      "path": "tracknet/data/trajectory_dataset.py",
+      "bytes": 6240,
+      "sha256": "8ac14563c232ab4e1dd109d7b2674320dfd2f882e3de545984881b85a50a740d"
+    },
+    {
+      "path": "tracknet/data/transforms.py",
+      "bytes": 4493,
+      "sha256": "04332b6e65cdb6840e68e0855a4716752a460d8ce9d15697d46753255798d467"
+    },
+    {
+      "path": "tracknet/evaluation/__init__.py",
+      "bytes": 210,
+      "sha256": "00e0e6b6cb5cd7796c0980280c4fb8a284e3b5b3c48c529f299aadbca46bf342"
+    },
+    {
+      "path": "tracknet/evaluation/evaluator.py",
+      "bytes": 18000,
+      "sha256": "ed8f6813abf56c66de06ee2631c0fc814cf6cf7c35aa36d3b584aaa555e4beef"
+    },
+    {
+      "path": "tracknet/inference/__init__.py",
+      "bytes": 485,
+      "sha256": "ab288c5d9e7ea6d22ed578a477f45e25c2bf6f716b330bbb9d77c2c0c82618f3"
+    },
+    {
+      "path": "tracknet/inference/aggregation.py",
+      "bytes": 3176,
+      "sha256": "fe0486ec24ac3f21a15c644d2bd9d160b2de7aca16bec310b2bf6a06c9ba660e"
+    },
+    {
+      "path": "tracknet/inference/postprocess.py",
+      "bytes": 3629,
+      "sha256": "54ef813130737d8b169e8ffd71ddfcf6b26e8432b18ef6ee8553f0debbe73655"
+    },
+    {
+      "path": "tracknet/inference/rectification.py",
+      "bytes": 5666,
+      "sha256": "851834e98db88572781de290b533d0ead31f86b434ee9b850163f5e66dbdb0b3"
+    },
+    {
+      "path": "tracknet/inference/video_predictor.py",
+      "bytes": 21011,
+      "sha256": "822357d19c21387e9ee28e227fa94e71da74b49fc58cf8b16b3ba2343a18cca3"
+    },
+    {
+      "path": "tracknet/inference/visualization.py",
+      "bytes": 1560,
+      "sha256": "15fd687bea556caec046fe201243e68028fd0a120c8aa64192b09b16fd07f39c"
+    },
+    {
+      "path": "tracknet/inference/windowing.py",
+      "bytes": 1183,
+      "sha256": "81349a6743600914063f9f0912dc26896b59590acd881dfde1c3a828d35e18fe"
+    },
+    {
+      "path": "tracknet/models/__init__.py",
+      "bytes": 243,
+      "sha256": "dea531fff2200a7f267db2499213d48eeb2fd92b31ad012d5528b6d1c4cb8106"
+    },
+    {
+      "path": "tracknet/models/blocks.py",
+      "bytes": 3375,
+      "sha256": "71bd30f3d387591c9bc21cf6833c2abbd466831c59b9bd698e9673e38a12153a"
+    },
+    {
+      "path": "tracknet/models/registry.py",
+      "bytes": 348,
+      "sha256": "f1edaeb2a82b9090992fce706c1eced41ad57c25b2ba5911e39f3ee0308c3f07"
+    },
+    {
+      "path": "tracknet/models/tracknet_v1.py",
+      "bytes": 3143,
+      "sha256": "4f9b6169aad6649f5473208977f03f86ef476fa5f9c7b87b27042edda012cd9e"
+    },
+    {
+      "path": "tracknet/models/tracknet_v2.py",
+      "bytes": 981,
+      "sha256": "93f6fe00432e6d426872d0ee6097b0b3bd7d8e24a59517782ba268fca4c038c6"
+    },
+    {
+      "path": "tracknet/models/tracknet_v3.py",
+      "bytes": 3689,
+      "sha256": "64ce053156f4f428d96e149a0ac23ebd2cdf5c5958eac938d0c49cda6959e735"
+    },
+    {
+      "path": "tracknet/models/tracknet_v4.py",
+      "bytes": 3437,
+      "sha256": "b8328e437e4c0136d05ab7fce85bcf808ebc086a544b5b66f03d2d4285c21474"
+    },
+    {
+      "path": "tracknet/models/tracknet_v5.py",
+      "bytes": 10893,
+      "sha256": "e69270232919c92199e2d51bb983d061d2c5d940067ef0b8a149f9d00fcb812d"
+    },
+    {
+      "path": "tracknet/papers/__init__.py",
+      "bytes": 2656,
+      "sha256": "e63d504ce4eaf1f7582d049b5c6fb4a83a6710f3928e5ab8e14369f5c90578b3"
+    },
+    {
+      "path": "tracknet/papers/base.py",
+      "bytes": 6051,
+      "sha256": "9c3d7c018569f132445957ca9ba14f248934481b2fccfaa4265b5d18ffda5aeb"
+    },
+    {
+      "path": "tracknet/papers/v1/__init__.py",
+      "bytes": 76,
+      "sha256": "cab875d7c92edeb68d753bbdfada6cdeac6d0ef540184bf3a46cc5d925f0ad4a"
+    },
+    {
+      "path": "tracknet/papers/v1/spec.py",
+      "bytes": 845,
+      "sha256": "aba44f8272972b67de701500f145c72bb0bce87f01d15568b269cef4936a37dd"
+    },
+    {
+      "path": "tracknet/papers/v2/__init__.py",
+      "bytes": 76,
+      "sha256": "44f2125dc2fe6e6f38e6b29977d2e1fbcc3b6e1b82a6dcfa2f49ce455219dcef"
+    },
+    {
+      "path": "tracknet/papers/v2/spec.py",
+      "bytes": 718,
+      "sha256": "726af2ff6e36147852968971ba3f8497311d515b553772f75e846f1be1983d3b"
+    },
+    {
+      "path": "tracknet/papers/v3/__init__.py",
+      "bytes": 138,
+      "sha256": "d6b79d0371a192edf24570a1ec9088ffea9e8fe9bad627b4a65b2be645ac78a9"
+    },
+    {
+      "path": "tracknet/papers/v3/spec.py",
+      "bytes": 1478,
+      "sha256": "de31b1719a298a293e7e2d2bddfb1feeccc8e716b25abdde85651fe6b54f9c7d"
+    },
+    {
+      "path": "tracknet/papers/v4/__init__.py",
+      "bytes": 76,
+      "sha256": "058f220f8f629a59da9a1d638867e58358cff43fac4dd5b90628c5b1c1bc6386"
+    },
+    {
+      "path": "tracknet/papers/v4/spec.py",
+      "bytes": 718,
+      "sha256": "8df90784bacf4459d8949abce1f87d5e655ebea0ddc9fd327083e03807af7a92"
+    },
+    {
+      "path": "tracknet/papers/v5/__init__.py",
+      "bytes": 76,
+      "sha256": "991919077b702ed0af62415ad61dd402d03b2e25701465d8f1c16fcca042bffc"
+    },
+    {
+      "path": "tracknet/papers/v5/spec.py",
+      "bytes": 1117,
+      "sha256": "b8856984391f10a5c8a3c95e16a688bdadb6fbf64ff74d5e52dc5a1b96f64dfe"
+    },
+    {
+      "path": "tracknet/tools/__init__.py",
+      "bytes": 71,
+      "sha256": "941fcb77e9c8160358df8be34790e9fa7bee802f5166b1e3bb8b1669191df5f7"
+    },
+    {
+      "path": "tracknet/tools/collect_evaluations.py",
+      "bytes": 8248,
+      "sha256": "bd4cc44156624988be238991c8c612a69e83a3b8237ffd0dfb6efa2b98349a50"
+    },
+    {
+      "path": "tracknet/tools/evaluate.py",
+      "bytes": 2547,
+      "sha256": "6df259f511b9ad7d7aa45565291344cebc56c3ee800c19a37db2e1a410fc4cb3"
+    },
+    {
+      "path": "tracknet/tools/hardware.py",
+      "bytes": 330,
+      "sha256": "7134125c83ba25691aee122f9c012254f121ee5cce2302d36bb9f8ea94851f94"
+    },
+    {
+      "path": "tracknet/tools/predict_video.py",
+      "bytes": 2650,
+      "sha256": "c9a4a1a84aff35d1cc27270a545f9025b06d4d6f5a4f0fc25cd60f46017c3ec0"
+    },
+    {
+      "path": "tracknet/tools/preprocess.py",
+      "bytes": 998,
+      "sha256": "221983d966cce93261b524b2fc0cab28fba208b4ad420fd48a5e1aa5a9c9599d"
+    },
+    {
+      "path": "tracknet/tools/train.py",
+      "bytes": 858,
+      "sha256": "85412c38e8a77c8e67fc9d4546586d221245584929a9c62bbdac5ce7a144700b"
+    },
+    {
+      "path": "tracknet/tools/visualize_dataset.py",
+      "bytes": 2251,
+      "sha256": "9ed0a503424bc48e286ecc65e98cab32d4d8953bcc00a90a21941faafbc2056a"
+    },
+    {
+      "path": "tracknet/training/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "tracknet/training/checkpoint.py",
+      "bytes": 3542,
+      "sha256": "9b52605fe3b84e3b9621d9565b2237505a7c4221c7d74ad0366f77e9f7c7e8ef"
+    },
+    {
+      "path": "tracknet/training/losses.py",
+      "bytes": 2370,
+      "sha256": "b508cb9e64bacd6eab9030c65ec4351bf795cf3b4f2b3fde845ed0136c807939"
+    },
+    {
+      "path": "tracknet/training/metrics.py",
+      "bytes": 1977,
+      "sha256": "6452bf75a38137b21b3b0c0fd738b0af05c57f3e6da746edd7ad454a26470f28"
+    },
+    {
+      "path": "tracknet/training/tensorboard.py",
+      "bytes": 13649,
+      "sha256": "08003cbd495b35524d90802fdf0e2afb97a8bab996d9e1042f55bd8c44f58ca2"
+    },
+    {
+      "path": "tracknet/training/trainer.py",
+      "bytes": 23253,
+      "sha256": "677673185d65a991712c8fe1396672ae954e6ea4b0addb5173b001750d514c71"
+    },
+    {
+      "path": "tracknet/utils/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "tracknet/utils/device.py",
+      "bytes": 411,
+      "sha256": "42aba04db7c6f2185ad88c660bdaf515acd2431cd0c1d41a28304702d25c554c"
+    },
+    {
+      "path": "tracknet/utils/hardware.py",
+      "bytes": 1636,
+      "sha256": "53b81a0d69167040a02ab27111655120e4fb5e4780c19814a021ae0d989feb56"
+    },
+    {
+      "path": "tracknet/utils/io.py",
+      "bytes": 620,
+      "sha256": "4480d4217a889edf76e8905cd990676b8db24fd05da89a04f15008a26c07bb56"
+    },
+    {
+      "path": "tracknet/utils/seeding.py",
+      "bytes": 458,
+      "sha256": "488e3b5ec016d0fd17f17915190996538cbf3333aef301b61900c45ac52859db"
+    },
+    {
+      "path": "configs/evaluate.yaml",
+      "bytes": 413,
+      "sha256": "47eb0a0f4c23c3be0f852b3dbef7f5bb27875c910e3a1bad182a7f517ee34b06"
+    },
+    {
+      "path": "configs/evaluate_v1.yaml",
+      "bytes": 395,
+      "sha256": "a62f1905d4508440a78aa3d1d0956fad444d99d0decb7923892892afaf23b7f5"
+    },
+    {
+      "path": "configs/evaluate_v2.yaml",
+      "bytes": 370,
+      "sha256": "50fc5e39880540795ff8eb964186a434aae87a2cdc55ab1658bf929341c8e526"
+    },
+    {
+      "path": "configs/evaluate_v3_tracker.yaml",
+      "bytes": 386,
+      "sha256": "286b7bfb3fd181a793ea6a648ae80b3a4d8e03cb510baf3c9b480f0a648a2e08"
+    },
+    {
+      "path": "configs/evaluate_v3_tracker_rectifier.yaml",
+      "bytes": 590,
+      "sha256": "87b08a04701c93f58ea44ea393686b113314a61fc31639f88147eddc2ba51a46"
+    },
+    {
+      "path": "configs/evaluate_v4.yaml",
+      "bytes": 379,
+      "sha256": "0cfa8aabd5b8b017e03f014496817f5c6ecf9e32daedb77fea5ec9933e6ac5f3"
+    },
+    {
+      "path": "configs/evaluate_v5.yaml",
+      "bytes": 370,
+      "sha256": "1c7c82b9a988bc41d95bfecd5dc5d57a3864862f156eca055e224627da94dd55"
+    },
+    {
+      "path": "configs/mac_smoke_preprocess.yaml",
+      "bytes": 319,
+      "sha256": "3334621bcd1cfc386912de28034a098f883a0e977908635a041fc788d095de7e"
+    },
+    {
+      "path": "configs/mac_smoke_train_v2.yaml",
+      "bytes": 875,
+      "sha256": "6288b9c7e759d5d70114f4143bb26d1484099394385fe7fdc22040a537a31415"
+    },
+    {
+      "path": "configs/predict_video.yaml",
+      "bytes": 649,
+      "sha256": "010e5f066341315f02e507bd2011928bb5c32344b6fc2ff8f00459fda5e91a4c"
+    },
+    {
+      "path": "configs/preprocess.yaml",
+      "bytes": 319,
+      "sha256": "3a733b81e58cc8c6ddfbd5d1ffb840ff3d5e2c11c3f44c9203ba9655c989d78d"
+    },
+    {
+      "path": "configs/preprocess_fast_512x288.yaml",
+      "bytes": 320,
+      "sha256": "b89e34bd08b421107323103c28c3837245b278de5006f9021d2bbed74da698aa"
+    },
+    {
+      "path": "configs/preprocess_fast_v1_640x360.yaml",
+      "bytes": 320,
+      "sha256": "ee5562a471b463709b272077641a4f7e1a858e8e3efcd5befa57637540b0146e"
+    },
+    {
+      "path": "configs/preprocess_v1_640x360.yaml",
+      "bytes": 319,
+      "sha256": "c4834e2682deab96715d748476cc5cbaf2e9893b0c3d67b9da52177b4e080a63"
+    },
+    {
+      "path": "configs/smoke_train_cpu.yaml",
+      "bytes": 587,
+      "sha256": "6ba599188607a177d1a879e8761da03b23bb0401ebe53b86c3019e1c97f0bd1d"
+    },
+    {
+      "path": "configs/thesis/evaluation_amateur7.csv",
+      "bytes": 1357,
+      "sha256": "ce56e49d8c6d7622755bc48cce369f67fca32a002338bee69365519f3969ae03"
+    },
+    {
+      "path": "configs/thesis/evaluation_original58.csv",
+      "bytes": 6938,
+      "sha256": "e50d83b2f24f9e39fa38e25beb4e82acd7808e23459582f77566ae4b33bb7d04"
+    },
+    {
+      "path": "configs/train_v1.yaml",
+      "bytes": 900,
+      "sha256": "55fa6805ba2f47d33ae4c52087fc035c955f171c7171bad5edace6ffe13a6863"
+    },
+    {
+      "path": "configs/train_v2.yaml",
+      "bytes": 891,
+      "sha256": "01f0f275f693e2ddb5686ac02a65fe722a48c7f88a4803c3c9e82af77a7a0416"
+    },
+    {
+      "path": "configs/train_v2_ddp_max.yaml",
+      "bytes": 967,
+      "sha256": "9c45aa0bae223e417f691cdd433b05e918448dc88cf55fc7338ce828acfbcba0"
+    },
+    {
+      "path": "configs/train_v3_rectifier.yaml",
+      "bytes": 962,
+      "sha256": "2409e77ec13cf711128df03929bb0fef235eed293d1135f250f4cddd2ddc99ce"
+    },
+    {
+      "path": "configs/train_v3_tracker.yaml",
+      "bytes": 897,
+      "sha256": "8ecbb7ab517f9cd6d460258b02b49a58b78e4c3845fdac16e313520db2c035e2"
+    },
+    {
+      "path": "configs/train_v4.yaml",
+      "bytes": 960,
+      "sha256": "bdb337ee190c20f6b15a4ffc26e556738a735f81457d39a6dc188a4f6725c87b"
+    },
+    {
+      "path": "configs/train_v5.yaml",
+      "bytes": 1075,
+      "sha256": "93e3be18f85041ff6ca2c0f6567abe1642ce4109a40550ccf4aa9aa7bd1fb61f"
+    },
+    {
+      "path": "configs/visualize_dataset.yaml",
+      "bytes": 283,
+      "sha256": "e7b587699634258ac7980e757b0e5ac06805f9bbf6e1825c44bc3274343e0699"
+    },
+    {
+      "path": "docs/file_migration.csv",
+      "bytes": 3689,
+      "sha256": "bc89c2adda583d608c72a292b4d35db838d1b8283b093b887cf566824880092b"
+    },
+    {
+      "path": "docs/platforms/jetson_nano/file_migration.csv",
+      "bytes": 2603,
+      "sha256": "7a8ff2c69e5795e408cbe8e92629537dfce1986508d361bc25f598a53474f62a"
+    },
+    {
+      "path": "docs/platforms.md",
+      "bytes": 3919,
+      "sha256": "c1a8d962a8108f0e25b9045ba6abdda6fdfb3d4c14e0ab1074125feb6950b9da"
+    },
+    {
+      "path": "docs/thesis_workflow.md",
+      "bytes": 4280,
+      "sha256": "efad084ee746b8ac74973e481f318779eb3b93cd9cf5dd4545efc14fed55306b"
+    },
+    {
+      "path": "docs/upstream_readme.md",
+      "bytes": 12512,
+      "sha256": "de68c235a02be271b3bfe5a78a03bdd36cf78c186c3182c80b0d82d69f8b2e2a"
+    },
+    {
+      "path": "tests/conftest.py",
+      "bytes": 4238,
+      "sha256": "485a9237f89b22c31b2e176dfe90ea95160c83003ecbc214db52ccc1a92241b7"
+    },
+    {
+      "path": "tests/test_hardware_pipeline.py",
+      "bytes": 5820,
+      "sha256": "7679cca33a42dcb8e5c296950345267137a0aa47802c75be11198fb5d6806ed5"
+    },
+    {
+      "path": "tests/test_inference_evaluation_training.py",
+      "bytes": 35427,
+      "sha256": "9a1d2905dd989fdce4ae0a9e1740779a1612e4bb7d1f76a7ff80c94e06deef34"
+    },
+    {
+      "path": "tests/test_loss_checkpoint_metrics.py",
+      "bytes": 1948,
+      "sha256": "9ace393f90542f77c6c1896682c0ded0453f4413f2f085537df2114e81a3f351"
+    },
+    {
+      "path": "tests/test_models_forward.py",
+      "bytes": 2774,
+      "sha256": "55b26b7d96106e988117b8ea518165ab6a585f44e90078f61176d829494476a4"
+    },
+    {
+      "path": "tests/test_paper_contracts.py",
+      "bytes": 13771,
+      "sha256": "831078f684151051ae75a57472be47bee3883edd6c5f13fe204ec8546fd58b2f"
+    },
+    {
+      "path": "tests/test_preprocess_dataset.py",
+      "bytes": 5320,
+      "sha256": "b6e24535a7874508aad48dfd89e6953b75ccc4b117d698604bdb1dac7eed17da"
+    },
+    {
+      "path": "tests/test_project_layout.py",
+      "bytes": 1725,
+      "sha256": "ae086d8e54ffef4010984fab81f7eb0851d729b5d9a147654d95fcbe42cc3dbc"
+    },
+    {
+      "path": "tests/test_thesis_layout.py",
+      "bytes": 1563,
+      "sha256": "fa32977f37b063b6425c2d0cac2f84f7720782f79b8cfc87143270e42c4cee43"
+    },
+    {
+      "path": "tests/test_transforms_heatmaps.py",
+      "bytes": 851,
+      "sha256": "db8cd4da1d65a0f073991ac80f53783b436919cccc2585cfa24188b2929134a7"
+    },
+    {
+      "path": "scripts/make_synthetic_raw.py",
+      "bytes": 1841,
+      "sha256": "99cd95c68e0be7132b7610f2bed0666a30a7cdd363ceecc21131a9cc325153df"
+    },
+    {
+      "path": "model_results/evaluation/summary.csv",
+      "bytes": 1914,
+      "sha256": "3993dc0df2f5f30f9bad31362f492f0aa415d170ec6c9b10bb1ac1db435a53e1"
+    },
+    {
+      "path": "model_results/evaluation/summary.json",
+      "bytes": 3318,
+      "sha256": "3966c2c455a797b3cc79d0604292e922adacc88f52be8060132df0aee8a963af"
+    },
+    {
+      "path": "model_results/evaluation/tracknet_v1/checkpoint.json",
+      "bytes": 294,
+      "sha256": "575c7d0d5161bcee6382f1534c79d6511d3cb8b3fe272bce60d34ca2c8c43ea0"
+    },
+    {
+      "path": "model_results/evaluation/tracknet_v1/evaluation.resolved.json",
+      "bytes": 843,
+      "sha256": "518889a58bc8ed61828d90ffc83db0d044eb281d358dbe4695ce6ed4cdd894a3"
+    },
+    {
+      "path": "model_results/evaluation/tracknet_v1/metrics.by_sequence.json",
+      "bytes": 8330,
+      "sha256": "4cb36fdac759cfb15c2f012c689f5a4196209eafecc14393cbff44f56e9e2414"
+    },
+    {
+      "path": "model_results/evaluation/tracknet_v1/metrics.json",
+      "bytes": 253,
+      "sha256": "79ff5f6e62e273cd1e6f0019baa5e470eb391207f3e9cb79b8d087d72aba4a88"
+    },
+    {
+      "path": "model_results/evaluation/tracknet_v1/predictions.csv",
+      "bytes": 1129564,
+      "sha256": "c80ead9feda1f789bff867efffaf1f9838d553c970c0df9432a2384590183d6f"
+    },
+    {
+      "path": "model_results/evaluation/tracknet_v1/protocol.json",
+      "bytes": 143,
+      "sha256": "4b1e4ae8ad1d8318270c9f24fdd64d5df3a9bbd00e359ea759e9d57fc2f81a77"
+    },
+    {
+      "path": "model_results/evaluation/tracknet_v2/checkpoint.json",
+      "bytes": 299,
+      "sha256": "a8539c4345ba139bd2b805a978c70cacb7ecf8bdc6917bbfb8cf9bf7e23e4cbe"
+    },
+    {
+      "path": "model_results/evaluation/tracknet_v2/evaluation.resolved.json",
+      "bytes": 843,
+      "sha256": "7207d54f724c6334f18a16947897d99a997ba6dd1b2ac8514abd58bf09cbe2eb"
+    },
+    {
+      "path": "model_results/evaluation/tracknet_v2/metrics.by_sequence.json",
+      "bytes": 8387,
+      "sha256": "01f974baf99ffbe2f9c44e364132f1668732bcf3c18e6a52ba0610219c06c32f"
+    },
+    {
+      "path": "model_results/evaluation/tracknet_v2/metrics.json",
+      "bytes": 251,
+      "sha256": "50e060b07f753f991567e6eee6197491153198c9c8d664e66f74833cd5c8b540"
+    },
+    {
+      "path": "model_results/evaluation/tracknet_v2/predictions.csv",
+      "bytes": 1363611,
+      "sha256": "9ce5292dbaec5247c039b8f048854f22ffaa434bfc5e45e72b1a32c8064ebb95"
+    },
+    {
+      "path": "model_results/evaluation/tracknet_v2/protocol.json",
+      "bytes": 143,
+      "sha256": "55dc88495d242c54935476c68f2c5f994fe51c0ae1e4a6ce08b77a68eba9b596"
+    },
+    {
+      "path": "model_results/evaluation/tracknet_v3_tracker_rectifier/checkpoint.json",
+      "bytes": 308,
+      "sha256": "20f74e51ce0ebbc9f06605261dd2ffc94910a38677d59d448dd55d3d45132cee"
+    },
+    {
+      "path": "model_results/evaluation/tracknet_v3_tracker_rectifier/evaluation.resolved.json",
+      "bytes": 935,
+      "sha256": "8d95db5f57e46cddb836c97c74fa9939d256eb0f6d1624b04552e8e68a6cc5cc"
+    },
+    {
+      "path": "model_results/evaluation/tracknet_v3_tracker_rectifier/metrics.by_sequence.json",
+      "bytes": 8739,
+      "sha256": "ff0fc6ec80ac718e92f97da35d3e450d932fa1afee7a50a3f2333ac6b473db24"
+    },
+    {
+      "path": "model_results/evaluation/tracknet_v3_tracker_rectifier/metrics.json",
+      "bytes": 259,
+      "sha256": "2e807e16b485e6ebfb41f13b6a098de6180c1d3d9cf06f0074db4b1cbbf59d40"
+    },
+    {
+      "path": "model_results/evaluation/tracknet_v3_tracker_rectifier/predictions.csv",
+      "bytes": 1396435,
+      "sha256": "4d260623ad4e18e3cb9f440ccd30140cf83bb6b00adf13070deca53b8d59b419"
+    },
+    {
+      "path": "model_results/evaluation/tracknet_v3_tracker_rectifier/protocol.json",
+      "bytes": 140,
+      "sha256": "c3ec3b646d01f192ee19c3facbc299a3fe778bd1e593e0fedaba2fc7de311ec7"
+    },
+    {
+      "path": "model_results/evaluation/tracknet_v4/checkpoint.json",
+      "bytes": 302,
+      "sha256": "ad9ec09db6837db53e206336454662da5b724a5b829c6e83051cbd4fd4aea2a4"
+    },
+    {
+      "path": "model_results/evaluation/tracknet_v4/evaluation.resolved.json",
+      "bytes": 880,
+      "sha256": "9c5c2450c7ebfdee1dca547cda1921eeedf7f138c26068c3ada1fa0b0be8c675"
+    },
+    {
+      "path": "model_results/evaluation/tracknet_v4/metrics.by_sequence.json",
+      "bytes": 3182,
+      "sha256": "03e0bac18ee25afb8d602acf84cf4e1b8f7829cec6d3f322e882a7f76c665dfa"
+    },
+    {
+      "path": "model_results/evaluation/tracknet_v4/metrics.json",
+      "bytes": 248,
+      "sha256": "3634b8d9da083f1dcb654318f5f0a408c6a03752ad32fea11c99f9652a3be491"
+    },
+    {
+      "path": "model_results/evaluation/tracknet_v4/predictions.csv",
+      "bytes": 309216,
+      "sha256": "a39bda9f31a71415cf837b9253a1b5fcb44529f857aa7f2d80adaf8772230b09"
+    },
+    {
+      "path": "model_results/evaluation/tracknet_v4/protocol.json",
+      "bytes": 143,
+      "sha256": "55dc88495d242c54935476c68f2c5f994fe51c0ae1e4a6ce08b77a68eba9b596"
+    },
+    {
+      "path": "model_results/evaluation/tracknet_v4_full/checkpoint.json",
+      "bytes": 302,
+      "sha256": "8f67338ad3f09a8f31ce3f36d6ecf9603752a96abed3e9334baf5b084a70dc08"
+    },
+    {
+      "path": "model_results/evaluation/tracknet_v4_full/evaluation.resolved.json",
+      "bytes": 888,
+      "sha256": "2648f7b492b37df7b9877ac7446508f290ed35ef995d5f1acdaae85df9b5df4b"
+    },
+    {
+      "path": "model_results/evaluation/tracknet_v4_full/metrics.by_sequence.json",
+      "bytes": 878,
+      "sha256": "cdd205911173df219366f1fd4f235b19922adea6da0875001807fb5067b4cf77"
+    },
+    {
+      "path": "model_results/evaluation/tracknet_v4_full/metrics.json",
+      "bytes": 249,
+      "sha256": "cd411f5db2d59cfd954484c15da6d1b3cd9516d17d29cf588bd3db87cf52071e"
+    },
+    {
+      "path": "model_results/evaluation/tracknet_v4_full/predictions.csv",
+      "bytes": 187349,
+      "sha256": "7e0cc0806060abba970542efa28f310ea610b531cc9ad75a7daea4045078b508"
+    },
+    {
+      "path": "model_results/evaluation/tracknet_v4_full/protocol.json",
+      "bytes": 143,
+      "sha256": "55dc88495d242c54935476c68f2c5f994fe51c0ae1e4a6ce08b77a68eba9b596"
+    },
+    {
+      "path": "model_results/evaluation/tracknet_v5/checkpoint.json",
+      "bytes": 297,
+      "sha256": "1d8640039364bc30bf78d71399dbdf7533b49ddb131e13a8859f1162616fd525"
+    },
+    {
+      "path": "model_results/evaluation/tracknet_v5/evaluation.resolved.json",
+      "bytes": 962,
+      "sha256": "5812cf091ef32ef1889dc0ff47e7f3e7f19abaf6039a84602b4b9a028e0cca4c"
+    },
+    {
+      "path": "model_results/evaluation/tracknet_v5/metrics.by_sequence.json",
+      "bytes": 8650,
+      "sha256": "652877160da34fd90435107a2f7ee5fdb68d175dfced338c4e34d08c3e6373b7"
+    },
+    {
+      "path": "model_results/evaluation/tracknet_v5/metrics.json",
+      "bytes": 255,
+      "sha256": "01f3bd39e71c85890a1115bdf4beefb01d409f0f2a8c0f570e3eb50552d12fd0"
+    },
+    {
+      "path": "model_results/evaluation/tracknet_v5/predictions.csv",
+      "bytes": 1366577,
+      "sha256": "ef081aad48f0d77b5614ff517d1137c3c790ff2b4c45e515b996a7fa1b0f276e"
+    },
+    {
+      "path": "model_results/evaluation/tracknet_v5/protocol.json",
+      "bytes": 143,
+      "sha256": "55dc88495d242c54935476c68f2c5f994fe51c0ae1e4a6ce08b77a68eba9b596"
+    },
+    {
+      "path": "model_results/EVALUATION_RESULTS.md",
+      "bytes": 4246,
+      "sha256": "b914c9da96d22ce610acd13cb10f4e196d8a7f7b7a64d6883a763cbdb1f10a23"
+    },
+    {
+      "path": "model_results/TRAINING_SUMMARY.md",
+      "bytes": 4388,
+      "sha256": "89787eba2b2576c1de1d64c78901ded4f11c39edbe5b455caa8429df4a68cccd"
+    },
+    {
+      "path": "papers/extracted/TrackNet - A Deep Learning Network for Tracking High-speed and Tiny Objects in Sports Applications.txt",
+      "bytes": 47070,
+      "sha256": "9603a8196232fcc46a9940a428ade3b2e3b4f9eca8284f5c1710f9c630e527e3"
+    },
+    {
+      "path": "papers/extracted/TrackNetV2 - Efficient Shuttlecock Tracking Network.txt",
+      "bytes": 30515,
+      "sha256": "d40b805d913e3e7fdd9558fdfb96c25e84f6e586469d5d1e8a8e668da65d954a"
+    },
+    {
+      "path": "papers/extracted/TrackNetV3 - Enhancing ShuttleCock Tracking with Augmentations and Trajectory Rectification.txt",
+      "bytes": 38909,
+      "sha256": "2252247800050cee39d8c222d4dbbaec31a3ef4341e5b3a486f5720b98940bd7"
+    },
+    {
+      "path": "papers/extracted/TrackNetV4 - Enhancing Fast Sports Object Tracking with Motion Attention Maps.txt",
+      "bytes": 75048,
+      "sha256": "95e75378b513501a143b07c4ff26c6313410d77c99745162c5ed2adc16ef3d52"
+    },
+    {
+      "path": "papers/extracted/TrackNetV5 - Residual-Driven Spatio-Temporal Refinement and Motion Direction Decoupling for Fast Object Tracking.txt",
+      "bytes": 33957,
+      "sha256": "51797713a98333ca7f7afaf3644c716f0a4c507ee5c9c95070828a6564ed1624"
+    },
+    {
+      "path": "papers/TrackNet - A Deep Learning Network for Tracking High-speed and Tiny Objects in Sports Applications.pdf",
+      "bytes": 3148094,
+      "sha256": "8be381fc6250eb12b5d7ee013821786cdb3613de54bbabc1bcdd8dce8aaf96fd"
+    },
+    {
+      "path": "papers/TrackNetV2 - Efficient Shuttlecock Tracking Network.pdf",
+      "bytes": 821906,
+      "sha256": "6d48c7e79ba88ec89cf7fe323ce55dd4065e9348e62e865da1c7abbc15bd2143"
+    },
+    {
+      "path": "papers/TrackNetV3 - Enhancing ShuttleCock Tracking with Augmentations and Trajectory Rectification.pdf",
+      "bytes": 2694508,
+      "sha256": "3d9feddd741b246b12419e1b85961a70c465500cef881d260fe29780e2bcaf18"
+    },
+    {
+      "path": "papers/TrackNetV4 - Enhancing Fast Sports Object Tracking with Motion Attention Maps.pdf",
+      "bytes": 42857158,
+      "sha256": "1c98f6840d8be224a223617cba9b8ec7123975a0deebe8023f17f2e2cc82f44d"
+    },
+    {
+      "path": "papers/TrackNetV5 - Residual-Driven Spatio-Temporal Refinement and Motion Direction Decoupling for Fast Object Tracking.pdf",
+      "bytes": 11552552,
+      "sha256": "807b7b11f6b05d01ed6d11fd5d7b2947f48f9e64e215e387822a314c5b9e3579"
+    },
+    {
+      "path": ".gitignore",
+      "bytes": 1247,
+      "sha256": "cb8f0fb2ff6b2fd165fac4331f724718a2ebd706d28c162fd4615108eddd72f2"
+    },
+    {
+      "path": "AGENTS.md",
+      "bytes": 5812,
+      "sha256": "476073e15d6843082ed883f4d68d3f35026c6083f63b31e4ff3001d0816bbe92"
+    },
+    {
+      "path": "figure1_pareto_front_batch.png",
+      "bytes": 272479,
+      "sha256": "b730a9d3dd689794cf030c0496766e5436e47953eef1433faff264000756527b"
+    },
+    {
+      "path": "figure2_sensitivity_line_batch.png",
+      "bytes": 216028,
+      "sha256": "e7389d0e8867ebc3138fc5d2755f129f70d254d086122cb5d70f84f959af4594"
+    },
+    {
+      "path": "figure3_ablation_summary_batch.png",
+      "bytes": 181697,
+      "sha256": "118e00dfe6d747e3eeddd58cec90ef8871c837c79ac272d76a9aaa629cb3c1ef"
+    },
+    {
+      "path": "hyperparameter_tuning_results_128_batch.csv",
+      "bytes": 3577,
+      "sha256": "d5d01119a8b85acc2ae258927db66dcb52a7155ef9cd82b0ac4905f8b3f9691e"
+    },
+    {
+      "path": "hyperparameter_tuning_results_64_4D.csv",
+      "bytes": 3586,
+      "sha256": "397d0f7f16b219b7bfff5c779b5523dc7ba0c2141fac2727677a90b17fbed963"
+    },
+    {
+      "path": "pyproject.toml",
+      "bytes": 356,
+      "sha256": "488d5321eb34bd404109efa87eaeebf10703059e6784cb537e8c3a956cdf71a0"
+    },
+    {
+      "path": "README.md",
+      "bytes": 2558,
+      "sha256": "466e0db0af259a4fad3237fa6df18e5103446c23295f16a10ea6aecf672d4885"
+    },
+    {
+      "path": "Real-Time Badminton Tracking on Edge Devices A Lightweight ROI-based Architecture \u7684\u526f\u672c.pptx",
+      "bytes": 54265422,
+      "sha256": "114da9723c1a8b6388e784a782a86aaaaca53ba257e4cbbd022ed58e760bdf2d"
+    },
+    {
+      "path": "requirements-dev.txt",
+      "bytes": 41,
+      "sha256": "d50ddc62b3b50aaa970f9af539b572dcddad85ec738250e974a25de3526e4091"
+    },
+    {
+      "path": "requirements.txt",
+      "bytes": 70,
+      "sha256": "913aba410e293f019599eed0fc7bb94ead4fc463eb3509b6f4f8e7a465d37c73"
+    },
+    {
+      "path": "docs/platforms/jetson_nano/original_sources_20261030.tar.gz",
+      "bytes": 106959,
+      "sha256": "58f6d63b8c5336082fe3a99596e34b180673f7b902708952d7e95aac2a5e424c"
+    },
+    {
+      "path": "docs/archive/pre_organization_sources.zip",
+      "bytes": 68748,
+      "sha256": "088793c38018abd32a324072bc84b1abc1b9b7670cc762a94ffa052d1e4bfe9f"
+    }
+  ],
+  "source_files": 219,
+  "total_bytes": 122923965,
+  "excluded_assets": [
+    "datasets",
+    "weights",
+    "engines",
+    "generated videos"
+  ]
+}

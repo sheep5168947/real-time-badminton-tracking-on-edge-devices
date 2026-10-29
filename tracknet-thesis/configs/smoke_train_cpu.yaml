@@ -1,0 +1,26 @@
+model:
+  version: v2
+  sequence_length: 3
+  base_channels: 4
+
+dataset:
+  processed_root: test_results/dataset/processed/synthetic
+  sequence_length: 3
+  train_split_file: test_results/dataset/processed/synthetic/splits/train.txt
+  val_split_file: test_results/dataset/processed/synthetic/splits/val.txt
+
+train:
+  experiment_name: smoke_cpu
+  output_root: test_results/train
+  epochs: 1
+  batch_size: 2
+  workers: 0
+  persistent_workers: false
+  optimizer: Adam
+  lr: 0.001
+  loss: wbce
+  device: cpu
+  amp: false
+  seed: 7
+  num_threads: 1
+  interop_threads: 1

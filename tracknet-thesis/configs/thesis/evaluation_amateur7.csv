@@ -1,0 +1,8 @@
+match,video,mode,video_path,labels_path
+match_china2,singles0.mp4,offline,dataset/raw/am_singles/am_singles/match_china2/rally_video/singles0.mp4,dataset/raw/am_singles/am_singles/match_china2/ball_trajectory/singles0_ball.csv
+match_china2,singles1.mp4,offline,dataset/raw/am_singles/am_singles/match_china2/rally_video/singles1.mp4,dataset/raw/am_singles/am_singles/match_china2/ball_trajectory/singles1_ball.csv
+match_china2,singles2.mp4,offline,dataset/raw/am_singles/am_singles/match_china2/rally_video/singles2.mp4,dataset/raw/am_singles/am_singles/match_china2/ball_trajectory/singles2_ball.csv
+match_china2,singles3.mp4,offline,dataset/raw/am_singles/am_singles/match_china2/rally_video/singles3.mp4,dataset/raw/am_singles/am_singles/match_china2/ball_trajectory/singles3_ball.csv
+match_yewtee,singles0.mp4,offline,dataset/raw/am_singles/am_singles/match_yewtee/rally_video/singles0.mp4,dataset/raw/am_singles/am_singles/match_yewtee/ball_trajectory/singles0_ball.csv
+match_yewtee,singles1.mp4,offline,dataset/raw/am_singles/am_singles/match_yewtee/rally_video/singles1.mp4,dataset/raw/am_singles/am_singles/match_yewtee/ball_trajectory/singles1_ball.csv
+match_yewtee,singles2.mp4,offline,dataset/raw/am_singles/am_singles/match_yewtee/rally_video/singles2.mp4,dataset/raw/am_singles/am_singles/match_yewtee/ball_trajectory/singles2_ball.csv

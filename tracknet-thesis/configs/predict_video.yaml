@@ -1,0 +1,19 @@
+inference:
+  video_path: dataset/raw/inference/inference_sample.mp4
+  checkpoint_path: model-v2.0.1-epoch30/tracknet_v2_epoch30.pt
+  output_csv: outputs/predict/inference_sample_v2_predictions.csv
+  output_video: outputs/predict/inference_sample_v2_overlay.mp4
+  target_width: 512
+  target_height: 288
+  sequence_length: 3
+  threshold: 0.5
+  batch_size: 4
+  device: auto
+  frame_index_base: 0
+  trail_length: 12
+  progress: true
+  verbose: true
+  # Optional V3 rectification:
+  # rectifier_checkpoint_path: model-v2.0.1-epoch30/tracknet_v3_rectifier_epoch30.pt
+  # rectifier_sequence_length: 16
+  # rectifier_delta_y_pixels: 30.0
