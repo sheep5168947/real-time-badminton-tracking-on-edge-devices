@@ -13,10 +13,10 @@ import tensorrt as trt
 
 # === 參數解析 ===
 parser = argparse.ArgumentParser(description="Dual-Engine Tracking 64x64")
-parser.add_argument("--motion", type=int, default=15, help="Motion Mask Threshold")
-parser.add_argument("--local_conf", type=float, default=0.55, help="Local Confidence Threshold")
-parser.add_argument("--global_conf", type=float, default=0.62, help="Global Confidence Threshold")
-parser.add_argument("--miss", type=int, default=1, help="Max Miss Tolerance")
+parser.add_argument("--motion", type=int, default=10, help="Motion Mask Threshold (default: 10)")
+parser.add_argument("--local_conf", type=float, default=0.55, help="Local Confidence Threshold (default: 0.55)")
+parser.add_argument("--global_conf", type=float, default=0.55, help="Global Confidence Threshold (default: 0.55)")
+parser.add_argument("--miss", type=int, default=3, help="Max Miss Tolerance (default: 3)")
 args = parser.parse_args()
 
 MOTION_THRESH = args.motion

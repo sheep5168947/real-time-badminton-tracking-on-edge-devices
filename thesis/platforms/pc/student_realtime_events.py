@@ -18,6 +18,14 @@ if __package__ in (None, ""):
     from pathlib import Path as _ThesisPath
     _thesis_sys.path.insert(0, str(_ThesisPath(__file__).resolve().parents[3]))
 
+import sys
+if hasattr(sys.stdout, "reconfigure"):
+    try:
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+        sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:
+        pass
+
 
 import argparse
 import csv
@@ -1091,16 +1099,16 @@ def ai_thread(
 
     logger.close(last_processed_id)
     print("\n========================================")
-    print("📊 128x128 模式 - 引擎觸發佔比與素材統計報告 (PC Synced)")
+    print("[STATS] 128x128 模式 - 引擎觸發佔比與素材統計報告 (PC Synced)")
     print(f"總處理幀數: {stats_total_frames}")
     if stats_total_frames > 0:
         print(f"[128x128 局部追蹤] 佔比: {(stats_track_128 / stats_total_frames) * 100:.1f}%")
         print(f"[512x288 全域救援] 佔比: {(stats_global_rec / stats_total_frames) * 100:.1f}%")
     print("----------------------------------------")
-    print(f"✨ Mask 黃金案例 1 [反敗為勝 Peak Rescued]:   {mask_counts['rescued']} 張 -> {logger.mask_rescued_dir}")
-    print(f"🛡️ Mask 黃金案例 2 [攔截誤報 Alarm Blocked]: {mask_counts['blocked']} 張 -> {logger.mask_blocked_dir}")
-    print(f"🧹 Mask 保真濾波 3 [真球不變 Noise Cleaned]: {mask_counts['cleaned']} 張 -> {logger.mask_cleaned_dir}")
-    print(f"📁 KF 救援事件統計表: {logger.csv_path.resolve()}")
+    print(f"[MASK 1] Mask 黃金案例 1 [反敗為勝 Peak Rescued]:   {mask_counts['rescued']} 張 -> {logger.mask_rescued_dir}")
+    print(f"[MASK 2] Mask 黃金案例 2 [攔截誤報 Alarm Blocked]: {mask_counts['blocked']} 張 -> {logger.mask_blocked_dir}")
+    print(f"[MASK 3] Mask 保真濾波 3 [真球不變 Noise Cleaned]: {mask_counts['cleaned']} 張 -> {logger.mask_cleaned_dir}")
+    print(f"[CSV] KF 救援事件統計表: {logger.csv_path.resolve()}")
     print("========================================\n")
 
 

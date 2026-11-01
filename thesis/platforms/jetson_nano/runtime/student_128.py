@@ -11,10 +11,12 @@ import argparse
 
 # 建立參數解析器
 parser = argparse.ArgumentParser(description="Dual-Engine Tracking")
-parser.add_argument("--motion", type=int, default=15, help="Motion Mask Threshold")
-parser.add_argument("--local_conf", type=float, default=0.55, help="Local Confidence Threshold")
-parser.add_argument("--global_conf", type=float, default=0.62, help="Global Confidence Threshold")
-parser.add_argument("--miss", type=int, default=1, help="Max Miss Tolerance")
+parser.add_argument("--motion", type=int, default=10, help="Motion Mask Threshold (default: 10)")
+parser.add_argument("--local_conf", type=float, default=0.55, help="Local Confidence Threshold (default: 0.55)")
+parser.add_argument("--global_conf", type=float, default=0.55, help="Global Confidence Threshold (default: 0.55)")
+parser.add_argument("--miss", type=int, default=3, help="Max Miss Tolerance (default: 3)")
+parser.add_argument("--no_kf", action="store_true", help="Disable Kalman Filter (use static center)")
+parser.add_argument("--no_mask", action="store_true", help="Disable Motion Mask (use raw heatmap)")
 args = parser.parse_args()
 
 # 使用外部傳入的參數取代原本寫死的數值
@@ -22,6 +24,8 @@ MOTION_THRESH = args.motion
 CONF_THRESH_LOCAL = args.local_conf
 CONF_THRESH_GLOBAL = args.global_conf  # 全域閥值通常固定，若要調也可以加進 args
 MAX_MISS_TOLERANCE = args.miss
+USE_KF = not args.no_kf
+USE_MASK = not args.no_mask
 class TRTModel:
     def __init__(self, engine_path, ctx):
         self.logger = trt.Logger(trt.Logger.ERROR)
@@ -100,11 +104,11 @@ W_ORIG, H_ORIG = 1280, 720
 W_TRAIN, H_TRAIN = 512, 288
 ROI_SIZE = 128
 
-# Algorithm Parameters (Aligned with Thesis)
-# MOTION_THRESH = 15
+# Algorithm Parameters (Aligned with Thesis: 10 / 0.55 / 0.55 / 3)
+# MOTION_THRESH = 10
 # CONF_THRESH_LOCAL = 0.55
-# CONF_THRESH_GLOBAL = 0.62
-# MAX_MISS_TOLERANCE = 1
+# CONF_THRESH_GLOBAL = 0.55
+# MAX_MISS_TOLERANCE = 3
 
 # ==========================================
 # Worker Thread: AI Inference (Hybrid Dual-Engine)
@@ -169,32 +173,39 @@ def ai_thread(engine_128_path, engine_512_path):
         # ==========================================
         # Phase 1: Local ROI Tracking (128x128)
         # ==========================================
-        if not is_lost and kf is not None:
-            predicted_state = kf.predict()
-            pred_x, pred_y = int(predicted_state[0, 0]), int(predicted_state[1, 0])
+        if not is_lost:
+            if USE_KF and kf is not None:
+                predicted_state = kf.predict()
+                pred_x, pred_y = int(predicted_state[0, 0]), int(predicted_state[1, 0])
+            else:
+                pred_x, pred_y = int(last_x_512), int(last_y_512)
             
             c0, _, _ = crop_and_pad(img0, pred_x, pred_y, ROI_SIZE)
             c1, _, _ = crop_and_pad(img1, pred_x, pred_y, ROI_SIZE)
             c2, _, _ = crop_and_pad(img2, pred_x, pred_y, ROI_SIZE)
             
-            g0 = cv2.cvtColor(c0, cv2.COLOR_BGR2GRAY)
-            g1 = cv2.cvtColor(c1, cv2.COLOR_BGR2GRAY)
-            _, motion_mask = cv2.threshold(cv2.absdiff(g1, g0), MOTION_THRESH, 255, cv2.THRESH_BINARY)
-            motion_mask = motion_mask.astype(np.float32) / 255.0
-
             imgs = np.concatenate((c0, c1, c2), axis=-1).astype(np.float32) / 255.0
             tensor_x = np.ascontiguousarray(np.transpose(imgs, (2, 0, 1))[np.newaxis, ...])
             
             raw_out = trt_128(tensor_x)
             heatmap = fast_sigmoid(raw_out).squeeze()
             
-            heatmap_masked = heatmap * cv2.resize(motion_mask, (heatmap.shape[1], heatmap.shape[0]))
-            lx, ly, conf = get_shuttle_center_local(heatmap_masked)
+            if USE_MASK:
+                g0 = cv2.cvtColor(c0, cv2.COLOR_BGR2GRAY)
+                g1 = cv2.cvtColor(c1, cv2.COLOR_BGR2GRAY)
+                _, motion_mask = cv2.threshold(cv2.absdiff(g1, g0), MOTION_THRESH, 255, cv2.THRESH_BINARY)
+                motion_mask = motion_mask.astype(np.float32) / 255.0
+                heatmap_final = heatmap * cv2.resize(motion_mask, (heatmap.shape[1], heatmap.shape[0]))
+            else:
+                heatmap_final = heatmap
+
+            lx, ly, conf = get_shuttle_center_local(heatmap_final)
             
             if conf >= CONF_THRESH_LOCAL:
                 gx = pred_x - ROI_SIZE // 2 + lx
                 gy = pred_y - ROI_SIZE // 2 + ly
-                kf.correct(np.array([[gx], [gy]], dtype=np.float32))
+                if USE_KF and kf is not None:
+                    kf.correct(np.array([[gx], [gy]], dtype=np.float32))
                 last_x_512, last_y_512 = gx, gy
                 student_found = True
                 miss_count = 0
@@ -210,22 +221,26 @@ def ai_thread(engine_128_path, engine_512_path):
         # Phase 2: Global Recovery (512x288)
         # ==========================================
         if is_lost:
-            g0 = cv2.cvtColor(img0, cv2.COLOR_BGR2GRAY)
-            g1 = cv2.cvtColor(img1, cv2.COLOR_BGR2GRAY)
-            _, motion_mask = cv2.threshold(cv2.absdiff(g1, g0), MOTION_THRESH, 255, cv2.THRESH_BINARY)
-            motion_mask = motion_mask.astype(np.float32) / 255.0
-            
             imgs = np.concatenate((img0, img1, img2), axis=-1).astype(np.float32) / 255.0
             tensor_x = np.ascontiguousarray(np.transpose(imgs, (2, 0, 1))[np.newaxis, ...])
             
             raw_out = trt_512(tensor_x)
             heatmap = fast_sigmoid(raw_out).squeeze()
             
-            heatmap_masked = heatmap * cv2.resize(motion_mask, (heatmap.shape[1], heatmap.shape[0]))
-            gx, gy, conf = get_shuttle_center_local(heatmap_masked)
+            if USE_MASK:
+                g0 = cv2.cvtColor(img0, cv2.COLOR_BGR2GRAY)
+                g1 = cv2.cvtColor(img1, cv2.COLOR_BGR2GRAY)
+                _, motion_mask = cv2.threshold(cv2.absdiff(g1, g0), MOTION_THRESH, 255, cv2.THRESH_BINARY)
+                motion_mask = motion_mask.astype(np.float32) / 255.0
+                heatmap_final = heatmap * cv2.resize(motion_mask, (heatmap.shape[1], heatmap.shape[0]))
+            else:
+                heatmap_final = heatmap
+
+            gx, gy, conf = get_shuttle_center_local(heatmap_final)
 
             if conf > CONF_THRESH_GLOBAL:
-                kf = init_kalman_filter(gx, gy) 
+                if USE_KF:
+                    kf = init_kalman_filter(gx, gy) 
                 last_x_512, last_y_512 = gx, gy
                 is_lost = False
                 miss_count = 0

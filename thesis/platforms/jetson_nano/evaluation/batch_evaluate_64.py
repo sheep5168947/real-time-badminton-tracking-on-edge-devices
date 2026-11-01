@@ -1,5 +1,12 @@
 # -*- coding: utf-8 -*-
 import os
+import sys
+
+# Critical runtime guards for Jetson Nano (Cortex-A57 & OpenMP TLS)
+os.environ["OPENBLAS_CORETYPE"] = "ARMV8"
+if "/usr/lib/aarch64-linux-gnu/libgomp.so.1" not in os.environ.get("LD_PRELOAD", ""):
+    os.environ["LD_PRELOAD"] = "/usr/lib/aarch64-linux-gnu/libgomp.so.1:" + os.environ.get("LD_PRELOAD", "")
+
 import cv2
 import time
 import numpy as np
@@ -14,16 +21,22 @@ import tensorrt as trt
 
 # === 參數解析 ===
 parser = argparse.ArgumentParser(description="Dual-Engine Tracking 64x64 Batch Eval (Academic Sequential Mode)")
-parser.add_argument("--motion", type=int, default=15, help="Motion Mask Threshold")
-parser.add_argument("--local_conf", type=float, default=0.55, help="Local Confidence Threshold")
-parser.add_argument("--global_conf", type=float, default=0.62, help="Global Confidence Threshold")
-parser.add_argument("--miss", type=int, default=1, help="Max Miss Tolerance")
+parser.add_argument("--motion", type=int, default=10, help="Motion Mask Threshold (default: 10)")
+parser.add_argument("--local_conf", type=float, default=0.55, help="Local Confidence Threshold (default: 0.55)")
+parser.add_argument("--global_conf", type=float, default=0.55, help="Global Confidence Threshold (default: 0.55)")
+parser.add_argument("--miss", type=int, default=3, help="Max Miss Tolerance (default: 3)")
+parser.add_argument("--no_kf", action="store_true", help="Disable Kalman Filter (use static center)")
+parser.add_argument("--no_mask", action="store_true", help="Disable Motion Mask (use raw heatmap)")
+parser.add_argument("--base_dir", type=str, default="raw/part1", help="Dataset base dir (default: raw/part1)")
+parser.add_argument("--output_csv", type=str, default=None, help="Path to save evaluation summary CSV")
 args = parser.parse_args()
 
 MOTION_THRESH = args.motion
 CONF_THRESH_LOCAL = args.local_conf
 CONF_THRESH_GLOBAL = args.global_conf
 MAX_MISS_TOLERANCE = args.miss
+USE_KF = not args.no_kf
+USE_MASK = not args.no_mask
 
 # === TensorRT 模型類別 ===
 class TRTModel:
@@ -120,22 +133,25 @@ def main():
     _ = trt_512(dummy_512)
     
     # 智慧尋找 raw/part1 裡面所有的 mp4 與 csv 配對
-    base_dir = "raw/part1"
+    base_dir = args.base_dir
     video_files = []
     
     if not os.path.exists(base_dir):
-        print(f"[致命錯誤] 找不到資料夾 {base_dir}")
+        print("[致命錯誤] 找不到資料夾 {}".format(base_dir))
         return
         
     for root, dirs, files in os.walk(base_dir):
-        if os.path.basename(root) == "video":
+        bname = os.path.basename(root)
+        if bname in ["video", "rally_video"]:
             for file in files:
                 if file.endswith(".mp4"):
                     vid_path = os.path.join(root, file)
                     match_dir = os.path.dirname(root)
                     csv_name = file.replace(".mp4", "_ball.csv")
-                    csv_path = os.path.join(match_dir, "csv", csv_name)
-                    if os.path.exists(csv_path):
+                    csv_path1 = os.path.join(match_dir, "csv", csv_name)
+                    csv_path2 = os.path.join(match_dir, "ball_trajectory", csv_name)
+                    csv_path = csv_path1 if os.path.exists(csv_path1) else (csv_path2 if os.path.exists(csv_path2) else None)
+                    if csv_path and os.path.exists(csv_path):
                         video_files.append((vid_path, csv_path))
                         
     if len(video_files) == 0:
@@ -166,6 +182,17 @@ def main():
         if not cap.isOpened():
             cap = cv2.VideoCapture(vid_path, cv2.CAP_FFMPEG)
             
+        w_vid = cap.get(cv2.CAP_PROP_FRAME_WIDTH)
+        h_vid = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
+        if w_vid > 0 and h_vid > 0:
+            scale_w = float(w_vid) / float(W_TRAIN)
+            scale_h = float(h_vid) / float(H_TRAIN)
+            dist_thresh_cur = DIST_THRESH * (float(w_vid) / float(W_ORIG))
+        else:
+            scale_w = float(W_ORIG) / float(W_TRAIN)
+            scale_h = float(H_ORIG) / float(H_TRAIN)
+            dist_thresh_cur = DIST_THRESH
+            
         frame_queue = []
         is_lost = True
         miss_count = 0
@@ -194,31 +221,39 @@ def main():
             start_time = time.perf_counter()
             
             # Phase 1: Local ROI
-            if not is_lost and kf is not None:
-                predicted_state = kf.predict()
-                pred_x, pred_y = int(predicted_state[0, 0]), int(predicted_state[1, 0])
+            if not is_lost:
+                if USE_KF and kf is not None:
+                    predicted_state = kf.predict()
+                    pred_x, pred_y = int(predicted_state[0, 0]), int(predicted_state[1, 0])
+                else:
+                    pred_x, pred_y = int(last_x_512), int(last_y_512)
                 
                 c0, _, _ = crop_and_pad(img0, pred_x, pred_y, ROI_SIZE)
                 c1, _, _ = crop_and_pad(img1, pred_x, pred_y, ROI_SIZE)
                 c2, _, _ = crop_and_pad(img2, pred_x, pred_y, ROI_SIZE)
-                
-                g0 = cv2.cvtColor(c0, cv2.COLOR_BGR2GRAY)
-                g1 = cv2.cvtColor(c1, cv2.COLOR_BGR2GRAY)
-                _, motion_mask = cv2.threshold(cv2.absdiff(g1, g0), MOTION_THRESH, 255, cv2.THRESH_BINARY)
-                motion_mask = motion_mask.astype(np.float32) / 255.0
 
                 imgs = np.concatenate((c0, c1, c2), axis=-1).astype(np.float32) / 255.0
                 tensor_x = np.ascontiguousarray(np.transpose(imgs, (2, 0, 1))[np.newaxis, ...])
                 
                 raw_out = trt_64(tensor_x)
                 heatmap = fast_sigmoid(raw_out).squeeze()
-                heatmap_masked = heatmap * cv2.resize(motion_mask, (heatmap.shape[1], heatmap.shape[0]))
-                lx, ly, conf = get_shuttle_center_local(heatmap_masked)
+
+                if USE_MASK:
+                    g0 = cv2.cvtColor(c0, cv2.COLOR_BGR2GRAY)
+                    g1 = cv2.cvtColor(c1, cv2.COLOR_BGR2GRAY)
+                    _, motion_mask = cv2.threshold(cv2.absdiff(g1, g0), MOTION_THRESH, 255, cv2.THRESH_BINARY)
+                    motion_mask = motion_mask.astype(np.float32) / 255.0
+                    heatmap_final = heatmap * cv2.resize(motion_mask, (heatmap.shape[1], heatmap.shape[0]))
+                else:
+                    heatmap_final = heatmap
+
+                lx, ly, conf = get_shuttle_center_local(heatmap_final)
                 
                 if conf >= CONF_THRESH_LOCAL:
                     gx = pred_x - ROI_SIZE // 2 + lx
                     gy = pred_y - ROI_SIZE // 2 + ly
-                    kf.correct(np.array([[gx], [gy]], dtype=np.float32))
+                    if USE_KF and kf is not None:
+                        kf.correct(np.array([[gx], [gy]], dtype=np.float32))
                     last_x_512, last_y_512 = gx, gy
                     student_found = True
                     miss_count = 0
@@ -231,21 +266,26 @@ def main():
 
             # Phase 2: Global Recovery
             if is_lost:
-                g0 = cv2.cvtColor(img0, cv2.COLOR_BGR2GRAY)
-                g1 = cv2.cvtColor(img1, cv2.COLOR_BGR2GRAY)
-                _, motion_mask = cv2.threshold(cv2.absdiff(g1, g0), MOTION_THRESH, 255, cv2.THRESH_BINARY)
-                motion_mask = motion_mask.astype(np.float32) / 255.0
-                
                 imgs = np.concatenate((img0, img1, img2), axis=-1).astype(np.float32) / 255.0
                 tensor_x = np.ascontiguousarray(np.transpose(imgs, (2, 0, 1))[np.newaxis, ...])
                 
                 raw_out = trt_512(tensor_x)
                 heatmap = fast_sigmoid(raw_out).squeeze()
-                heatmap_masked = heatmap * cv2.resize(motion_mask, (heatmap.shape[1], heatmap.shape[0]))
-                gx, gy, conf = get_shuttle_center_local(heatmap_masked)
+
+                if USE_MASK:
+                    g0 = cv2.cvtColor(img0, cv2.COLOR_BGR2GRAY)
+                    g1 = cv2.cvtColor(img1, cv2.COLOR_BGR2GRAY)
+                    _, motion_mask = cv2.threshold(cv2.absdiff(g1, g0), MOTION_THRESH, 255, cv2.THRESH_BINARY)
+                    motion_mask = motion_mask.astype(np.float32) / 255.0
+                    heatmap_final = heatmap * cv2.resize(motion_mask, (heatmap.shape[1], heatmap.shape[0]))
+                else:
+                    heatmap_final = heatmap
+
+                gx, gy, conf = get_shuttle_center_local(heatmap_final)
 
                 if conf > CONF_THRESH_GLOBAL:
-                    kf = init_kalman_filter(gx, gy) 
+                    if USE_KF:
+                        kf = init_kalman_filter(gx, gy) 
                     last_x_512, last_y_512 = gx, gy
                     is_lost = False
                     miss_count = 0
@@ -266,7 +306,7 @@ def main():
                     pred_x_orig = last_x_512 * scale_w
                     pred_y_orig = last_y_512 * scale_h
                     if gt_vis == 1:
-                        if math.hypot(pred_x_orig - gt_x, pred_y_orig - gt_y) <= DIST_THRESH:
+                        if math.hypot(pred_x_orig - gt_x, pred_y_orig - gt_y) <= dist_thresh_cur:
                             TP += 1
                         else:
                             FP += 1
@@ -285,17 +325,53 @@ def main():
     avg_fps = stats_total_frames / ai_total_time if ai_total_time > 0 else 0
     precision = TP / (TP + FP) if (TP + FP) > 0 else 0.0
     recall = TP / (TP + FN) if (TP + FN) > 0 else 0.0
+    f1 = 2 * precision * recall / (precision + recall) if (precision + recall) > 0 else 0.0
+    local_ratio = (stats_track_64 / stats_total_frames) * 100 if stats_total_frames > 0 else 0.0
+    global_ratio = (stats_global_rec / stats_total_frames) * 100 if stats_total_frames > 0 else 0.0
 
     print("\n========================================")
-    print("📊 64x64 模式 - 引擎觸發與準確率報告")
+    print("Jetson Nano 64x64 模式 - 引擎觸發與準確率報告")
+    print("配置: KF={}, Motion_Mask={}, Thresh={}, LocalConf={}, GlobalConf={}, Miss={}".format(
+        "ON" if USE_KF else "OFF", "ON" if USE_MASK else "OFF",
+        MOTION_THRESH, CONF_THRESH_LOCAL, CONF_THRESH_GLOBAL, MAX_MISS_TOLERANCE
+    ))
     print("總處理幀數: {}".format(stats_total_frames))
     print("平均 FPS: {:.2f}".format(avg_fps))
-    if stats_total_frames > 0:
-        print("[64x64 省電] 佔比: {:.1f}%".format((stats_track_64 / stats_total_frames) * 100))
-        print("[全域救援] 佔比: {:.1f}%".format((stats_global_rec / stats_total_frames) * 100))
+    print("[64x64 局部搜尋] 佔比: {:.1f}%".format(local_ratio))
+    print("[512x288 全域救援] 佔比: {:.1f}%".format(global_ratio))
     print("準確率 (Precision): {:.2f}%".format(precision * 100))
     print("召回率 (Recall): {:.2f}%".format(recall * 100))
+    print("F1-Score: {:.2f}%".format(f1 * 100))
     print("========================================\n")
+
+    if args.output_csv:
+        file_exists = os.path.exists(args.output_csv)
+        os.makedirs(os.path.dirname(os.path.abspath(args.output_csv)), exist_ok=True)
+        with open(args.output_csv, 'a', newline='', encoding='utf-8') as f:
+            writer = csv.writer(f)
+            if not file_exists:
+                writer.writerow([
+                    "KF", "Motion_Mask", "Motion_Thresh", "Conf_Local", "Conf_Global", "Max_Miss",
+                    "Total_Frames", "Average_FPS", "Local_Ratio(%)", "Global_Ratio(%)",
+                    "Precision(%)", "Recall(%)", "F1(%)", "TP", "FP", "FN"
+                ])
+            writer.writerow([
+                "ON" if USE_KF else "OFF",
+                "ON" if USE_MASK else "OFF",
+                MOTION_THRESH,
+                CONF_THRESH_LOCAL,
+                CONF_THRESH_GLOBAL,
+                MAX_MISS_TOLERANCE,
+                stats_total_frames,
+                round(avg_fps, 2),
+                round(local_ratio, 2),
+                round(global_ratio, 2),
+                round(precision * 100, 2),
+                round(recall * 100, 2),
+                round(f1 * 100, 2),
+                TP, FP, FN
+            ])
+        print("[CSV] 結果已寫入: {}".format(args.output_csv))
 
 if __name__ == "__main__":
     main()
