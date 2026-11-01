@@ -1,0 +1,31 @@
+{
+  "weights": "E:\\Thesis\\tracknet-series-pytorch\\checkpoints_v4_student\\epoch_30.pth",
+  "weights_sha256": "525c0c0d5632868abc017152c80097dc463e4deecd85d4fdb8f6ea4c03de7d64",
+  "device": "cuda",
+  "torch_version": "2.7.1+cu118",
+  "opencv_version": "5.0.0",
+  "videos": 7,
+  "mode": "offline_consecutive_frames",
+  "mask_threshold": 10,
+  "local_conf": 0.55,
+  "global_conf": 0.55,
+  "lost_duration": 3,
+  "roi": 128,
+  "resize": "native -> 1280x720 -> 512x288",
+  "alignments": [
+    "middle",
+    "latest"
+  ],
+  "thresholds_native_px": [
+    15,
+    20,
+    30,
+    50
+  ],
+  "independent_tracking_states": true,
+  "outputs": [
+    "measurement",
+    "display_with_kf"
+  ],
+  "protocol": "Wrong-location detection counts as FP and FN. No-label frames excluded. First two inputs have no output. GT is never used by tracker. Raw inference may be cached for identical inputs within one frame; no speed comparison."
+}

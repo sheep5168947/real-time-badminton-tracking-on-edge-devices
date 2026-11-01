@@ -39,9 +39,12 @@ def init_kalman_filter(x, y):
 
 def fast_crop_orig(frame_orig, cx_512, cy_288, radius_512=64):
     h_orig, w_orig = frame_orig.shape[:2]
-    cx_orig = cx_512 * 2.5
-    cy_orig = cy_288 * 2.5
-    r_orig = int(radius_512 * 2.5)
+    scale_w = float(w_orig) / 512.0
+    scale_h = float(h_orig) / 288.0
+    
+    cx_orig = cx_512 * scale_w
+    cy_orig = cy_288 * scale_h
+    r_orig = int(radius_512 * max(scale_w, scale_h))
     
     x_min, x_max = int(cx_orig - r_orig), int(cx_orig + r_orig)
     y_min, y_max = int(cy_orig - r_orig), int(cy_orig + r_orig)
@@ -91,6 +94,8 @@ def main():
     cap = cv2.VideoCapture(str(video_path))
     w_orig = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
     h_orig = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+    scale_w = float(w_orig) / 512.0
+    scale_h = float(h_orig) / 288.0
     fps = cap.get(cv2.CAP_PROP_FPS) or 30.0
     total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
     
@@ -164,7 +169,7 @@ def main():
                     if conf >= 0.45:
                         dx = base_last_x - 64.0 + float(lx)
                         dy = base_last_y - 64.0 + float(ly)
-                        base_pred_pt = (dx * 2.5, dy * 2.5)
+                        base_pred_pt = (dx * scale_w, dy * scale_h)
                         base_last_x, base_last_y = dx, dy
                         base_miss = 0
                     else:
@@ -187,7 +192,7 @@ def main():
                     if conf >= 0.45:
                         dx = float(gx) * 2.0
                         dy = float(gy) * 2.0
-                        base_pred_pt = (dx * 2.5, dy * 2.5)
+                        base_pred_pt = (dx * scale_w, dy * scale_h)
                         base_last_x, base_last_y = dx, dy
                         base_is_lost = False
                         base_miss = 0
@@ -234,7 +239,7 @@ def main():
                         prop_miss = 0
                         prop_vx = dx - prop_last_x
                         prop_vy = dy - prop_last_y
-                        prop_pred_pt = (dx * 2.5, dy * 2.5)
+                        prop_pred_pt = (dx * scale_w, dy * scale_h)
                         prop_last_x, prop_last_y = dx, dy
                         if prop_kf is None:
                             prop_kf = init_kalman_filter(dx, dy)
@@ -246,10 +251,10 @@ def main():
                         if prop_miss <= 1:
                             prop_mode_str = "TRAJECTORY-FILL (KF)"
                             if prop_kf is not None:
-                                prop_pred_pt = (crop_cx * 2.5, crop_cy * 2.5)
+                                prop_pred_pt = (crop_cx * scale_w, crop_cy * scale_h)
                                 prop_last_x, prop_last_y = crop_cx, crop_cy
                             else:
-                                prop_pred_pt = ((prop_last_x + prop_vx) * 2.5, (prop_last_y + prop_vy) * 2.5)
+                                prop_pred_pt = ((prop_last_x + prop_vx) * scale_w, (prop_last_y + prop_vy) * scale_h)
                                 prop_last_x, prop_last_y = prop_last_x + prop_vx, prop_last_y + prop_vy
                         
                         if prop_miss >= 3:
@@ -272,7 +277,7 @@ def main():
                     if conf >= 0.35:
                         dx = float(gx) * 2.0
                         dy = float(gy) * 2.0
-                        prop_pred_pt = (dx * 2.5, dy * 2.5)
+                        prop_pred_pt = (dx * scale_w, dy * scale_h)
                         prop_last_x, prop_last_y = dx, dy
                         prop_is_lost = False
                         prop_miss = 0
