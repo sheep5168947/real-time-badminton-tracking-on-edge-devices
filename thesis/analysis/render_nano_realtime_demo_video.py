@@ -65,22 +65,23 @@ def render_demo():
         pred_info = preds.get(fid, None)
         gt_info = gt_dict.get(fid, None)
 
-        # Update scoring
+        # Update scoring (Strict Dual-Penalty: dist > 15 px => FP + FN)
         if gt_info and pred_info:
             gvis = gt_info["vis"]
             has_pred = (pred_info["x"] is not None and pred_info["y"] is not None)
-            if has_pred:
-                if gvis == 1:
+            if gvis == 1:
+                if has_pred:
                     dist = math.hypot(pred_info["x"] - gt_info["x"], pred_info["y"] - gt_info["y"])
                     if dist <= 15.0:
                         running_tp += 1
                     else:
                         running_fp += 1
+                        running_fn += 1
                 else:
-                    running_fp += 1
-            else:
-                if gvis == 1:
                     running_fn += 1
+            else:
+                if has_pred:
+                    running_fp += 1
 
         cur_prec = (running_tp / (running_tp + running_fp) * 100.0) if (running_tp + running_fp) > 0 else 100.0
         cur_rec = (running_tp / (running_tp + running_fn) * 100.0) if (running_tp + running_fn) > 0 else 100.0
@@ -125,7 +126,9 @@ def render_demo():
         cv2.putText(frame, "NVIDIA Jetson Nano Real-Time Tracking", (35, 50),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.65, (255, 255, 255), 2, cv2.LINE_AA)
 
-        cv2.putText(frame, f"Stream FPS: 30.0 FPS | Queue Drop: 0.0%", (35, 78),
+        # Calculate dynamic effective stream rate from latency
+        cur_fps = min(30.0, 1000.0 / lat_val) if lat_val > 0 else 30.0
+        cv2.putText(frame, f"Stream: 30.0 Hz Target | Dynamic Rate: {cur_fps:.1f} FPS", (35, 78),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.48, (200, 230, 255), 1, cv2.LINE_AA)
 
         cv2.putText(frame, f"Mode: {mode_str}", (35, 105),
