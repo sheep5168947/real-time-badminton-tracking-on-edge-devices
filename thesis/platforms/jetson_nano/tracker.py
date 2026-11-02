@@ -79,6 +79,28 @@ def fast_argmax(heatmap_2d):
     return int(idx[-1]), int(idx[-2]), conf
 
 
+def subpixel_centroid(heatmap_2d, lx, ly, win=2):
+    """
+    Sub-pixel centroid refinement using localized center-of-mass around argmax peak.
+    Eliminates integer quantization jitter and physical spatial displacement noise.
+    """
+    h, w = heatmap_2d.shape
+    x_min = max(0, lx - win)
+    x_max = min(w, lx + win + 1)
+    y_min = max(0, ly - win)
+    y_max = min(h, ly + win + 1)
+    patch = heatmap_2d[y_min:y_max, x_min:x_max]
+    base = float(np.min(patch))
+    weights = np.maximum(0.0, patch - base)
+    total_w = float(np.sum(weights))
+    if total_w < 1e-6:
+        return float(lx), float(ly)
+    ys, xs = np.indices(patch.shape)
+    cx = float(np.sum((xs + x_min) * weights)) / total_w
+    cy = float(np.sum((ys + y_min) * weights)) / total_w
+    return cx, cy
+
+
 def robust_crop(frame_orig, cx_512, cy_288, radius_512=64, target_size=128):
     """
     Sub-pixel-safe multi-scale ROI cropper.
@@ -143,15 +165,16 @@ class HierarchicalEdgeTracker:
     and adaptive multi-scale rescue.
     """
     def __init__(self,
-                 engine_128_path="weights/miniroi_128x128.engine",
-                 engine_256_path="weights/miniroi_256x144.engine",
+                 engine_128_path="weights/miniroi_128x128_augmented.engine",
+                 engine_256_path="weights/miniroi_256x144_augmented.engine",
                  t_track=0.20,
                  t_coarse=0.16,
                  t_verify=0.28,
                  max_miss=3,
                  jump_gate=55.0,
                  smash_speed_thresh=20.0,
-                 adaptive_rescue=True):
+                 adaptive_rescue=True,
+                 vel_comp=0.30):
         
         self.t_track = float(t_track)
         self.t_coarse = float(t_coarse)
@@ -160,8 +183,15 @@ class HierarchicalEdgeTracker:
         self.jump_gate = float(jump_gate)
         self.smash_speed_thresh = float(smash_speed_thresh)
         self.adaptive_rescue = bool(adaptive_rescue)
+        self.vel_comp = float(vel_comp)
         
-        # Load TensorRT Models
+        # Load TensorRT Models (with graceful fallback to baseline if augmented missing)
+        import os
+        if not os.path.exists(engine_128_path) and os.path.exists("weights/miniroi_128x128.engine"):
+            engine_128_path = "weights/miniroi_128x128.engine"
+        if not os.path.exists(engine_256_path) and os.path.exists("weights/miniroi_256x144.engine"):
+            engine_256_path = "weights/miniroi_256x144.engine"
+            
         self.trt_128 = FastTRTModel(engine_128_path)
         self.trt_256 = FastTRTModel(engine_256_path)
         
@@ -254,15 +284,14 @@ class HierarchicalEdgeTracker:
         # Stage 1: Local ROI Tracking Mode
         # =========================================================================
         if not self.is_lost:
-            if self.kf is not None:
-                pred_k = self.kf.predict()
-                crop_cx = float(pred_k[0, 0])
-                crop_cy = float(pred_k[1, 0])
-            else:
-                crop_cx, crop_cy = self.last_x, self.last_y
-                
             speed = math.hypot(self.vx, self.vy)
-            
+            if speed <= 20.0 and self.miss_count == 0:
+                crop_cx = self.last_x + self.vx
+                crop_cy = self.last_y + self.vy
+            else:
+                crop_cx = self.last_x
+                crop_cy = self.last_y
+                
             # Mechanism A: High-Velocity Smash Dynamic ROI Expansion
             # When speed > smash_speed_thresh, expand crop radius from 64 (128x128) to 80 (160x160)
             if speed > self.smash_speed_thresh:
@@ -284,10 +313,11 @@ class HierarchicalEdgeTracker:
             
             out_128 = self.trt_128.infer(self.buf_128).squeeze()
             lx, ly, conf = fast_argmax(out_128)
+            slx, sly = subpixel_centroid(out_128, lx, ly, win=2)
             engine_str = "128x128"
             
-            dx = crop_cx - float(crop_r) + float(lx) * scale_factor
-            dy = crop_cy - float(crop_r) + float(ly) * scale_factor
+            dx = crop_cx - float(crop_r) + float(slx) * scale_factor
+            dy = crop_cy - float(crop_r) + float(sly) * scale_factor
             jump = math.hypot(dx - self.last_x, dy - self.last_y)
             pass_gate = (jump <= gate)
             
@@ -311,8 +341,12 @@ class HierarchicalEdgeTracker:
                 self.vy = new_vy
                 self.last_x = dx
                 self.last_y = dy
-                pred_pt_512 = (dx, dy)
-                pred_pt_orig = (dx * scale_w, dy * scale_h)
+                
+                # Velocity lag compensation (compensates 3-frame convolution temporal centroid lag)
+                pred_x_512 = dx + self.vel_comp * new_vx
+                pred_y_512 = dy + self.vel_comp * new_vy
+                pred_pt_512 = (pred_x_512, pred_y_512)
+                pred_pt_orig = (pred_x_512 * scale_w, pred_y_512 * scale_h)
                 conf_out = conf
                 mode_str = "STATIONARY_HOLD" if self.is_stationary else "LOCAL_TRACK"
                 local_success = True
@@ -338,6 +372,7 @@ class HierarchicalEdgeTracker:
             
             out_256 = self.trt_256.infer(self.buf_256).squeeze()
             gx, gy, conf_coarse = fast_argmax(out_256)
+            sgx, sgy = subpixel_centroid(out_256, gx, gy, win=2)
             engine_str = "128+256" if not self.is_lost else "256x144"
             
             # Mechanism B: Adaptive Low-Contrast Proposal Rescue
@@ -352,8 +387,8 @@ class HierarchicalEdgeTracker:
                     pass_coarse = True
                     
             if pass_coarse:
-                cand_x = float(gx) * 2.0
-                cand_y = float(gy) * 2.0
+                cand_x = float(sgx) * 2.0
+                cand_y = float(sgy) * 2.0
                 
                 # Native Fine Verification (128x128 Crop)
                 v0, _ = robust_crop(self.frame_buffer[0], cand_x, cand_y, 64, 128)
@@ -366,11 +401,24 @@ class HierarchicalEdgeTracker:
                 
                 out_ver = self.trt_128.infer(self.buf_128).squeeze()
                 vx_loc, vy_loc, conf_ver = fast_argmax(out_ver)
+                svx, svy = subpixel_centroid(out_ver, vx_loc, vy_loc, win=2)
                 engine_str += "+128_ver"
                 
+                accepted = False
                 if conf_ver >= self.t_verify:
-                    fine_x = cand_x - 64.0 + float(vx_loc)
-                    fine_y = cand_y - 64.0 + float(vy_loc)
+                    fine_x = cand_x - 64.0 + float(svx)
+                    fine_y = cand_y - 64.0 + float(svy)
+                    conf_out = conf_ver
+                    mode_str = "INSTANT_RESCUE"
+                    accepted = True
+                elif conf_coarse >= 0.25:
+                    fine_x = cand_x
+                    fine_y = cand_y
+                    conf_out = conf_coarse
+                    mode_str = "RESCUE_COARSE"
+                    accepted = True
+                    
+                if accepted:
                     self.last_x, self.last_y = fine_x, fine_y
                     self.vx, self.vy = 0.0, 0.0
                     self.is_lost = False
@@ -378,8 +426,6 @@ class HierarchicalEdgeTracker:
                     self.kf = init_kalman(fine_x, fine_y)
                     pred_pt_512 = (fine_x, fine_y)
                     pred_pt_orig = (fine_x * scale_w, fine_y * scale_h)
-                    conf_out = conf_ver
-                    mode_str = "INSTANT_RESCUE"
                 else:
                     self.miss_count += 1
                     if self.miss_count >= self.max_miss:

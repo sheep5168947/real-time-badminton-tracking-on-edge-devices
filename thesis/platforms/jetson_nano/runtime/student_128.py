@@ -37,9 +37,9 @@ def parse_args():
     parser = argparse.ArgumentParser(description="Real-Time Badminton Tracking Runtime on Jetson Nano")
     parser.add_argument("--source", type=str, default="weights/1_01_00.mp4",
                         help="Input video file path or camera device index (e.g., 0 for /dev/video0)")
-    parser.add_argument("--engine_128", type=str, default="weights/miniroi_128x128.engine",
+    parser.add_argument("--engine_128", type=str, default="weights/miniroi_128x128_augmented.engine",
                         help="Path to 128x128 TensorRT engine")
-    parser.add_argument("--engine_256", type=str, default="weights/miniroi_256x144.engine",
+    parser.add_argument("--engine_256", type=str, default="weights/miniroi_256x144_augmented.engine",
                         help="Path to 256x144 TensorRT engine")
     parser.add_argument("--output", type=str, default="weights/student_realtime_output.mp4",
                         help="Output video path (or leave empty to disable saving)")
@@ -127,7 +127,8 @@ def main():
         t_track=args.t_track,
         t_coarse=args.t_coarse,
         t_verify=args.t_verify,
-        adaptive_rescue=True
+        adaptive_rescue=True,
+        vel_comp=0.30
     )
     
     # Warmup TRT Engines

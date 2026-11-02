@@ -171,8 +171,8 @@ def main():
     print("   POWERED BY UNIFIED HierarchicalEdgeTracker (STRICT DUAL-PENALTY)")
     print("=" * 105)
     
-    engine_128 = "weights/miniroi_128x128.engine"
-    engine_256 = "weights/miniroi_256x144.engine"
+    engine_128 = "weights/miniroi_128x128_augmented.engine" if os.path.exists("weights/miniroi_128x128_augmented.engine") else "weights/miniroi_128x128.engine"
+    engine_256 = "weights/miniroi_256x144_augmented.engine" if os.path.exists("weights/miniroi_256x144_augmented.engine") else "weights/miniroi_256x144.engine"
     
     tracker = HierarchicalEdgeTracker(
         engine_128_path=engine_128,
@@ -180,7 +180,8 @@ def main():
         t_track=0.20,
         t_coarse=0.16,
         t_verify=0.28,
-        adaptive_rescue=True
+        adaptive_rescue=True,
+        vel_comp=0.30
     )
     
     # Warmup TRT
