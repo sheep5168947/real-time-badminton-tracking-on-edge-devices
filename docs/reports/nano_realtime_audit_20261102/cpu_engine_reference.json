@@ -1,0 +1,8 @@
+{
+  "weights": "E:\\Thesis\\tracknet-series-pytorch\\checkpoints_v4_student_augmented\\best_augmented.pth",
+  "weights_sha256": "8e83aaff2a8bbc3e47ab9cd2f8961484141cac0efa93ab389f5fbb05b97cf2c0",
+  "model_sha256": "c85ea7d6649fcff4fc55d664303e0a6e040ede3f18f6fa46a9e5836e6daad001",
+  "torch_version": "2.7.1+cu118",
+  "seed": 20261102,
+  "scope": "Independent CPU reference only; no training or threshold change"
+}

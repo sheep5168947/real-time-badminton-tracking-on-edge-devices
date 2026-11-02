@@ -1,0 +1,288 @@
+{
+  "source_sha256": "d66c86907dac8a696a967e0d4ba10e3a6cd2ed3391ba9a586d5f548dc01fde16",
+  "device": "NVIDIA Tegra X1",
+  "comparisons": [
+    {
+      "key": "match1/1_03_06",
+      "repeat": 0,
+      "condition": "original",
+      "result": {
+        "TP": 192,
+        "FP": 7,
+        "FN": 31,
+        "prec": 96.4824120603015,
+        "rec": 86.09865470852019,
+        "f1": 90.9952606635071,
+        "fps": 29.817668886886718,
+        "drop_rate": 0.0,
+        "lat_local": 13.262194155335308,
+        "lat_rescue": 22.288396837222198,
+        "total_frames": 251,
+        "ingested": 251,
+        "processed": 251,
+        "dropped": 0
+      }
+    },
+    {
+      "key": "match1/1_03_06",
+      "repeat": 0,
+      "condition": "observed",
+      "result": {
+        "TP": 192,
+        "FP": 7,
+        "FN": 31,
+        "prec": 96.4824120603015,
+        "rec": 86.09865470852019,
+        "f1": 90.9952606635071,
+        "fps": 29.991558614149636,
+        "drop_rate": 0.0,
+        "lat_local": 12.904053247589262,
+        "lat_rescue": 21.536601813898223,
+        "total_frames": 251,
+        "ingested": 251,
+        "processed": 251,
+        "dropped": 0
+      }
+    },
+    {
+      "key": "match1/1_03_06",
+      "repeat": 1,
+      "condition": "observed",
+      "result": {
+        "TP": 192,
+        "FP": 7,
+        "FN": 31,
+        "prec": 96.4824120603015,
+        "rec": 86.09865470852019,
+        "f1": 90.9952606635071,
+        "fps": 29.813377758690176,
+        "drop_rate": 0.0,
+        "lat_local": 12.922818213590432,
+        "lat_rescue": 22.3057811395255,
+        "total_frames": 251,
+        "ingested": 251,
+        "processed": 251,
+        "dropped": 0
+      }
+    },
+    {
+      "key": "match1/1_03_06",
+      "repeat": 1,
+      "condition": "original",
+      "result": {
+        "TP": 192,
+        "FP": 7,
+        "FN": 31,
+        "prec": 96.4824120603015,
+        "rec": 86.09865470852019,
+        "f1": 90.9952606635071,
+        "fps": 29.815013808761293,
+        "drop_rate": 0.0,
+        "lat_local": 12.909258839806515,
+        "lat_rescue": 22.215329953491334,
+        "total_frames": 251,
+        "ingested": 251,
+        "processed": 251,
+        "dropped": 0
+      }
+    },
+    {
+      "key": "match10/1_03_01",
+      "repeat": 0,
+      "condition": "original",
+      "result": {
+        "TP": 194,
+        "FP": 198,
+        "FN": 136,
+        "prec": 49.48979591836735,
+        "rec": 58.78787878787879,
+        "f1": 53.739612188365655,
+        "fps": 29.97094585142998,
+        "drop_rate": 0.0,
+        "lat_local": 12.550928536204363,
+        "lat_rescue": 32.28880723529795,
+        "total_frames": 580,
+        "ingested": 580,
+        "processed": 580,
+        "dropped": 0
+      }
+    },
+    {
+      "key": "match10/1_03_01",
+      "repeat": 0,
+      "condition": "observed",
+      "result": {
+        "TP": 194,
+        "FP": 198,
+        "FN": 136,
+        "prec": 49.48979591836735,
+        "rec": 58.78787878787879,
+        "f1": 53.739612188365655,
+        "fps": 29.95992549053941,
+        "drop_rate": 0.0,
+        "lat_local": 12.513293733027075,
+        "lat_rescue": 31.75507891911125,
+        "total_frames": 580,
+        "ingested": 580,
+        "processed": 580,
+        "dropped": 0
+      }
+    },
+    {
+      "key": "match10/1_03_01",
+      "repeat": 1,
+      "condition": "observed",
+      "result": {
+        "TP": 196,
+        "FP": 198,
+        "FN": 134,
+        "prec": 49.746192893401016,
+        "rec": 59.3939393939394,
+        "f1": 54.143646408839786,
+        "fps": 29.899695360292093,
+        "drop_rate": 0.1724137931034483,
+        "lat_local": 12.515499583707005,
+        "lat_rescue": 32.29837202965495,
+        "total_frames": 580,
+        "ingested": 580,
+        "processed": 579,
+        "dropped": 1
+      }
+    },
+    {
+      "key": "match10/1_03_01",
+      "repeat": 1,
+      "condition": "original",
+      "result": {
+        "TP": 194,
+        "FP": 198,
+        "FN": 136,
+        "prec": 49.48979591836735,
+        "rec": 58.78787878787879,
+        "f1": 53.739612188365655,
+        "fps": 29.934277165022046,
+        "drop_rate": 0.0,
+        "lat_local": 12.490072000014049,
+        "lat_rescue": 32.252133992642484,
+        "total_frames": 580,
+        "ingested": 580,
+        "processed": 580,
+        "dropped": 0
+      }
+    }
+  ],
+  "diagnostics": [
+    {
+      "key": "match8/3_15_08",
+      "counts": {
+        "tp": 0,
+        "tn": 33,
+        "wrong_location": 2,
+        "false_positive_absent": 0,
+        "missed_visible": 128,
+        "unknown_visibility": 0
+      },
+      "corrected": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "legacy_recall": 0.0,
+        "visible_frames": 130,
+        "corrected_fp": 2,
+        "corrected_fn": 130
+      },
+      "reasons": {
+        "coarse_low_confidence": 123,
+        "verification_low_confidence": 1,
+        "accepted_wrong_location": 2,
+        "local_low_confidence": 3,
+        "no_temporal_window": 1
+      }
+    },
+    {
+      "key": "match8/3_02_00",
+      "counts": {
+        "tp": 4,
+        "tn": 18,
+        "wrong_location": 0,
+        "false_positive_absent": 1,
+        "missed_visible": 64,
+        "unknown_visibility": 0
+      },
+      "corrected": {
+        "precision": 0.8,
+        "recall": 0.058823529411764705,
+        "f1": 0.1095890410958904,
+        "legacy_recall": 0.058823529411764705,
+        "visible_frames": 68,
+        "corrected_fp": 1,
+        "corrected_fn": 64
+      },
+      "reasons": {
+        "coarse_low_confidence": 57,
+        "verification_low_confidence": 3,
+        "local_low_confidence": 3,
+        "no_temporal_window": 1
+      }
+    },
+    {
+      "key": "match2/1_02_03",
+      "counts": {
+        "tp": 60,
+        "tn": 66,
+        "wrong_location": 2,
+        "false_positive_absent": 3,
+        "missed_visible": 214,
+        "unknown_visibility": 0
+      },
+      "corrected": {
+        "precision": 0.9230769230769231,
+        "recall": 0.21739130434782608,
+        "f1": 0.3519061583577713,
+        "legacy_recall": 0.21897810218978103,
+        "visible_frames": 276,
+        "corrected_fp": 5,
+        "corrected_fn": 216
+      },
+      "reasons": {
+        "coarse_low_confidence": 188,
+        "verification_low_confidence": 10,
+        "local_low_confidence": 16,
+        "accepted_wrong_location": 2
+      }
+    }
+  ],
+  "cpu_trt_probe": {
+    "local": {
+      "shape": [
+        1,
+        1,
+        128,
+        128
+      ],
+      "max_abs_error": 8.195638656616211e-08,
+      "mean_abs_error": 1.3396402209764346e-08,
+      "cpu_peak": 0.08241407573223114,
+      "trt_peak": 0.08241406083106995,
+      "cpu_argmax": 1596,
+      "trt_argmax": 1596,
+      "finite": true
+    },
+    "global": {
+      "shape": [
+        1,
+        1,
+        144,
+        256
+      ],
+      "max_abs_error": 7.450580596923828e-08,
+      "mean_abs_error": 1.390147463808944e-08,
+      "cpu_peak": 0.0765984058380127,
+      "trt_peak": 0.07659843564033508,
+      "cpu_argmax": 4120,
+      "trt_argmax": 4120,
+      "finite": true
+    }
+  },
+  "complete": true
+}
