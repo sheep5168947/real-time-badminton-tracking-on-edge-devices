@@ -43,7 +43,7 @@ def parse_args():
                         help="Path to 256x144 TensorRT engine")
     parser.add_argument("--output", type=str, default="weights/student_realtime_output.mp4",
                         help="Output video path (or leave empty to disable saving)")
-    parser.add_argument("--t_track", type=float, default=0.18, help="Local tracking confidence threshold")
+    parser.add_argument("--t_track", type=float, default=0.20, help="Local tracking confidence threshold")
     parser.add_argument("--t_coarse", type=float, default=0.16, help="Coarse global proposal threshold")
     parser.add_argument("--t_verify", type=float, default=0.28, help="Fine verification confidence threshold")
     parser.add_argument("--fps", type=float, default=30.0, help="Target ingestion FPS")

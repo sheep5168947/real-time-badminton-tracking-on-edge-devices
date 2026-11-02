@@ -177,7 +177,7 @@ def main():
     tracker = HierarchicalEdgeTracker(
         engine_128_path=engine_128,
         engine_256_path=engine_256,
-        t_track=0.18,
+        t_track=0.20,
         t_coarse=0.16,
         t_verify=0.28,
         adaptive_rescue=True

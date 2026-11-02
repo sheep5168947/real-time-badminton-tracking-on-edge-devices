@@ -145,7 +145,7 @@ class HierarchicalEdgeTracker:
     def __init__(self,
                  engine_128_path="weights/miniroi_128x128.engine",
                  engine_256_path="weights/miniroi_256x144.engine",
-                 t_track=0.18,
+                 t_track=0.20,
                  t_coarse=0.16,
                  t_verify=0.28,
                  max_miss=3,
@@ -315,24 +315,22 @@ class HierarchicalEdgeTracker:
                 pred_pt_orig = (dx * scale_w, dy * scale_h)
                 conf_out = conf
                 mode_str = "STATIONARY_HOLD" if self.is_stationary else "LOCAL_TRACK"
+                local_success = True
                 
                 if self.kf is None:
                     self.kf = init_kalman(dx, dy)
                 else:
                     self.kf.correct(np.array([[dx], [dy]], dtype=np.float32))
             else:
-                self.miss_count += 1
-                if self.miss_count >= self.max_miss:
-                    self.is_lost = True
-                    self.kf = None
-                    self.vx, self.vy = 0.0, 0.0
-                    self.is_stationary = False
-                    self.stationary_frames = 0
+                local_success = False
+        else:
+            local_success = False
 
         # =========================================================================
-        # Stage 2: Coarse-to-Fine Global Recovery Mode
+        # Stage 2: Instant Coarse-to-Fine Global Recovery Mode
+        # Seamlessly rescues tracking in the SAME frame whenever Local fails!
         # =========================================================================
-        if self.is_lost:
+        if not local_success:
             # Construct 256x144 temporal input from circular ring buffer
             self.buf_256[0, 0:3] = self.resized_slots[(self.slot_idx - 3) % 3]
             self.buf_256[0, 3:6] = self.resized_slots[(self.slot_idx - 2) % 3]
@@ -340,7 +338,7 @@ class HierarchicalEdgeTracker:
             
             out_256 = self.trt_256.infer(self.buf_256).squeeze()
             gx, gy, conf_coarse = fast_argmax(out_256)
-            engine_str = "256x144"
+            engine_str = "128+256" if not self.is_lost else "256x144"
             
             # Mechanism B: Adaptive Low-Contrast Proposal Rescue
             pass_coarse = False
@@ -350,7 +348,7 @@ class HierarchicalEdgeTracker:
                 # Compute Peak-to-Mean Ratio (PMR) to verify isolated candidate
                 mean_bg = float(np.mean(out_256)) + 1e-6
                 pmr = conf_coarse / mean_bg
-                if pmr >= 4.5:
+                if pmr >= 4.0:
                     pass_coarse = True
                     
             if pass_coarse:
@@ -368,7 +366,7 @@ class HierarchicalEdgeTracker:
                 
                 out_ver = self.trt_128.infer(self.buf_128).squeeze()
                 vx_loc, vy_loc, conf_ver = fast_argmax(out_ver)
-                engine_str = "256x144+128x128"
+                engine_str += "+128_ver"
                 
                 if conf_ver >= self.t_verify:
                     fine_x = cand_x - 64.0 + float(vx_loc)
@@ -381,7 +379,19 @@ class HierarchicalEdgeTracker:
                     pred_pt_512 = (fine_x, fine_y)
                     pred_pt_orig = (fine_x * scale_w, fine_y * scale_h)
                     conf_out = conf_ver
-                    mode_str = "COARSE_RESCUE"
+                    mode_str = "INSTANT_RESCUE"
+                else:
+                    self.miss_count += 1
+                    if self.miss_count >= self.max_miss:
+                        self.is_lost = True
+                        self.kf = None
+                        self.vx, self.vy = 0.0, 0.0
+            else:
+                self.miss_count += 1
+                if self.miss_count >= self.max_miss:
+                    self.is_lost = True
+                    self.kf = None
+                    self.vx, self.vy = 0.0, 0.0
                     
         latency_ms = (time.perf_counter() - t0) * 1000.0
         self.processed_frames += 1
