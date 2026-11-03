@@ -164,21 +164,30 @@ def run_realtime_clip(video_path, gt_path, tracker, tolerance=15.0):
 
 
 def main():
+    import argparse
+    parser = argparse.ArgumentParser(description="Jetson Nano Real-Time Benchmark for match1..match23")
+    parser.add_argument("--match_start", type=int, default=1, help="Start match index (e.g. 1)")
+    parser.add_argument("--match_end", type=int, default=23, help="End match index (e.g. 23)")
+    parser.add_argument("--sample_per_match", type=int, default=0, help="If > 0, test only N clips per match")
+    parser.add_argument("--output_csv", type=str, default="report_materials/nano_realtime_full_146videos_results.csv")
+    args = parser.parse_args()
+
     print("=" * 115)
-    print("   NVIDIA JETSON NANO 146-VIDEO REAL-TIME HARDWARE BENCHMARK (match1 ~ match23)")
+    print("   NVIDIA JETSON NANO REAL-TIME HARDWARE BENCHMARK (match1 ~ match23)")
     print("   POWERED BY UNIFIED HierarchicalEdgeTracker (STRICT DUAL-PENALTY)")
     print("=" * 115)
     
-    engine_128 = "weights/miniroi_128x128.engine"
-    engine_256 = "weights/miniroi_256x144.engine"
+    engine_128 = "weights/miniroi_128x128_augmented.engine" if os.path.exists("weights/miniroi_128x128_augmented.engine") else "weights/miniroi_128x128.engine"
+    engine_256 = "weights/miniroi_256x144_augmented.engine" if os.path.exists("weights/miniroi_256x144_augmented.engine") else "weights/miniroi_256x144.engine"
     
     tracker = HierarchicalEdgeTracker(
         engine_128_path=engine_128,
         engine_256_path=engine_256,
-        t_track=0.18,
+        t_track=0.20,
         t_coarse=0.16,
         t_verify=0.28,
-        adaptive_rescue=True
+        adaptive_rescue=True,
+        vel_comp=0.30
     )
     
     # Warmup TRT
@@ -188,14 +197,26 @@ def main():
     for _ in range(10):
         _ = tracker.trt_128.infer(d128)
         _ = tracker.trt_256.infer(d256)
-    print("[INFO] Warmup complete. Commencing 146-video benchmark...\n")
+    print("[INFO] Warmup complete. Commencing evaluation...\n")
     
-    base_raw = Path("dataset/raw/part1")
-    matches = [f"match{i}" for i in range(1, 24)]
+    candidate_paths = [Path("raw/part1"), Path("dataset/raw/part1")]
+    base_raw = None
+    for p in candidate_paths:
+        if p.exists():
+            base_raw = p
+            break
+            
+    if base_raw is None:
+        raise FileNotFoundError("Could not find raw/part1 or dataset/raw/part1 directory!")
+        
+    print(f"[INFO] Using dataset directory: {base_raw}")
+    matches = [f"match{i}" for i in range(args.match_start, args.match_end + 1)]
     
     all_results = []
+    tot_tp, tot_fp, tot_fn, tot_vis = 0, 0, 0, 0
+    tot_frames_all, tot_dropped_all = 0, 0
     
-    csv_out = Path("report_materials/nano_realtime_full_146videos_results.csv")
+    csv_out = Path(args.output_csv)
     csv_out.parent.mkdir(parents=True, exist_ok=True)
     
     with open(csv_out, "w", newline="", encoding="utf-8") as f_out:
@@ -214,6 +235,9 @@ def main():
                 continue
                 
             v_files = sorted(list(v_dir.glob("*.mp4")))
+            if args.sample_per_match > 0:
+                v_files = v_files[:args.sample_per_match]
+                
             print(f"\n>>> Running {m} ({len(v_files)} clips) ...")
             
             for vf in v_files:
@@ -229,10 +253,41 @@ def main():
                 ])
                 f_out.flush()
                 all_results.append((m, vf.stem, res))
+                tot_tp += res["tp"]
+                tot_fp += res["fp"]
+                tot_fn += res["fn"]
+                tot_vis += res["total_visible"]
+                tot_frames_all += res["total_frames"]
                 print(f"  {m}/{vf.stem:<10} | FPS: {res['fps']:>4.1f} | Drop: {res['drop_rate']:>4.1f}% | "
                       f"Prec: {res['prec']:>5.1f}% | Strict Rec: {res['strict_rec']:>5.1f}% | F1: {res['f1']:>5.1f}")
                       
-    print(f"\n[SUCCESS] Completed all {len(all_results)} videos! Saved to {csv_out}")
+    agg_p = (tot_tp / (tot_tp + tot_fp) * 100.0) if (tot_tp + tot_fp) > 0 else 0.0
+    agg_r = (tot_tp / tot_vis * 100.0) if tot_vis > 0 else 0.0
+    agg_f1 = (2 * agg_p * agg_r / (agg_p + agg_r)) if (agg_p + agg_r) > 0 else 0.0
+    
+    macro_p = float(np.mean([r[2]["prec"] for r in all_results])) if all_results else 0.0
+    macro_r = float(np.mean([r[2]["strict_rec"] for r in all_results])) if all_results else 0.0
+    macro_f1 = float(np.mean([r[2]["f1"] for r in all_results])) if all_results else 0.0
+    macro_fps = float(np.mean([r[2]["fps"] for r in all_results])) if all_results else 0.0
+    macro_drop = float(np.mean([r[2]["drop_rate"] for r in all_results])) if all_results else 0.0
+    
+    print("\n" + "=" * 105)
+    print("   BENCHMARK EVALUATION SUMMARY")
+    print("=" * 105)
+    print(f"Total Clips Tested : {len(all_results)}")
+    print(f"Total Frames Tested: {tot_frames_all}")
+    print(f"Macro Mean FPS     : {macro_fps:.1f} FPS (Throughput)")
+    print(f"Macro Drop Rate    : {macro_drop:.2f}%")
+    print(f"Macro Precision    : {macro_p:.1f}%")
+    print(f"Macro Strict Recall: {macro_r:.1f}%")
+    print(f"Macro F1-Score     : {macro_f1:.1f}")
+    print("-" * 105)
+    print(f"Aggregate Precision: {agg_p:.1f}%")
+    print(f"Aggregate Recall   : {agg_r:.1f}%")
+    print(f"Aggregate F1-Score : {agg_f1:.1f}")
+    print(f"Total Statistics   : TP={tot_tp}, FP={tot_fp}, FN={tot_fn}, GT_Visible={tot_vis}")
+    print("=" * 105)
+    print(f"\n[SUCCESS] Completed! Results saved to {csv_out}")
 
 
 if __name__ == "__main__":
