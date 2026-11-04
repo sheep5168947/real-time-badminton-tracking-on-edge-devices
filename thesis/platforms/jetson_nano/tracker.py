@@ -167,14 +167,14 @@ class HierarchicalEdgeTracker:
     def __init__(self,
                  engine_128_path="weights/miniroi_128x128_augmented.engine",
                  engine_256_path="weights/miniroi_256x144_augmented.engine",
-                 t_track=0.20,
-                 t_coarse=0.16,
-                 t_verify=0.28,
+                 t_track=0.18,
+                 t_coarse=0.14,
+                 t_verify=0.20,
                  max_miss=3,
                  jump_gate=55.0,
                  smash_speed_thresh=20.0,
                  adaptive_rescue=True,
-                 vel_comp=0.30):
+                 vel_comp=0.28):
         
         self.t_track = float(t_track)
         self.t_coarse = float(t_coarse)
@@ -296,7 +296,7 @@ class HierarchicalEdgeTracker:
             # When speed > smash_speed_thresh, expand crop radius from 64 (128x128) to 80 (160x160)
             if speed > self.smash_speed_thresh:
                 crop_r = 80
-                gate = self.jump_gate * 1.25
+                gate = max(self.jump_gate * 1.5, speed * 1.6)
             else:
                 crop_r = 64
                 gate = self.jump_gate
@@ -337,14 +337,18 @@ class HierarchicalEdgeTracker:
                     self.stationary_frames = 0
                     self.is_stationary = False
                     
+                # Adaptive velocity lag: check for direction reversal (e.g. bounce / racket hit)
+                v_dot = (new_vx * self.vx + new_vy * self.vy)
+                eff_comp = 0.0 if v_dot < 0 else self.vel_comp
+                
                 self.vx = new_vx
                 self.vy = new_vy
                 self.last_x = dx
                 self.last_y = dy
                 
                 # Velocity lag compensation (compensates 3-frame convolution temporal centroid lag)
-                pred_x_512 = dx + self.vel_comp * new_vx
-                pred_y_512 = dy + self.vel_comp * new_vy
+                pred_x_512 = dx + eff_comp * new_vx
+                pred_y_512 = dy + eff_comp * new_vy
                 pred_pt_512 = (pred_x_512, pred_y_512)
                 pred_pt_orig = (pred_x_512 * scale_w, pred_y_512 * scale_h)
                 conf_out = conf
@@ -379,11 +383,11 @@ class HierarchicalEdgeTracker:
             pass_coarse = False
             if conf_coarse >= self.t_coarse:
                 pass_coarse = True
-            elif self.adaptive_rescue and conf_coarse >= 0.12:
+            elif self.adaptive_rescue and conf_coarse >= 0.08:
                 # Compute Peak-to-Mean Ratio (PMR) to verify isolated candidate
                 mean_bg = float(np.mean(out_256)) + 1e-6
                 pmr = conf_coarse / mean_bg
-                if pmr >= 4.0:
+                if pmr >= 3.2:
                     pass_coarse = True
                     
             if pass_coarse:
@@ -411,9 +415,14 @@ class HierarchicalEdgeTracker:
                     conf_out = conf_ver
                     mode_str = "INSTANT_RESCUE"
                     accepted = True
-                elif conf_coarse >= 0.25:
-                    fine_x = cand_x
-                    fine_y = cand_y
+                elif conf_coarse >= 0.20:
+                    # Fine Centroid Coordinate Refinement: use 128 subpixel peak if discriminative
+                    if conf_ver >= 0.12:
+                        fine_x = cand_x - 64.0 + float(svx)
+                        fine_y = cand_y - 64.0 + float(svy)
+                    else:
+                        fine_x = cand_x
+                        fine_y = cand_y
                     conf_out = conf_coarse
                     mode_str = "RESCUE_COARSE"
                     accepted = True
