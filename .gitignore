@@ -97,3 +97,7 @@ lightning_logs/
 
 # Raw TensorBoard telemetry stays on the working machine
 /model_results/training_logs/**/events.out.tfevents.*
+
+# Temporary Office lock files
+~$*
+
