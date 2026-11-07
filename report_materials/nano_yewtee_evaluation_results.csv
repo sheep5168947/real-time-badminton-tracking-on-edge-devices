@@ -1,0 +1,4 @@
+Clip,Resolution,FPS,Drop_Rate_Pct,Precision_Pct,Strict_Recall_Pct,F1_Score,Mean_Latency_ms,P95_Latency_ms,TP,FP,FN,GT_Visible
+yewtee_s0,1920x1080,29.68,0.61,86.56,88.46,87.50,20.42,45.56,161,25,21,182
+yewtee_s1,1920x1080,29.69,0.41,83.74,83.74,83.74,22.37,45.54,103,20,20,123
+yewtee_s2,1920x1080,29.98,0.00,90.50,84.58,87.44,20.50,45.34,181,19,33,214

@@ -97,6 +97,9 @@ def run_realtime_clip(video_path, gt_path, tracker, tolerance=15.0):
             mid_fid = telemetry["frame_id"]
             if telemetry["pred_point"] is not None:
                 predictions[mid_fid] = telemetry["pred_point"]
+            if telemetry.get("retro_pred") is not None:
+                r_fid, r_pt = telemetry["retro_pred"]
+                predictions[r_fid] = r_pt
             if "LOCAL" in telemetry["mode"] or "STATIONARY" in telemetry["mode"]:
                 latencies_local.append(telemetry["latency_ms"])
             else:
@@ -182,12 +185,7 @@ def main():
     
     tracker = HierarchicalEdgeTracker(
         engine_128_path=engine_128,
-        engine_256_path=engine_256,
-        t_track=0.20,
-        t_coarse=0.16,
-        t_verify=0.28,
-        adaptive_rescue=True,
-        vel_comp=0.30
+        engine_256_path=engine_256
     )
     
     # Warmup TRT

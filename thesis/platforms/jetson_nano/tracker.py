@@ -167,14 +167,16 @@ class HierarchicalEdgeTracker:
     def __init__(self,
                  engine_128_path="weights/miniroi_128x128_augmented.engine",
                  engine_256_path="weights/miniroi_256x144_augmented.engine",
-                 t_track=0.18,
+                 t_track=0.20,
                  t_coarse=0.14,
-                 t_verify=0.20,
-                 max_miss=3,
-                 jump_gate=55.0,
+                 t_verify=0.35,
+                 max_miss=2,
+                 jump_gate=50.0,
                  smash_speed_thresh=20.0,
                  adaptive_rescue=True,
-                 vel_comp=0.28):
+                 vel_comp=0.28,
+                 require_ver=True,
+                 confirm_rescue=True):
         
         self.t_track = float(t_track)
         self.t_coarse = float(t_coarse)
@@ -184,6 +186,8 @@ class HierarchicalEdgeTracker:
         self.smash_speed_thresh = float(smash_speed_thresh)
         self.adaptive_rescue = bool(adaptive_rescue)
         self.vel_comp = float(vel_comp)
+        self.require_ver = bool(require_ver)
+        self.confirm_rescue = bool(confirm_rescue)
         
         # Load TensorRT Models (with graceful fallback to baseline if augmented missing)
         import os
@@ -211,6 +215,7 @@ class HierarchicalEdgeTracker:
         
         # Tracking Kinematic State
         self.is_lost = True
+        self.tentative = None
         self.kf = None
         self.last_x = 256.0
         self.last_y = 144.0
@@ -229,6 +234,7 @@ class HierarchicalEdgeTracker:
     def reset(self):
         """Reset internal tracking state and history."""
         self.is_lost = True
+        self.tentative = None
         self.kf = None
         self.last_x = 256.0
         self.last_y = 144.0
@@ -275,6 +281,7 @@ class HierarchicalEdgeTracker:
         
         pred_pt_orig = None
         pred_pt_512 = None
+        retro_pred = None
         conf_out = 0.0
         mode_str = "SEARCH_LOST"
         engine_str = "NONE"
@@ -328,37 +335,44 @@ class HierarchicalEdgeTracker:
                 
                 # Mechanism C: Kinematic Pre-Serve & Stationary Detection
                 disp = math.hypot(new_vx, new_vy)
-                if disp < 2.0:
+                if disp < 1.5:
                     self.stationary_frames += 1
-                    if self.stationary_frames >= 4:
-                        self.is_stationary = True
-                        new_vx, new_vy = 0.0, 0.0
                 else:
                     self.stationary_frames = 0
                     self.is_stationary = False
                     
-                # Adaptive velocity lag: check for direction reversal (e.g. bounce / racket hit)
-                v_dot = (new_vx * self.vx + new_vy * self.vy)
-                eff_comp = 0.0 if v_dot < 0 else self.vel_comp
-                
-                self.vx = new_vx
-                self.vy = new_vy
-                self.last_x = dx
-                self.last_y = dy
-                
-                # Velocity lag compensation (compensates 3-frame convolution temporal centroid lag)
-                pred_x_512 = dx + eff_comp * new_vx
-                pred_y_512 = dy + eff_comp * new_vy
-                pred_pt_512 = (pred_x_512, pred_y_512)
-                pred_pt_orig = (pred_x_512 * scale_w, pred_y_512 * scale_h)
-                conf_out = conf
-                mode_str = "STATIONARY_HOLD" if self.is_stationary else "LOCAL_TRACK"
-                local_success = True
-                
-                if self.kf is None:
-                    self.kf = init_kalman(dx, dy)
+                # Terminate tracking if motionless on floor (dead ball)
+                if self.stationary_frames >= 4:
+                    self.is_lost = True
+                    self.is_stationary = True
+                    self.tentative = None
+                    self.kf = None
+                    self.vx, self.vy = 0.0, 0.0
+                    local_success = False
                 else:
-                    self.kf.correct(np.array([[dx], [dy]], dtype=np.float32))
+                    # Adaptive velocity lag: check for direction reversal (e.g. bounce / racket hit)
+                    v_dot = (new_vx * self.vx + new_vy * self.vy)
+                    eff_comp = 0.0 if v_dot < 0 else self.vel_comp
+                    
+                    self.vx = new_vx
+                    self.vy = new_vy
+                    self.last_x = dx
+                    self.last_y = dy
+                    self.tentative = None
+                    
+                    # Velocity lag compensation (compensates 3-frame convolution temporal centroid lag)
+                    pred_x_512 = dx + eff_comp * new_vx
+                    pred_y_512 = dy + eff_comp * new_vy
+                    pred_pt_512 = (pred_x_512, pred_y_512)
+                    pred_pt_orig = (pred_x_512 * scale_w, pred_y_512 * scale_h)
+                    conf_out = conf
+                    mode_str = "STATIONARY_HOLD" if self.is_stationary else "LOCAL_TRACK"
+                    local_success = True
+                    
+                    if self.kf is None:
+                        self.kf = init_kalman(dx, dy)
+                    else:
+                        self.kf.correct(np.array([[dx], [dy]], dtype=np.float32))
             else:
                 local_success = False
         else:
@@ -415,36 +429,60 @@ class HierarchicalEdgeTracker:
                     conf_out = conf_ver
                     mode_str = "INSTANT_RESCUE"
                     accepted = True
-                elif conf_coarse >= 0.20:
-                    # Fine Centroid Coordinate Refinement: use 128 subpixel peak if discriminative
-                    if conf_ver >= 0.12:
-                        fine_x = cand_x - 64.0 + float(svx)
-                        fine_y = cand_y - 64.0 + float(svy)
-                    else:
-                        fine_x = cand_x
-                        fine_y = cand_y
+                elif not self.require_ver and conf_coarse >= 0.22 and conf_ver >= 0.16:
+                    fine_x = cand_x - 64.0 + float(svx)
+                    fine_y = cand_y - 64.0 + float(svy)
                     conf_out = conf_coarse
                     mode_str = "RESCUE_COARSE"
                     accepted = True
                     
                 if accepted:
-                    self.last_x, self.last_y = fine_x, fine_y
-                    self.vx, self.vy = 0.0, 0.0
-                    self.is_lost = False
-                    self.miss_count = 0
-                    self.kf = init_kalman(fine_x, fine_y)
-                    pred_pt_512 = (fine_x, fine_y)
-                    pred_pt_orig = (fine_x * scale_w, fine_y * scale_h)
+                    if self.confirm_rescue:
+                        # Dynamic in-flight motion 2-hit confirmation
+                        if self.tentative is not None:
+                            tx, ty, tfid = self.tentative
+                            jump = math.hypot(fine_x - tx, fine_y - ty)
+                            if 2.0 <= jump <= self.jump_gate * 1.5:
+                                # Confirmed valid moving shuttlecock!
+                                self.last_x, self.last_y = fine_x, fine_y
+                                self.vx = fine_x - tx
+                                self.vy = fine_y - ty
+                                self.is_lost = False
+                                self.miss_count = 0
+                                self.stationary_frames = 0
+                                self.kf = init_kalman(fine_x, fine_y)
+                                pred_pt_512 = (fine_x, fine_y)
+                                pred_pt_orig = (fine_x * scale_w, fine_y * scale_h)
+                                retro_pred = (tfid, (tx * scale_w, ty * scale_h))
+                                self.tentative = None
+                            else:
+                                # Prior candidate was a static glitch, replace with new tentative
+                                self.tentative = (fine_x, fine_y, target_mid_fid)
+                        else:
+                            # Register candidate for confirmation
+                            self.tentative = (fine_x, fine_y, target_mid_fid)
+                            self.last_x, self.last_y = fine_x, fine_y
+                    else:
+                        self.last_x, self.last_y = fine_x, fine_y
+                        self.vx, self.vy = 0.0, 0.0
+                        self.is_lost = False
+                        self.miss_count = 0
+                        self.stationary_frames = 0
+                        self.kf = init_kalman(fine_x, fine_y)
+                        pred_pt_512 = (fine_x, fine_y)
+                        pred_pt_orig = (fine_x * scale_w, fine_y * scale_h)
                 else:
                     self.miss_count += 1
                     if self.miss_count >= self.max_miss:
                         self.is_lost = True
+                        self.tentative = None
                         self.kf = None
                         self.vx, self.vy = 0.0, 0.0
             else:
                 self.miss_count += 1
                 if self.miss_count >= self.max_miss:
                     self.is_lost = True
+                    self.tentative = None
                     self.kf = None
                     self.vx, self.vy = 0.0, 0.0
                     
@@ -455,6 +493,7 @@ class HierarchicalEdgeTracker:
         telemetry = {
             "frame_id": target_mid_fid,
             "pred_point": pred_pt_orig,
+            "retro_pred": retro_pred,
             "norm_point": pred_pt_512,
             "confidence": conf_out,
             "mode": mode_str,
