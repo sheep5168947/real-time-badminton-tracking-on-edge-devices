@@ -52,23 +52,27 @@
 
 ---
 
-### 第三章 階層式邊緣追蹤系統方法論 (Chapter 3: Methodology)
-- **3.1 系統總體架構與狀態轉移 (System Architecture & State Machine)**
-  - 循航追蹤狀態（Tracking）、提案救援狀態（Rescue）、失鎖搜尋狀態（Lost）、落地死球休眠狀態（Stationary/Dead-Ball）。
+### 第三章 階層式邊緣羽球追蹤方法論 (Chapter 3: Methodology)
+- **3.1 邊緣端羽球追蹤之基準範式與領域核心挑戰 (Baseline Paradigms & Domain Challenges)**
+  - 業界常見基準範式評估（深層全解析度卷積、全畫面均勻空間降採樣、時空運動遮罩與初階階層架構之物理瓶頸）。
+  - 邊緣即時羽球追蹤之四大核心挑戰（極速脫靶 Tail-Dragging Lag、反彈過衝 Kinematic Reversal、地坪反光陷阱 Specular Reflection、靜態微震盪 Static Micro-Jitter）。
+- **3.2 系統整體架構設計 (System Architecture & Pipeline Overview)**
+  - 系統端到端推論管線（End-to-End Inference Pipeline）。
+  - 追蹤狀態機導引與狀態轉移（Tracking Finite State Machine）。
   - 零拷貝單影格增量環形緩衝區（Zero-Copy Incremental Ring Buffer）。
-- **3.2 超輕量級 Mini-ROI 局域循航網絡 (Local Mini-ROI Cruise Engine)**
-  - 128×128 超輕量化 U-Net 架構設計。
-  - 速度自適應扣殺 ROI 動態擴展（Smash Dynamic ROI Expansion）。
-  - Sub-pixel 質心連續座標微調（Sub-pixel Center-of-Mass Refinement）。
-  - 反向速度阻尼時序滯後補償（Reversal Damping Velocity Lag Compensation）。
-- **3.3 即時粗細兩階段提案與驗證網絡 (Two-Stage Coarse-to-Fine Rescue)**
-  - 256×144 全域粗提案引擎（Coarse Proposal Engine）。
-  - 峰值均值比（Peak-to-Mean Ratio, PMR）自適應微弱訊號拯救。
-  - 128×128 高解析度微型驗證機制（Strict Fine Verification）。
-- **3.4 高純度動態位移雙影格確認機制 (In-Flight Motion 2-Hit Confirmation)**
-  - 靜止地坪反光斑點之數學特徵分析。
-  - 候選點兩影格動態物理位移閘門（$2.0 \le \Delta p \le \text{gate}$）。
-  - 回溯式軌跡連貫輸出（Retroactive Telemetry Emission）。
+- **3.3 模組一：時空適應性局部追蹤機制 (Module 1: Spatio-Temporal Adaptive Local Tracking)**
+  - 扣殺搜尋窗動態擴展（Dynamic Smash ROI Expansion）與次像素質心連續微調（Sub-pixel Refinement）。
+  - 無此模組 vs. 啟用此模組之視覺現象與量化數據對比（Without vs. With Comparison）。
+- **3.4 模組二：擊球動態轉折與反向速度阻尼機制 (Module 2: Kinematic Reversal Damping Mechanism)**
+  - 向量內積方向突變檢驗（Dot-Product Inversion Detection）與慣性過衝抑制。
+  - 無此模組 vs. 啟用此模組之視覺現象與量化數據對比（Without vs. With Comparison）。
+- **3.5 模組三：高純度階層式全域救援機制 (Module 3: High-Purity Hierarchical Global Rescue)**
+  - 峰值均值比（PMR）粗篩、原生微型高置信度驗證（$\tau_{\text{verify}} \ge 0.35$）與動態飛行雙影格物理確認（2-Hit Motion Confirmation）。
+  - 斬除極端地坪反光（`match10` FP 消除 97.2%）之視覺與全量賽事實測數據。
+- **3.6 模組四：狀態機管制與靜止死球自適應凍結 (Module 4: State Machine Regulation & Static Freeze)**
+  - 4 幀連續微小位移監測與主動休眠脫鎖機制。
+  - 無此模組 vs. 啟用此模組之視覺現象與量化數據對比（Without vs. With Comparison）。
+- **3.7 方法論總結：四大模組協同防禦矩陣 (Collaborative Defense Matrix)**
 
 ---
 
